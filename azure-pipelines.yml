@@ -15,6 +15,22 @@ variables:
   value: $(Build.Repository.Name).tfstate
 
 stages:
+  - stage: docker
+    jobs:
+    - job: docker_stuff
+      steps:
+      - task: Docker@2
+        displayName: Login to ACR
+        inputs:
+          command: login
+          containerRegistry: acrquackbank
+      - task: Docker@2
+        displayName: Build and Push
+        inputs:
+          command: buildAndPush
+          repository: quackersbank
+          tags: |
+            latest
   - stage: terraform
     jobs:
     - job: do_terraform
