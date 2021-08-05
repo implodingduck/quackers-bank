@@ -38,7 +38,7 @@ resource "random_string" "unique" {
 }
 
 resource "azurerm_app_service_plan" "aspjar" {
-  name                = "asp-jar-${var.func_name}"
+  name                = "asp-jar-${local.func_name}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   kind                = "Linux"
@@ -50,7 +50,7 @@ resource "azurerm_app_service_plan" "aspjar" {
 }
 
 resource "azurerm_container_registry" "test" {
-  name                = "acr${var.func_name}"
+  name                = "acr${local.func_name}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   sku                 = "Standard"
@@ -58,7 +58,7 @@ resource "azurerm_container_registry" "test" {
 }
 
 resource "azurerm_app_service_plan" "aspdocker" {
-  name                = "asp-docker-${var.func_name}"
+  name                = "asp-docker-${local.func_name}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   kind                = "Linux"
