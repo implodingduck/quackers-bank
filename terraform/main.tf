@@ -44,8 +44,8 @@ resource "azurerm_app_service_plan" "aspjar" {
   kind                = "Linux"
   reserved = true
   sku {
-    tier = "Dynamic"
-    size = "Y1"
+    tier = "Basic"
+    size = "B1"
   }
 }
 
@@ -64,8 +64,8 @@ resource "azurerm_app_service_plan" "aspdocker" {
   kind                = "Linux"
   reserved = true
   sku {
-    tier = "Dynamic"
-    size = "Y1"
+    tier = "Basic"
+    size = "B1"
   }
 }
 
@@ -75,16 +75,16 @@ resource "azurerm_app_service" "my_app_service_container" {
  location            = azurerm_resource_group.rg.location
  app_service_plan_id     = azurerm_app_service_plan.aspdocker.id
 
-#  site_config {
-#    always_on = "true"
-#    linux_fx_version  = "DOCKER|${azurerm_container_registry.test.login_server}/quackersbank:latest" #define the images to usecfor you application
-#    health_check_path = "/health" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
-#  }
+ site_config {
+   always_on = "true"
+   linux_fx_version  = "DOCKER|${azurerm_container_registry.test.login_server}/quackersbank:latest" #define the images to usecfor you application
+   health_check_path = "/health" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
+ }
 
-#  app_settings = {
-#    DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
-#    DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
-#    DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.test.admin_password
-#  } 
+ app_settings = {
+   DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
+   DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
+   DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.test.admin_password
+ } 
 }
 
