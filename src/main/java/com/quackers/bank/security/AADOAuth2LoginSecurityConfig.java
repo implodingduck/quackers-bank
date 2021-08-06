@@ -13,6 +13,7 @@ public class AADOAuth2LoginSecurityConfig extends AADWebSecurityConfigurerAdapte
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.authorizeRequests()
+                .antMatchers("/health/**").permitAll()
                 .anyRequest().authenticated();
         // Do some custom configuration
     }  
