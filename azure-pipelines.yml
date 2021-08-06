@@ -25,11 +25,7 @@ stages:
         inputs:
           secureFile: 'quackers-bank-application.properties'
       - script: |
-           pwd
-           ls -lta
-           ls src/main
            cp $(application_properties.secureFilePath) $(System.DefaultWorkingDirectory)/src/main/resources/application.properties
-           ls src/main/resources
       - task: Docker@2
         displayName: Login to ACR
         inputs:
