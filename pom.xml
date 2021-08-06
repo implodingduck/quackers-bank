@@ -112,7 +112,6 @@
 				<version>2.0.0</version>  
 				<configuration> 
 					<schemaVersion>v2</schemaVersion>  
-					<subscriptionId>${arm.subscription}</subscriptionId>  
 					<resourceGroup>${arm.resourcegroup}</resourceGroup>  
 					<appName>quackersbankjar</appName>  
 					<pricingTier>B1</pricingTier>  
