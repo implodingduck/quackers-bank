@@ -12,7 +12,7 @@ RUN ./mvnw dependency:go-offline
 
 COPY . /usr/src/app 
 
-RUN ./mvnw install
+RUN ./mvnw clean install
 
 
 FROM openjdk:11-jre
