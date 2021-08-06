@@ -70,7 +70,7 @@ resource "azurerm_app_service_plan" "aspdocker" {
 }
 
 resource "azurerm_app_service" "my_app_service_container" {
- name                    = "my_app_service_container"
+ name                    = "${local.func_name}container"
  resource_group_name = azurerm_resource_group.rg.name
  location            = azurerm_resource_group.rg.location
  app_service_plan_id     = azurerm_app_service_plan.aspdocker.id
