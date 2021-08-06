@@ -15,33 +15,33 @@ variables:
   value: $(Build.Repository.Name).tfstate
 
 stages:
-  - stage: docker
-    jobs:
-    - job: docker_stuff
-      steps:
-      - task: DownloadSecureFile@1
-        name: application_properties
-        displayName: 'Download application.properties'
-        inputs:
-          secureFile: 'quackers-bank-application.properties'
-      - script: |
-           pwd
-           ls -lta
-           ls src/main
-           cp $(application_properties.secureFilePath) $(System.DefaultWorkingDirectory)/src/main/resources/application.properties
-           ls src/main/resources
-      - task: Docker@2
-        displayName: Login to ACR
-        inputs:
-          command: login
-          containerRegistry: acrquackbank
-      - task: Docker@2
-        displayName: Build and Push
-        inputs:
-          command: buildAndPush
-          repository: quackersbank
-          tags: |
-            latest
+  # - stage: docker
+    # jobs:
+    # - job: docker_stuff
+    #   steps:
+    #   - task: DownloadSecureFile@1
+    #     name: application_properties
+    #     displayName: 'Download application.properties'
+    #     inputs:
+    #       secureFile: 'quackers-bank-application.properties'
+    #   - script: |
+    #        pwd
+    #        ls -lta
+    #        ls src/main
+    #        cp $(application_properties.secureFilePath) $(System.DefaultWorkingDirectory)/src/main/resources/application.properties
+    #        ls src/main/resources
+    #   - task: Docker@2
+    #     displayName: Login to ACR
+    #     inputs:
+    #       command: login
+    #       containerRegistry: acrquackbank
+    #   - task: Docker@2
+    #     displayName: Build and Push
+    #     inputs:
+    #       command: buildAndPush
+    #       repository: quackersbank
+    #       tags: |
+    #        latest
   - stage: terraform
     jobs:
     - job: do_terraform
