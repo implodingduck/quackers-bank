@@ -34,6 +34,8 @@ stages:
         inputs:
           command: login
           containerRegistry: acrquackbank
+      - script: |
+           ls src/main/resources
       - task: Docker@2
         displayName: Build and Push
         inputs:
