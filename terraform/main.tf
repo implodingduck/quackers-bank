@@ -78,7 +78,7 @@ resource "azurerm_app_service" "my_app_service_container" {
  site_config {
    always_on = "true"
    linux_fx_version  = "DOCKER|${azurerm_container_registry.test.login_server}/quackersbank:latest" #define the images to usecfor you application
-   health_check_path = "/health" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
+   health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
  }
 
  app_settings = {
