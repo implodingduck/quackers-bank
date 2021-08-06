@@ -111,14 +111,10 @@
 				<artifactId>azure-webapp-maven-plugin</artifactId>  
 				<version>2.0.0</version>  
 				<configuration> 
-				    <auth>
-         				<type>service_principal</type>
-         				<serverId>azure-sp-auth</serverId>
-      				</auth>
 					<schemaVersion>v2</schemaVersion>  
 					<subscriptionId>${arm.subscription}</subscriptionId>  
 					<resourceGroup>${arm.resourcegroup}</resourceGroup>  
-					<appName>quackersbankdemo</appName>  
+					<appName>quackersbankjar</appName>  
 					<pricingTier>B1</pricingTier>  
 					<region>${arm.region}</region>  
 					<runtime> 

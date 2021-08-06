@@ -49,6 +49,29 @@ resource "azurerm_app_service_plan" "aspjar" {
   }
 }
 
+resource "azurerm_app_service" "jar" {
+ name                    = "${local.func_name}jar"
+ resource_group_name = azurerm_resource_group.rg.name
+ location            = azurerm_resource_group.rg.location
+ app_service_plan_id     = azurerm_app_service_plan.aspjar.id
+
+}
+
+
+
+resource "null_resource" "publish_jar"{
+  depends_on = [
+    azurerm_app_service.jar
+  ]
+  triggers = {
+    index = "${timestamp()}"
+  }
+  provisioner "local-exec" {
+    working_dir = "../"
+    command     = "./mvnw package azure-webapp:deploy"
+  }
+}
+
 resource "azurerm_container_registry" "test" {
   name                = "acr${local.func_name}"
   resource_group_name = azurerm_resource_group.rg.name
@@ -87,4 +110,6 @@ resource "azurerm_app_service" "my_app_service_container" {
    DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.test.admin_password
  } 
 }
+
+
 
