@@ -29,13 +29,12 @@ stages:
            ls -lta
            ls src/main
            sudo ln -s -t $(System.DefaultWorkingDirectory)/src/main/resources/ $(application_properties.secureFilePath)
+           ls src/main/resources
       - task: Docker@2
         displayName: Login to ACR
         inputs:
           command: login
           containerRegistry: acrquackbank
-      - script: |
-           ls src/main/resources
       - task: Docker@2
         displayName: Build and Push
         inputs:
