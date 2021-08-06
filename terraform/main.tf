@@ -55,6 +55,12 @@ resource "azurerm_app_service" "jar" {
  location            = azurerm_resource_group.rg.location
  app_service_plan_id     = azurerm_app_service_plan.aspjar.id
 
+ site_config {
+   always_on = "true"
+   linux_fx_version = "JAVA|11-java11"
+   health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
+ }
+
 }
 
 
