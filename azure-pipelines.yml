@@ -9,12 +9,12 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
 variables:
 - group: terraform-backend-kv
 - name: TF_VAR_key
   value: $(Build.Repository.Name).tfstate
-- name: VERSIONNUM
-  value: ${{Date:yyyyMMddhhmm}}
 
 stages:
   - stage: docker
@@ -40,7 +40,7 @@ stages:
           repository: quackersbank
           tags: |
             latest
-            $(VERSIONNUM)
+            $(Build.BuildNumber)
             
   - stage: terraform
     jobs:
