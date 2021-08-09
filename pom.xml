@@ -19,6 +19,7 @@
 		<arm.subscription>${env.ARM_SUBSCRIPTION}</arm.subscription>
 		<arm.resourcegroup>${env.ARM_RESOURCE_GROUP}</arm.resourcegroup>
 		<arm.region>${env.ARM_REGION}</arm.region>
+		<arm.appname>quackersbankjar</arm.appname>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -113,7 +114,7 @@
 				<configuration> 
 					<schemaVersion>v2</schemaVersion>  
 					<resourceGroup>${arm.resourcegroup}</resourceGroup>  
-					<appName>quackersbankjar</appName>  
+					<appName>${arm.appname}</appName>  
 					<pricingTier>B1</pricingTier>  
 					<region>${arm.region}</region>  
 					<runtime> 
