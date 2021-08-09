@@ -14,7 +14,7 @@ variables:
 - name: TF_VAR_key
   value: $(Build.Repository.Name).tfstate
 - name: VERSIONNUM
-  value: $(Date:yyyyMMddhhmm)
+  value: ${{Date:yyyyMMddhhmm}}
 
 stages:
   - stage: docker
