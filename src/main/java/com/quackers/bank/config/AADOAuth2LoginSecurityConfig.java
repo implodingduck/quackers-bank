@@ -13,11 +13,13 @@ public class AADOAuth2LoginSecurityConfig extends AADWebSecurityConfigurerAdapte
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        http.authorizeRequests()
+        
+        http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/health/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/").permitAll()
                 .antMatchers(HttpMethod.GET, "/static/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and().oauth2Login().defaultSuccessUrl("/");
         // Do some custom configuration
     }  
 }

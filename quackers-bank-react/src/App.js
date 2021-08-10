@@ -2,6 +2,7 @@ import React, {Component, useState, useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import ApiTest from './ApiTest'
+import Accounts from './Accounts'
 import {
     BrowserRouter as Router,
     Switch,
@@ -35,6 +36,9 @@ function App () {
                     
                     <Route path="/test">
                         <ApiTest></ApiTest>
+                    </Route>
+                    <Route path="/accounts">
+                        <Accounts></Accounts>
                     </Route>
                     <Route path="">
                         <h1>Welcome to Quackers Bank</h1>
