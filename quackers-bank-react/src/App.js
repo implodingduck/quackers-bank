@@ -42,6 +42,7 @@ function App () {
                     </Route>
                     <Route path="">
                         <h1>Welcome to Quackers Bank</h1>
+                        { (authUser.attributes) ? <Link to={"/accounts"}>My Accounts</Link> : "" }
                         { (authUser.attributes) ? <Link to={"/test"}>Test Stuff</Link> : "" }
                          
                     </Route>

@@ -23,6 +23,9 @@ public class Account {
         this.balance = balance;
     }
 
+    public Long getId(){
+        return id;
+    }
     
     public Long getBalance() {
         return balance;
