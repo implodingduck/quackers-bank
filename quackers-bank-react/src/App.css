@@ -40,3 +40,32 @@
 .account {
   border-bottom: 1px solid #333333;
 }
+
+.banner {
+  box-shadow: 1px 1px 10px #333333;
+  z-index: 99;
+}
+
+.carousel-caption {
+  text-shadow: 1px 1px 1px #333333;
+}
+
+.carousel .img-fluid {
+  max-height: 20em;
+}
+
+.blurme {
+  filter: blur(4px);
+  -webkit-filter: blur(4px);
+}
+
+.topspacer {
+  margin-top: 1em;
+}
+
+.box {
+  border: 1px solid #666666;
+  border-radius: 5px;
+  padding: 1em;
+  height: 100%;
+}

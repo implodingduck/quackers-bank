@@ -18,6 +18,7 @@ public class AADOAuth2LoginSecurityConfig extends AADWebSecurityConfigurerAdapte
                 .antMatchers(HttpMethod.GET, "/health/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/").permitAll()
                 .antMatchers(HttpMethod.GET, "/static/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/**.jpg").permitAll()
                 .anyRequest().authenticated()
                 .and().oauth2Login().defaultSuccessUrl("/");
         // Do some custom configuration
