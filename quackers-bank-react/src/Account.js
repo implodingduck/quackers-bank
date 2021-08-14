@@ -1,7 +1,7 @@
 import React, {Component, useState, useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Container, Row, Col, Table, Button, Modal, ModalBody } from 'react-bootstrap'
+import { Container, Row, Col, Table, Button, Modal } from 'react-bootstrap'
 
 function Account( {account} ) {
 
@@ -85,8 +85,9 @@ function Account( {account} ) {
                 <Col>
             
             <h3>{account.type}</h3>
+            <Button style={ { float: "right", marginLeft: "-50%" } } variant="danger" onClick={handleCloseAccount}>Close Account</Button>
             <h4>Balance: {account.balance}</h4>
-            <pre style={ { "display": "none" }}>{JSON.stringify(account)}</pre> <button onClick={handleCloseAccount}>Close Account</button>
+            <pre style={ { "display": "none" }}>{JSON.stringify(account)}</pre> 
                 </Col>
             </Row>
             <Row>

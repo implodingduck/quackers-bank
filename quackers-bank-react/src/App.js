@@ -7,7 +7,8 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    Link,
+    Redirect
   } from "react-router-dom";
 
 import {Container, Row, Col, Navbar, Nav, NavDropdown, Image, Carousel, Card } from 'react-bootstrap'
@@ -43,7 +44,7 @@ function App () {
                         <Nav.Link href="/">Home</Nav.Link>
                         { (authUser.attributes) ? (<Nav.Link href="/accounts">Accounts</Nav.Link>) : "" }
                         { (authUser.attributes) ? (<Nav.Link href="/test">Testing</Nav.Link>) : "" }
-                        { (authUser.attributes) ? (<div className="nav-link">{ authUser.attributes.name } (<a href="/logout">Logout</a>)</div>) : (<Nav.Link href="/login">Login</Nav.Link>) }
+                        { (authUser.attributes) ? (<div className="nav-link">{ authUser.attributes.name } (<a href="/logout">Logout</a>)</div>) : (<Nav.Link href="/happylogin">Login</Nav.Link>) }
                     </Nav>
                     </Navbar.Collapse>
                 </Container>
@@ -59,6 +60,9 @@ function App () {
                                 </Route>
                                 <Route path="/accounts">
                                     <Accounts></Accounts>
+                                </Route>
+                                <Route path="/happylogin">
+                                    <Redirect to="/"/>
                                 </Route>
                                 <Route exact path="/">
                                     <Carousel>
@@ -114,6 +118,11 @@ function App () {
                             </Switch>
                             
                         </Router>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col className="footer">
+                        <p>Built using the MIT License.</p>
                     </Col>
                 </Row>
             </Container>
