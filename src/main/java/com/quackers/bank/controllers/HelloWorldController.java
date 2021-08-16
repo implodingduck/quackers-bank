@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HelloWorldController {
-    private static final String template = "Hello, %s! The time is: %s! and ";
+    private static final String template = "Hello, %s! The time is: %s!";
 	private final AtomicLong counter = new AtomicLong();
 
 	@GetMapping("/api")

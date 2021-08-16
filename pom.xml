@@ -15,7 +15,7 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
-		<azure.version>3.6.0</azure.version>
+		<azure.version>3.6.1</azure.version>
 		<arm.subscription>${env.ARM_SUBSCRIPTION}</arm.subscription>
 		<arm.resourcegroup>${env.ARM_RESOURCE_GROUP}</arm.resourcegroup>
 		<arm.region>${env.ARM_REGION}</arm.region>
@@ -32,7 +32,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.azure.spring</groupId>
-			<artifactId>azure-spring-boot-starter-active-directory</artifactId>
+			<artifactId>azure-spring-boot-starter-active-directory-b2c</artifactId>
 			<version>${azure.version}</version>
 		</dependency>
 		<dependency>
