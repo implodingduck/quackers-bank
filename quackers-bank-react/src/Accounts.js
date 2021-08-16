@@ -13,13 +13,17 @@ function Accounts() {
         "balance": 1000
     });
 
-    useEffect(() => {
+    const refreshAccounts = () => {
         fetch('/api/accounts/')
             .then((response) => response.json())
             .then(accountsJson => {
                 console.log(accountsJson)
                 setMyAccounts(accountsJson);
             });
+    }
+
+    useEffect(() => {
+        refreshAccounts()
     },[])
 
     const toggleCreateAccount = () => {
@@ -80,7 +84,7 @@ function Accounts() {
                     </Modal>
                     <div>
                         { myaccounts.map((account, i) => {
-                            return <Account key={i} account={account}></Account>
+                            return <Account key={i} account={account} refreshAccounts={refreshAccounts}></Account>
                         })}
                     </div>
                 </Col>

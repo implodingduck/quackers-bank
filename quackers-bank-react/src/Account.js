@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { Container, Row, Col, Table, Button, Modal } from 'react-bootstrap'
 
-function Account( {account} ) {
+function Account( {account, refreshAccounts} ) {
 
     const BASETRANSACTION = {
         "accountId": account.id,
@@ -66,6 +66,7 @@ function Account( {account} ) {
             })
         } ).then( () => { 
             fetchTransactions()
+            refreshAccounts()
             setTransaction(JSON.parse(JSON.stringify(BASETRANSACTION)))
         } );
     }
