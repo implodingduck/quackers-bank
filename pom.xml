@@ -107,6 +107,7 @@
 							<target>
 								<copy todir="${project.build.directory}/classes/public">
 									<fileset dir="${project.basedir}/quackers-bank-react/build"/>
+									<fileset dir="${project.basedir}/quackers-bank-react/public"/>
 								</copy>
 							</target>
 						</configuration>

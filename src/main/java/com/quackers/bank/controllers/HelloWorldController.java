@@ -28,7 +28,7 @@ public class HelloWorldController {
 	public DefaultOidcUser getUser(Authentication  authentication ) {
 		//TODO this is probably too many details and we can cut back
 		DefaultOidcUser userDetails = (DefaultOidcUser) authentication.getPrincipal();
-		System.out.println(userDetails.toString());
+		//System.out.println(userDetails.toString());
 		return userDetails;
 	}
 }

@@ -3,6 +3,8 @@ import logo from './logo.svg';
 import './App.css';
 import Account from './Account'
 
+import { Button, Container, Modal, Col, Row } from 'react-bootstrap'
+
 function Accounts() {
     const [myaccounts, setMyAccounts] = useState([]);
     const [showCreateAccount, setShowCreateAccount] = useState(false);
@@ -11,13 +13,17 @@ function Accounts() {
         "balance": 1000
     });
 
-    useEffect(() => {
+    const refreshAccounts = () => {
         fetch('/api/accounts/')
             .then((response) => response.json())
             .then(accountsJson => {
                 console.log(accountsJson)
                 setMyAccounts(accountsJson);
             });
+    }
+
+    useEffect(() => {
+        refreshAccounts()
     },[])
 
     const toggleCreateAccount = () => {
@@ -25,6 +31,7 @@ function Accounts() {
     }
 
     const handleCreateAccount = () => {
+        setShowCreateAccount(false)
         fetch('/api/accounts/', {
             method: 'POST',
             headers: {
@@ -51,23 +58,38 @@ function Accounts() {
     }
 
     return (
-        <div className="App">
-            <button onClick={toggleCreateAccount}>Create New Account</button>
-            <fieldset style={ { "display": (showCreateAccount) ? "block" : "none"  }}>
-                <legend>New Account:</legend>
-                <label>Type: <select onChange={handleTypeChange}>
-                    <option selected={(createAccount.type === 'Checking')}>Checking</option>
-                    <option selected={(createAccount.type === 'Savings')}>Savings</option>
-                </select></label>
-                <label>Initial Balance: <input type="text" name="balance" onChange={handleBalanceChange} value={createAccount.balance} /></label>
-                <button onClick={handleCreateAccount}>Create!</button>
-            </fieldset>
-            <div>
-                { myaccounts.map((account, i) => {
-                    return <Account key={i} account={account}></Account>
-                })}
-            </div>
-        </div>
+        <Container className="topspacer">
+            <Row>
+                <Col>
+                    <Button variant="primary" onClick={toggleCreateAccount}>Create New Account</Button>
+                    <Modal  show={showCreateAccount} onHide={toggleCreateAccount}>
+                        <Modal.Header closeButton>
+                                New Account:
+                        </Modal.Header>
+                        <Modal.Body>
+                            <fieldset>
+                                <legend style={ { display: "none"}}>New Account:</legend>
+                                <label>Type: <select onChange={handleTypeChange}>
+                                    <option selected={(createAccount.type === 'Checking')}>Checking</option>
+                                    <option selected={(createAccount.type === 'Savings')}>Savings</option>
+                                </select></label>
+                                <label>Initial Balance: <input type="text" name="balance" onChange={handleBalanceChange} value={createAccount.balance} /></label>
+                            </fieldset>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={toggleCreateAccount}>Close</Button>
+                            <Button variant="primary" onClick={handleCreateAccount}>Create Account</Button>
+                        </Modal.Footer>
+                    
+                    </Modal>
+                    <div>
+                        { myaccounts.map((account, i) => {
+                            return <Account key={i} account={account} refreshAccounts={refreshAccounts}></Account>
+                        })}
+                    </div>
+                </Col>
+            </Row>
+        </Container>
     )
 }
 
