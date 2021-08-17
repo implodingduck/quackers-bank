@@ -1,10 +1,17 @@
 package com.quackers.bank.models;
-public class Account {
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
+public class Account {
+    @Id
+    @GeneratedValue
     private Long id;
 
     private String type;
-    private String email;
+    private String uid;
     private Long balance;
 
     public Account(){
@@ -26,11 +33,11 @@ public class Account {
     public void setBalance(Long balance) {
         this.balance = balance;
     }
-    public String getEmail() {
-        return email;
+    public String getUid() {
+        return uid;
     }
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
     public String getType() {
         return type;

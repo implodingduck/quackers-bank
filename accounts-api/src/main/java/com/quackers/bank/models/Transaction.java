@@ -1,13 +1,23 @@
 package com.quackers.bank.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+@Entity
+@Table(name="accounttransaction")
 public class Transaction {
-
+    @Id
+    @GeneratedValue
     private Long id;
     private Long accountId;
     private String description;
     private Long amount;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private java.util.Date dateCreated;
 
     public Transaction(){
