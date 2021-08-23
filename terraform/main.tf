@@ -73,7 +73,7 @@ resource "null_resource" "publish_jar"{
     index = "${timestamp()}"
   }
   provisioner "local-exec" {
-    working_dir = "../"
+    working_dir = "../frontend"
     command     = "./mvnw package azure-webapp:deploy -Darm.resourcegroup=${azurerm_resource_group.rg.name} -Darm.region=${azurerm_resource_group.rg.location} -Darm.appname=${azurerm_app_service.jar.name}"
   }
 }

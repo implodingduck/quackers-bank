@@ -1,0 +1,17 @@
+server.forward-headers-strategy=native
+# Specifies your Active Directory ID:
+azure.activedirectory.tenant-id=
+# Specifies your App Registration's Application ID:
+azure.activedirectory.client-id=
+# Specifies your App Registration's secret key:
+azure.activedirectory.client-secret=
+
+logging.level.org.hibernate.SQL=DEBUG
+
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+#spring.jpa.hibernate.ddl-auto=create-drop
