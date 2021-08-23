@@ -31,6 +31,22 @@ services:
     networks:
       - quackersbank
 
+  transactions-api:
+    build: 
+      context: ./transactions-api
+      args:
+        SPRING_PROFILES_ACTIVE: dockercompose
+    image: transactions-api
+    container_name: transactions-api
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=localdocker
+    depends_on:
+      - mssql
+    networks:
+      - quackersbank
+
   frontend:
     build: ./frontend
     image: frontend

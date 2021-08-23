@@ -1,13 +1,7 @@
 package com.quackers.bank.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-@Entity
 public class Account {
-    @Id
-    @GeneratedValue
+
     private Long id;
 
     private String type;
@@ -58,5 +52,9 @@ public class Account {
         return id != null && id.equals(((Account) o).id);
     }
 
+    // @Override
+    // public String toString(){
+    //     return String.format("{ \"\""
+    // }
 
 }

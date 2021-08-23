@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -32,8 +33,34 @@ public class AccountController {
         return accountRepository.save(account);
     }
 
-    @GetMapping("/{uid}")
-    public Iterable<Account> getAccounts(@PathVariable String uid, Authentication  authentication) {
+    @GetMapping("/{id}")
+    public Account getAccountById(@PathVariable Long id, Authentication  authentication) {
+        System.out.println("Lets see if we can find some accounts");
+        AADB2COAuth2AuthenticatedPrincipal userDetails = (AADB2COAuth2AuthenticatedPrincipal) authentication.getPrincipal();
+        System.out.println(String.format("User: %s", userDetails.getName()));
+        System.out.println(String.format("Attributes: %s", userDetails.getAttributes()));
+        System.out.println(String.format("Authorities: %s", userDetails.getAuthorities()));
+        return accountRepository.findById(id).orElse(null);
+    }
+    @PutMapping("/{id}")
+    public Account updateAccountById(@PathVariable Long id, @RequestBody Account updatedAccount, Authentication  authentication) {
+        System.out.println(String.format("%s new balance = %s", id, updatedAccount.getBalance()));
+        AADB2COAuth2AuthenticatedPrincipal userDetails = (AADB2COAuth2AuthenticatedPrincipal) authentication.getPrincipal();
+        System.out.println(String.format("User: %s", userDetails.getName()));
+        System.out.println(String.format("Attributes: %s", userDetails.getAttributes()));
+        System.out.println(String.format("Authorities: %s", userDetails.getAuthorities()));
+        Account a = accountRepository.findById(id).orElse(null);
+        Account retVal = null;
+        if (a != null && updatedAccount.getBalance() != null){
+            a.setBalance(updatedAccount.getBalance());
+            retVal = accountRepository.save(a);
+        }
+        return retVal;
+
+    }
+
+    @GetMapping("/owner/{uid}")
+    public Iterable<Account> getAccountsByOwner(@PathVariable String uid, Authentication  authentication) {
         System.out.println("Lets see if we can find some accounts");
         AADB2COAuth2AuthenticatedPrincipal userDetails = (AADB2COAuth2AuthenticatedPrincipal) authentication.getPrincipal();
         System.out.println(String.format("User: %s", userDetails.getName()));
