@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    user: root
+    hostname: mssql
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD
+    volumes:
+      - "./mssql:/var/opt/mssql"
+    networks:
+      - quackersbank
+
+  accounts-api:
+    build: 
+      context: ./accounts-api
+      args:
+        SPRING_PROFILES_ACTIVE: dockercompose
+    image: accounts-api
+    container_name: accounts-api
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=localdocker
+    depends_on:
+      - mssql
+    networks:
+      - quackersbank
+
+  frontend:
+    build: ./frontend
+    image: frontend
+    container_name: frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mssql
+    networks:
+      - quackersbank
+
+networks:
+  quackersbank:
