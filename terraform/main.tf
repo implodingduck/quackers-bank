@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=2.62.0"
+      version = "=2.71.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -27,7 +27,7 @@ locals {
 data "azurerm_client_config" "current" {}
 
 data "azurerm_log_analytics_workspace" "default" {
-  name                = "DefaultWorkspace-${data.azurerm_client_config.subscription_id}-EUS"
+  name                = "DefaultWorkspace-${data.azurerm_client_config.current.subscription_id}-EUS"
   resource_group_name = "DefaultResourceGroup-EUS"
 } 
 
