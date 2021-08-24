@@ -60,7 +60,7 @@ module "frontend" {
 
 resource "null_resource" "publish_jar"{
   depends_on = [
-    azurerm_app_service.jar
+    module.frontend
   ]
   triggers = {
     index = "${timestamp()}"
