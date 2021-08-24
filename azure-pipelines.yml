@@ -36,7 +36,8 @@ stages:
       - task: Docker@2
         displayName: Build and Push
         inputs:
-          buildContext: frontend
+          buildContext: ./frontend
+          Dockerfile: ./frontend/Dockerfile
           command: buildAndPush
           repository: quackersbank
           tags: |
