@@ -44,7 +44,7 @@ resource "random_string" "unique" {
 
 module "frontend" {
   source = "github.com/implodingduck/tfmodules//appservice"
-  app_name                = "frontend"
+  appname                = "frontend"
   resource_group_name     = azurerm_resource_group.rg.name
   resource_group_location = azurerm_resource_group.rg.location
   workspace_id            = data.azurerm_log_analytics_workspace.default.id
