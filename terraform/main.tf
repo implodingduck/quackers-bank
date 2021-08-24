@@ -48,11 +48,11 @@ module "frontend" {
   resource_group_name     = azurerm_resource_group.rg.name
   resource_group_location = azurerm_resource_group.rg.location
   workspace_id            = data.azurerm_log_analytics_workspace.default.id
-  site_config = {
-    always_on = "true"
-    linux_fx_version = "JAVA|11-java11"
-    health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
-  }
+  
+  sc_always_on = "true"
+  sc_linux_fx_version = "JAVA|11-java11"
+  sc_health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
+  
 
 }
 
