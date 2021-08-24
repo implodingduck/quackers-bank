@@ -26,6 +26,11 @@ locals {
 
 data "azurerm_client_config" "current" {}
 
+data "azurerm_log_analytics_workspace" "default" {
+  name                = "DefaultWorkspace-${data.azurerm_client_config.subscription_id}-EUS"
+  resource_group_name = "DefaultResourceGroup-EUS"
+} 
+
 resource "azurerm_resource_group" "rg" {
   name     = "rg-quackbank-demo"
   location = var.location
@@ -37,29 +42,17 @@ resource "random_string" "unique" {
   upper   = false
 }
 
-resource "azurerm_app_service_plan" "aspjar" {
-  name                = "asp-jar-${local.func_name}"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  kind                = "Linux"
-  reserved = true
-  sku {
-    tier = "Basic"
-    size = "B1"
+module "frontend" {
+  source = "github.com/implodingduck/tfmodules//appservice"
+  app_name                = "frontend"
+  resource_group_name     = azurerm_resource_group.rg.name
+  resource_group_location = azurerm_resource_group.rg.location
+  workspace_id            = data.azurerm_log_analytics_workspace.default.id
+  site_config = {
+    always_on = "true"
+    linux_fx_version = "JAVA|11-java11"
+    health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
   }
-}
-
-resource "azurerm_app_service" "jar" {
- name                    = "${local.func_name}jar"
- resource_group_name = azurerm_resource_group.rg.name
- location            = azurerm_resource_group.rg.location
- app_service_plan_id     = azurerm_app_service_plan.aspjar.id
-
- site_config {
-   always_on = "true"
-   linux_fx_version = "JAVA|11-java11"
-   health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
- }
 
 }
 
@@ -74,7 +67,7 @@ resource "null_resource" "publish_jar"{
   }
   provisioner "local-exec" {
     working_dir = "../frontend"
-    command     = "./mvnw package azure-webapp:deploy -Darm.resourcegroup=${azurerm_resource_group.rg.name} -Darm.region=${azurerm_resource_group.rg.location} -Darm.appname=${azurerm_app_service.jar.name}"
+    command     = "./mvnw package azure-webapp:deploy -Darm.resourcegroup=${azurerm_resource_group.rg.name} -Darm.region=${azurerm_resource_group.rg.location} -Darm.appname=${module.frontend.app_service_name}"
   }
 }
 
