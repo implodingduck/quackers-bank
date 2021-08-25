@@ -14,7 +14,7 @@ RUN ./mvnw dependency:go-offline
 
 COPY . /usr/src/app 
 
-RUN ./mvnw clean install -DSPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
+RUN ./mvnw clean install -DskipTests
 
 
 FROM openjdk:11-jre

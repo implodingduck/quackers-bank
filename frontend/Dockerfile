@@ -12,7 +12,7 @@ RUN ./mvnw dependency:go-offline
 
 COPY . /usr/src/app 
 
-RUN ./mvnw clean install
+RUN ./mvnw clean install -DskipTests
 
 
 FROM openjdk:11-jre
