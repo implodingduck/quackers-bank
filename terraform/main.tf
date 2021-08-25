@@ -99,8 +99,8 @@ resource "azurerm_app_service" "my_app_service_container" {
 
  site_config {
    always_on = "true"
-   linux_fx_version  = "DOCKER|${azurerm_container_registry.test.login_server}/quackersbank:latest" #define the images to usecfor you application
-   health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
+   linux_fx_version  = "DOCKER|${azurerm_container_registry.test.login_server}/quackersbank:latest"
+   health_check_path = "/health/"
  }
 
  app_settings = {
@@ -200,4 +200,48 @@ resource "azurerm_mssql_firewall_rule" "editor" {
   server_id        = azurerm_mssql_server.db.id
   start_ip_address = "167.220.149.227"
   end_ip_address   = "167.220.149.227"
+}
+
+resource "azurerm_storage_account" "sa" {
+  name                     = "sa${local.func_name}"
+  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = azurerm_resource_group.rg.name
+  account_kind             = "StorageV2"
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+
+resource "azurerm_storage_container" "accounts-api" {
+  name                  = "accounts-api"
+  storage_account_name  = azurerm_storage_account.sa.name
+  container_access_type = "private"
+}
+
+module "accounts-api" {
+  source = "github.com/implodingduck/tfmodules//appservice"
+  appname                = "accountsapi"
+  resource_group_name     = azurerm_resource_group.rg.name
+  resource_group_location = azurerm_resource_group.rg.location
+  workspace_id            = data.azurerm_log_analytics_workspace.default.id
+  
+  sc_always_on = "true"
+  sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/accounts-api:latest"
+  sc_health_check_path = "/health/" 
+  app_settings = {
+    DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
+    DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
+    DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.test.admin_password
+  }
+
+  storage_account = [
+    {
+      name = azurerm_storage_account.sa.name
+      type = "AzureBlob"
+      account_name = azurerm_storage_account.sa.name
+      share_name = "accounts-api"
+      access_key = azurerm_storage_account.sa.primary_access_key
+      mount_path = "/opt/target/config"
+    }
+  ]
 }
