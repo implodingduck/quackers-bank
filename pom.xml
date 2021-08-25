@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.quackers</groupId>
+	<artifactId>quackers-bank</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>quackers-bank</name>
+	<description>Demo project for FSI</description>
+	
+	<!-- properties -->
+	<properties>
+		<java.version>11</java.version>
+		<azure.version>3.6.1</azure.version>
+		<arm.subscription>${env.ARM_SUBSCRIPTION}</arm.subscription>
+		<arm.resourcegroup>${env.ARM_RESOURCE_GROUP}</arm.resourcegroup>
+		<arm.region>${env.ARM_REGION}</arm.region>
+		<arm.appname>quackersaccountapijar</arm.appname>
+	</properties>
+	
+	<!-- modules -->
+	
+	<modules>
+		<module>frontend</module>	
+		<module>accounts-api</module>		
+		<module>transactions-api</module>
+	</modules>
+
+	<!-- dependencies -->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.quackers</groupId>
+				<artifactId>accountsapi</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>com.quackers</groupId>
+				<artifactId>bank</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>com.quackers</groupId>
+				<artifactId>transactionsapi</artifactId>
+			</dependency>		
+		</dependencies>
+	</dependencyManagement>
+
+
+</project>
