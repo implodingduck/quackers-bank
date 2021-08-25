@@ -19,8 +19,7 @@
 		<arm.appname>quackersaccountapijar</arm.appname>
 	</properties>
 	
-	<!-- modules -->
-	
+	<!-- modules -->	
 	<modules>
 		<module>frontend</module>	
 		<module>accounts-api</module>		
@@ -44,6 +43,5 @@
 			</dependency>		
 		</dependencies>
 	</dependencyManagement>
-
 
 </project>
