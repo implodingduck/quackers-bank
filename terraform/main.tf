@@ -232,7 +232,7 @@ module "accounts-api" {
     DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
     DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
     DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.test.admin_password
-    WEBSITES_PORT = "8081"
+    WEBSITES_PORT = "8080"
   }
 
   storage_account = [
@@ -241,6 +241,35 @@ module "accounts-api" {
       type = "AzureBlob"
       account_name = azurerm_storage_account.sa.name
       share_name = "accounts-api"
+      access_key = azurerm_storage_account.sa.primary_access_key
+      mount_path = "/opt/target/config"
+    }
+  ]
+}
+
+module "transactions-api" {
+  source = "github.com/implodingduck/tfmodules//appservice"
+  appname                = "transactionsapi"
+  resource_group_name     = azurerm_resource_group.rg.name
+  resource_group_location = azurerm_resource_group.rg.location
+  workspace_id            = data.azurerm_log_analytics_workspace.default.id
+  
+  sc_always_on = "true"
+  sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/transactions-api:latest"
+  sc_health_check_path = "/health/" 
+  app_settings = {
+    DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
+    DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
+    DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.test.admin_password
+    WEBSITES_PORT = "8080"
+  }
+
+  storage_account = [
+    {
+      name = azurerm_storage_account.sa.name
+      type = "AzureBlob"
+      account_name = azurerm_storage_account.sa.name
+      share_name = "transactions-api"
       access_key = azurerm_storage_account.sa.primary_access_key
       mount_path = "/opt/target/config"
     }
