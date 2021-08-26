@@ -247,6 +247,12 @@ module "accounts-api" {
   ]
 }
 
+resource "azurerm_storage_container" "transactions-api" {
+  name                  = "transactions-api"
+  storage_account_name  = azurerm_storage_account.sa.name
+  container_access_type = "private"
+}
+
 module "transactions-api" {
   source = "github.com/implodingduck/tfmodules//appservice"
   appname                = "transactionsapi"
