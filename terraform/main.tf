@@ -232,6 +232,7 @@ module "accounts-api" {
     DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
     DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
     DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.test.admin_password
+    WEBSITES_PORT = "8081"
   }
 
   storage_account = [
