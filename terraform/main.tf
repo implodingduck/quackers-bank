@@ -56,8 +56,6 @@ module "frontend" {
 
 }
 
-
-
 resource "null_resource" "publish_jar"{
   depends_on = [
     module.frontend
@@ -79,36 +77,6 @@ resource "azurerm_container_registry" "test" {
   admin_enabled       = true
 }
 
-resource "azurerm_app_service_plan" "aspdocker" {
-  name                = "asp-docker-${local.func_name}"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  kind                = "Linux"
-  reserved = true
-  sku {
-    tier = "Basic"
-    size = "B1"
-  }
-}
-
-resource "azurerm_app_service" "my_app_service_container" {
- name                    = "${local.func_name}dock"
- resource_group_name = azurerm_resource_group.rg.name
- location            = azurerm_resource_group.rg.location
- app_service_plan_id     = azurerm_app_service_plan.aspdocker.id
-
- site_config {
-   always_on = "true"
-   linux_fx_version  = "DOCKER|${azurerm_container_registry.test.login_server}/quackersbank:latest"
-   health_check_path = "/health/"
- }
-
- app_settings = {
-   DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
-   DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
-   DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.test.admin_password
- } 
-}
 
 resource "azurerm_key_vault" "kv" {
   name                       = "${local.func_name}-kv"
@@ -232,7 +200,6 @@ module "accounts-api" {
     DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
     DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
     DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.test.admin_password
-    WEBSITES_PORT = "8080"
   }
 
   storage_account = [
@@ -267,7 +234,6 @@ module "transactions-api" {
     DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
     DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
     DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.test.admin_password
-    WEBSITES_PORT = "8080"
   }
 
   storage_account = [
