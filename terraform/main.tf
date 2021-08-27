@@ -90,7 +90,7 @@ resource "azurerm_key_vault" "kv" {
   
 }
 
-resource "azurerm_key_vault_policy" "sp" {
+resource "azurerm_key_vault_access_policy" "sp" {
   key_vault_id = azurerm_key_vault.kv.id
   tenant_id = data.azurerm_client_config.current.tenant_id
   object_id = data.azurerm_client_config.current.object_id
@@ -121,7 +121,7 @@ resource "azurerm_key_vault_policy" "sp" {
 }
 
 
-resource "azurerm_key_vault_policy" "as" {
+resource "azurerm_key_vault_access_policy" "as" {
   for_each = toset([
     module.accounts-api.identity_principal_id,
     module.transactions-api.identity_principal_id,
