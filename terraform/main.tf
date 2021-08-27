@@ -44,7 +44,7 @@ resource "random_string" "unique" {
 
 module "frontend" {
   source = "github.com/implodingduck/tfmodules//appservice"
-  appname                = "frontend"
+  appname                = "frontend2"
   resource_group_name     = azurerm_resource_group.rg.name
   resource_group_location = azurerm_resource_group.rg.location
   workspace_id            = data.azurerm_log_analytics_workspace.default.id
@@ -228,7 +228,7 @@ resource "azurerm_storage_container" "accounts-api" {
 
 module "accounts-api" {
   source = "github.com/implodingduck/tfmodules//appservice"
-  appname                = "accountsapi"
+  appname                = "accountsapi2"
   resource_group_name     = azurerm_resource_group.rg.name
   resource_group_location = azurerm_resource_group.rg.location
   workspace_id            = data.azurerm_log_analytics_workspace.default.id
@@ -262,7 +262,7 @@ resource "azurerm_storage_container" "transactions-api" {
 
 module "transactions-api" {
   source = "github.com/implodingduck/tfmodules//appservice"
-  appname                = "transactionsapi"
+  appname                = "transactionsapi2"
   resource_group_name     = azurerm_resource_group.rg.name
   resource_group_location = azurerm_resource_group.rg.location
   workspace_id            = data.azurerm_log_analytics_workspace.default.id
