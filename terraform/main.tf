@@ -79,7 +79,7 @@ resource "azurerm_container_registry" "test" {
 
 
 resource "azurerm_key_vault" "kv" {
-  name                       = "${local.func_name}-kv"
+  name                       = "kv-${local.func_name}"
   location                   = azurerm_resource_group.rg.location
   resource_group_name        = azurerm_resource_group.rg.name
   tenant_id                  = data.azurerm_client_config.current.tenant_id
@@ -87,34 +87,62 @@ resource "azurerm_key_vault" "kv" {
   soft_delete_retention_days = 7
   purge_protection_enabled = false
 
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
-
-    key_permissions = [
-      "create",
-      "get",
-      "purge",
-      "recover",
-      "delete"
-    ]
-
-    secret_permissions = [
-      "set",
-      "purge",
-      "get",
-      "list"
-    ]
-
-    certificate_permissions = [
-      "purge"
-    ]
-
-    storage_permissions = [
-      "purge"
-    ]
-  }
+  
 }
+
+resource "azurerm_key_vault_policy" "sp" {
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = data.azurerm_client_config.current.object_id
+  
+  key_permissions = [
+    "create",
+    "get",
+    "purge",
+    "recover",
+    "delete"
+  ]
+
+  secret_permissions = [
+    "set",
+    "purge",
+    "get",
+    "list"
+  ]
+
+  certificate_permissions = [
+    "purge"
+  ]
+
+  storage_permissions = [
+    "purge"
+  ]
+  
+}
+
+
+resource "azurerm_key_vault_policy" "as" {
+  for_each = toset([
+    module.accounts-api.identity_principal_id,
+    module.transactions-api.identity_principal_id,
+    module.frontend.identity_principal_id,
+  ])
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = each.key
+  
+  key_permissions = [
+    "get",
+  ]
+
+  secret_permissions = [
+    "get",
+    "list"
+  ]
+  
+}
+
+
 
 resource "random_password" "password" {
   length           = 16
@@ -124,12 +152,24 @@ resource "random_password" "password" {
 
 
 resource "azurerm_key_vault_secret" "dbpassword" {
+  depends_on = [
+    azurerm_key_vault_policy.sp
+  ]
   name         = "dbpassword"
   value        = random_password.password.result
   key_vault_id = azurerm_key_vault.kv.id
   tags         = {}
 }
 
+resource "azurerm_key_vault_secret" "acrpassword" {
+  depends_on = [
+    azurerm_key_vault_policy.sp
+  ]
+  name = "acrpassword"
+  value = azurerm_container_registry.test.admin_password
+  key_vault_id = azurerm_key_vault.kv.id
+  tags         = {}
+}
 
 resource "azurerm_mssql_server" "db" {
   name                         = "${local.func_name}-server"
@@ -199,7 +239,7 @@ module "accounts-api" {
   app_settings = {
     DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
     DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
-    DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.test.admin_password
+    DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv.name};SecretName=${azurerm_key_vault_secret.arcpassword.name})"
   }
 
   storage_account = [
@@ -233,7 +273,7 @@ module "transactions-api" {
   app_settings = {
     DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
     DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
-    DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.test.admin_password
+    DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv.name};SecretName=${azurerm_key_vault_secret.arcpassword.name})"
   }
 
   storage_account = [
