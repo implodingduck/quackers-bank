@@ -121,26 +121,26 @@ resource "azurerm_key_vault_access_policy" "sp" {
 }
 
 
-resource "azurerm_key_vault_access_policy" "as" {
-  for_each = toset([
-    module.accounts-api.identity_principal_id,
-    module.transactions-api.identity_principal_id,
-    module.frontend.identity_principal_id,
-  ])
-  key_vault_id = azurerm_key_vault.kv.id
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = each.key
+# resource "azurerm_key_vault_access_policy" "as" {
+#   for_each = toset([
+#     module.accounts-api.identity_principal_id,
+#     module.transactions-api.identity_principal_id,
+#     module.frontend.identity_principal_id,
+#   ])
+#   key_vault_id = azurerm_key_vault.kv.id
+#   tenant_id = data.azurerm_client_config.current.tenant_id
+#   object_id = each.key
   
-  key_permissions = [
-    "get",
-  ]
+#   key_permissions = [
+#     "get",
+#   ]
 
-  secret_permissions = [
-    "get",
-    "list"
-  ]
+#   secret_permissions = [
+#     "get",
+#     "list"
+#   ]
   
-}
+# }
 
 
 
@@ -287,10 +287,10 @@ module "transactions-api" {
     }
   ]
 }
-resource "azurerm_mssql_firewall_rule" "appservice" {
-  for_each = setunion(module.accounts-api.possible_outbound_ip_address_list, module.transactions-api.possible_outbound_ip_address_list)
-  name             = "as-${replace(each.key, ".", "_")}"
-  server_id        = azurerm_mssql_server.db.id
-  start_ip_address = each.key
-  end_ip_address   = each.key
-}
+# resource "azurerm_mssql_firewall_rule" "appservice" {
+#   for_each = setunion(module.accounts-api.possible_outbound_ip_address_list, module.transactions-api.possible_outbound_ip_address_list)
+#   name             = "as-${replace(each.key, ".", "_")}"
+#   server_id        = azurerm_mssql_server.db.id
+#   start_ip_address = each.key
+#   end_ip_address   = each.key
+# }
