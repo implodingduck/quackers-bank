@@ -153,7 +153,7 @@ resource "random_password" "password" {
 
 resource "azurerm_key_vault_secret" "dbpassword" {
   depends_on = [
-    azurerm_key_vault_policy.sp
+    azurerm_key_vault_access_policy.sp
   ]
   name         = "dbpassword"
   value        = random_password.password.result
@@ -163,7 +163,7 @@ resource "azurerm_key_vault_secret" "dbpassword" {
 
 resource "azurerm_key_vault_secret" "acrpassword" {
   depends_on = [
-    azurerm_key_vault_policy.sp
+    azurerm_key_vault_access_policy.sp
   ]
   name = "acrpassword"
   value = azurerm_container_registry.test.admin_password
