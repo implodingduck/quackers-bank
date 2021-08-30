@@ -8,6 +8,7 @@ import com.quackers.bank.models.Transaction;
 import com.quackers.bank.repositories.TransactionRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,9 @@ import static org.springframework.security.oauth2.client.web.reactive.function.c
 public class TransactionController {
     private final TransactionRepository transactionRepository;
 
+    @Value("${quackers.accountsapi.baseurl}")
+    private String BASEURL;
+
     @Autowired
     WebClient webClient;
 
@@ -43,7 +47,7 @@ public class TransactionController {
         Transaction retVal = null;
         Account a = webClient
             .get()
-            .uri(String.format("http://accounts-api:8081/api/accounts/%s/", t.getAccountId()))
+            .uri(String.format("%s/api/accounts/%s/",BASEURL, t.getAccountId()))
             .attributes(clientRegistrationId("quackers-bank-accounts"))
             .retrieve()
             .bodyToMono(new ParameterizedTypeReference<Account>() {})
@@ -55,7 +59,7 @@ public class TransactionController {
                 
                 Account body = webClient
                     .put()
-                    .uri(String.format("http://accounts-api:8081/api/accounts/%s/", t.getAccountId()))
+                    .uri(String.format("%s/api/accounts/%s/", BASEURL, t.getAccountId()))
                     .attributes(clientRegistrationId("quackers-bank-accounts"))
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(BodyInserters.fromValue(a))
