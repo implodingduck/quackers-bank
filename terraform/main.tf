@@ -56,9 +56,23 @@ module "frontend" {
 
 }
 
+data "template_file" "appprops" {
+  template = file("${path.module}/application.properties.tmpl")
+   vars = {
+    accountsapibaseurl     = "https://${module.accounts-api.default_site_hostname}"
+    transactionsapibaseurl = "https://${module.transactions-api.default_site_hostname}"
+  }
+}
+
+resource "local_file" "appprops" {
+    content     = data.template_file.appprops.rendered
+    filename = "${path.module}/../frontend/src/main/resources/application.properties"
+}
+
 resource "null_resource" "publish_jar"{
   depends_on = [
-    module.frontend
+    module.frontend,
+    local_file.appprops
   ]
   triggers = {
     index = "${timestamp()}"

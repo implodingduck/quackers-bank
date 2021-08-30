@@ -7,6 +7,7 @@ import java.util.List;
 import com.quackers.bank.models.Account;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,6 +27,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequestMapping("/api/accounts")
 public class AccountController {
 
+    @Value("${quackers.accountsapi.baseurl}")
+    private String BASEURL;
+
     @Autowired
     WebClient webClient;
 
@@ -40,7 +44,7 @@ public class AccountController {
         account.setUid(userDetails.getSubject()); 
         Account body = webClient
             .post()
-            .uri(String.format("http://accounts-api:8081/api/accounts/"))
+            .uri(String.format("%s/api/accounts/", BASEURL))
             .attributes(clientRegistrationId("quackers-bank-accounts"))
             .contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(account))
@@ -57,7 +61,7 @@ public class AccountController {
         System.out.println(userDetails);
         List<Account> body = webClient
             .get()
-            .uri(String.format("http://accounts-api:8081/api/accounts/owner/%s/", userDetails.getSubject()))
+            .uri(String.format("%s/api/accounts/owner/%s/", BASEURL, userDetails.getSubject()))
             .attributes(clientRegistrationId("quackers-bank-accounts"))
             .retrieve()
             .bodyToMono(new ParameterizedTypeReference<List<Account>>() {})
@@ -70,7 +74,7 @@ public class AccountController {
     public String deleteAccount(@PathVariable Long id){
         String body = webClient
             .delete()
-            .uri(String.format("http://accounts-api:8081/api/accounts/%s/", id))
+            .uri(String.format("%s/api/accounts/%s/", BASEURL, id))
             .attributes(clientRegistrationId("quackers-bank-accounts"))
             .retrieve()
             .bodyToMono(String.class)
