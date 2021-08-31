@@ -81,7 +81,7 @@ resource "null_resource" "publish_jar"{
   }
   provisioner "local-exec" {
     working_dir = "../frontend"
-    command     = "./mvnw package azure-webapp:deploy -Darm.resourcegroup=${azurerm_resource_group.rg.name} -Darm.region=${azurerm_resource_group.rg.location} -Darm.appname=${module.frontend.app_service_name}"
+    command     = "curl -sOL https://github.com/microsoft/ApplicationInsights-Java/releases/download/3.1.0/applicationinsights-agent-3.1.0.jar && mv applicationinsights-agent-3.1.0.jar target/ &&./mvnw package azure-webapp:deploy -Darm.resourcegroup=${azurerm_resource_group.rg.name} -Darm.region=${azurerm_resource_group.rg.location} -Darm.appname=${module.frontend.app_service_name}"
   }
 }
 
