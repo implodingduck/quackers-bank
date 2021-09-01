@@ -6,6 +6,7 @@ import java.util.List;
 import com.quackers.bank.models.Transaction;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +26,9 @@ import static org.springframework.security.oauth2.client.web.reactive.function.c
 @RequestMapping("/api/transactions")
 public class TransactionController {
     
+    @Value("${quackers.transactionsapi.baseurl}")
+    private String BASEURL;
+
     @Autowired
     WebClient webClient;
 
@@ -40,7 +44,7 @@ public class TransactionController {
         System.out.println(String.format("createTransaction... %s: %s", t.getAccountId(), t.getAmount()));
         Transaction body = webClient
             .post()
-            .uri(String.format("http://transactions-api:8082/api/transactions/"))
+            .uri(String.format("%s/api/transactions/", BASEURL))
             .attributes(clientRegistrationId("quackers-bank-transactions"))
             .contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(t))
@@ -55,7 +59,7 @@ public class TransactionController {
     public Iterable<Transaction> getTransactions(@PathVariable Long accountId) {
         List<Transaction> body = webClient
             .get()
-            .uri(String.format("http://transactions-api:8082/api/transactions/%s/", accountId))
+            .uri(String.format("%s/api/transactions/%s/", BASEURL, accountId))
             .attributes(clientRegistrationId("quackers-bank-transactions"))
             .retrieve()
             .bodyToMono(new ParameterizedTypeReference<List<Transaction>>() {})

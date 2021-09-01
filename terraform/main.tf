@@ -52,15 +52,29 @@ module "frontend" {
   sc_always_on = "true"
   sc_linux_fx_version = "JAVA|11-java11"
   sc_health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
-  
+  app_settings = {
+    SOMEOTHER_SETTING = "testing"
+  }
 
 }
 
+data "template_file" "appprops" {
+  template = file("${path.module}/application.properties.tmpl")
+   vars = {
+    accountsapibaseurl     = "https://${module.accounts-api.default_site_hostname}"
+    transactionsapibaseurl = "https://${module.transactions-api.default_site_hostname}"
+  }
+}
 
+resource "local_file" "appprops" {
+    content     = data.template_file.appprops.rendered
+    filename = "${path.module}/../frontend/src/main/resources/application.properties"
+}
 
 resource "null_resource" "publish_jar"{
   depends_on = [
-    module.frontend
+    module.frontend,
+    local_file.appprops
   ]
   triggers = {
     index = "${timestamp()}"
@@ -79,39 +93,9 @@ resource "azurerm_container_registry" "test" {
   admin_enabled       = true
 }
 
-resource "azurerm_app_service_plan" "aspdocker" {
-  name                = "asp-docker-${local.func_name}"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  kind                = "Linux"
-  reserved = true
-  sku {
-    tier = "Basic"
-    size = "B1"
-  }
-}
-
-resource "azurerm_app_service" "my_app_service_container" {
- name                    = "${local.func_name}dock"
- resource_group_name = azurerm_resource_group.rg.name
- location            = azurerm_resource_group.rg.location
- app_service_plan_id     = azurerm_app_service_plan.aspdocker.id
-
- site_config {
-   always_on = "true"
-   linux_fx_version  = "DOCKER|${azurerm_container_registry.test.login_server}/quackersbank:latest" #define the images to usecfor you application
-   health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
- }
-
- app_settings = {
-   DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
-   DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
-   DOCKER_REGISTRY_SERVER_PASSWORD = azurerm_container_registry.test.admin_password
- } 
-}
 
 resource "azurerm_key_vault" "kv" {
-  name                       = "${local.func_name}-kv"
+  name                       = "kv-${local.func_name}"
   location                   = azurerm_resource_group.rg.location
   resource_group_name        = azurerm_resource_group.rg.name
   tenant_id                  = data.azurerm_client_config.current.tenant_id
@@ -119,34 +103,62 @@ resource "azurerm_key_vault" "kv" {
   soft_delete_retention_days = 7
   purge_protection_enabled = false
 
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
-
-    key_permissions = [
-      "create",
-      "get",
-      "purge",
-      "recover",
-      "delete"
-    ]
-
-    secret_permissions = [
-      "set",
-      "purge",
-      "get",
-      "list"
-    ]
-
-    certificate_permissions = [
-      "purge"
-    ]
-
-    storage_permissions = [
-      "purge"
-    ]
-  }
+  
 }
+
+resource "azurerm_key_vault_access_policy" "sp" {
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = data.azurerm_client_config.current.object_id
+  
+  key_permissions = [
+    "create",
+    "get",
+    "purge",
+    "recover",
+    "delete"
+  ]
+
+  secret_permissions = [
+    "set",
+    "purge",
+    "get",
+    "list"
+  ]
+
+  certificate_permissions = [
+    "purge"
+  ]
+
+  storage_permissions = [
+    "purge"
+  ]
+  
+}
+
+
+resource "azurerm_key_vault_access_policy" "as" {
+  for_each = toset([
+    module.accounts-api.identity_principal_id,
+    module.transactions-api.identity_principal_id,
+    module.frontend.identity_principal_id,
+  ])
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = each.key
+  
+  key_permissions = [
+    "get",
+  ]
+
+  secret_permissions = [
+    "get",
+    "list"
+  ]
+  
+}
+
+
 
 resource "random_password" "password" {
   length           = 16
@@ -156,12 +168,24 @@ resource "random_password" "password" {
 
 
 resource "azurerm_key_vault_secret" "dbpassword" {
+  depends_on = [
+    azurerm_key_vault_access_policy.sp
+  ]
   name         = "dbpassword"
   value        = random_password.password.result
   key_vault_id = azurerm_key_vault.kv.id
   tags         = {}
 }
 
+resource "azurerm_key_vault_secret" "acrpassword" {
+  depends_on = [
+    azurerm_key_vault_access_policy.sp
+  ]
+  name = "acrpassword"
+  value = azurerm_container_registry.test.admin_password
+  key_vault_id = azurerm_key_vault.kv.id
+  tags         = {}
+}
 
 resource "azurerm_mssql_server" "db" {
   name                         = "${local.func_name}-server"
@@ -200,4 +224,91 @@ resource "azurerm_mssql_firewall_rule" "editor" {
   server_id        = azurerm_mssql_server.db.id
   start_ip_address = "167.220.149.227"
   end_ip_address   = "167.220.149.227"
+}
+
+resource "azurerm_storage_account" "sa" {
+  name                     = "sa${local.func_name}"
+  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = azurerm_resource_group.rg.location
+  account_kind             = "StorageV2"
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+
+resource "azurerm_storage_container" "accounts-api" {
+  name                  = "accounts-api"
+  storage_account_name  = azurerm_storage_account.sa.name
+  container_access_type = "private"
+}
+
+module "accounts-api" {
+  source = "github.com/implodingduck/tfmodules//appservice"
+  appname                = "accountsapi"
+  resource_group_name     = azurerm_resource_group.rg.name
+  resource_group_location = azurerm_resource_group.rg.location
+  workspace_id            = data.azurerm_log_analytics_workspace.default.id
+  
+  sc_always_on = "true"
+  sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/accounts-api:latest"
+  sc_health_check_path = "/health/" 
+  app_settings = {
+    DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
+    DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
+    DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv.name};SecretName=${azurerm_key_vault_secret.acrpassword.name})"
+    SOMEOTHER_SETTING = "testing"
+  }
+
+  storage_account = [
+    {
+      name = azurerm_storage_account.sa.name
+      type = "AzureBlob"
+      account_name = azurerm_storage_account.sa.name
+      share_name = "accounts-api"
+      access_key = azurerm_storage_account.sa.primary_access_key
+      mount_path = "/opt/target/config"
+    }
+  ]
+}
+
+resource "azurerm_storage_container" "transactions-api" {
+  name                  = "transactions-api"
+  storage_account_name  = azurerm_storage_account.sa.name
+  container_access_type = "private"
+}
+
+module "transactions-api" {
+  source = "github.com/implodingduck/tfmodules//appservice"
+  appname                = "transactionsapi"
+  resource_group_name     = azurerm_resource_group.rg.name
+  resource_group_location = azurerm_resource_group.rg.location
+  workspace_id            = data.azurerm_log_analytics_workspace.default.id
+  
+  sc_always_on = "true"
+  sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/transactions-api:latest"
+  sc_health_check_path = "/health/" 
+  app_settings = {
+    DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
+    DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
+    DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv.name};SecretName=${azurerm_key_vault_secret.acrpassword.name})"
+    SOMEOTHER_SETTING = "testing"
+  }
+
+  storage_account = [
+    {
+      name = azurerm_storage_account.sa.name
+      type = "AzureBlob"
+      account_name = azurerm_storage_account.sa.name
+      share_name = "transactions-api"
+      access_key = azurerm_storage_account.sa.primary_access_key
+      mount_path = "/opt/target/config"
+    }
+  ]
+}
+resource "azurerm_mssql_firewall_rule" "appservice" {
+  for_each = setunion(module.accounts-api.possible_outbound_ip_address_list, module.transactions-api.possible_outbound_ip_address_list)
+  name             = "as-${replace(each.key, ".", "_")}"
+  server_id        = azurerm_mssql_server.db.id
+  start_ip_address = each.key
+  end_ip_address   = each.key
 }

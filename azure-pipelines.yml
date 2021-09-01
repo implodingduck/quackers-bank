@@ -101,7 +101,7 @@ stages:
         inputs:
           secureFile: 'quackers-bank-application.properties'
       - script: |
-           cp $(application_properties.secureFilePath) $(System.DefaultWorkingDirectory)/frontend/src/main/resources/application.properties
+           cp $(application_properties.secureFilePath) $(System.DefaultWorkingDirectory)/terraform/application.properties.tmpl
       - task: AzureCLI@2
         displayName: "Terraform Plan"
         inputs:
