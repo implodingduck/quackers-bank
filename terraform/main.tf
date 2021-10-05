@@ -59,6 +59,17 @@ module "frontend" {
     DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv.name};SecretName=${azurerm_key_vault_secret.acrpassword.name})"
   }
 
+  storage_account = [
+    {
+      name = azurerm_storage_account.sa.name
+      type = "AzureBlob"
+      account_name = azurerm_storage_account.sa.name
+      share_name = "frontend"
+      access_key = azurerm_storage_account.sa.primary_access_key
+      mount_path = "/opt/target/config"
+    }
+  ]
+
 }
 
 data "template_file" "appprops" {
@@ -239,6 +250,11 @@ resource "azurerm_storage_account" "sa" {
   account_replication_type = "LRS"
 }
 
+resource "azurerm_storage_container" "frontend" {
+  name                  = "frontend"
+  storage_account_name  = azurerm_storage_account.sa.name
+  container_access_type = "private"
+}
 
 resource "azurerm_storage_container" "accounts-api" {
   name                  = "accounts-api"
