@@ -50,7 +50,7 @@ module "frontend" {
   workspace_id            = data.azurerm_log_analytics_workspace.default.id
   
   sc_always_on = "true"
-  sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/frontend:latest"
+  sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/quackersbank:latest"
   sc_health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
   app_settings = {
     SOMEOTHER_SETTING = "testing"
