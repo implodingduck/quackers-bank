@@ -75,6 +75,7 @@ resource "local_file" "appprops" {
 }
 
 resource "null_resource" "publish_jar"{
+  count = 0
   depends_on = [
     module.frontend,
     local_file.appprops
