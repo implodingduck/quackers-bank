@@ -50,10 +50,13 @@ module "frontend" {
   workspace_id            = data.azurerm_log_analytics_workspace.default.id
   
   sc_always_on = "true"
-  sc_linux_fx_version = "JAVA|11-java11"
+  sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/frontend:latest"
   sc_health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
   app_settings = {
     SOMEOTHER_SETTING = "testing"
+    DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
+    DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
+    DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv.name};SecretName=${azurerm_key_vault_secret.acrpassword.name})"
   }
 
 }
