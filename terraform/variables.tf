@@ -24,3 +24,8 @@ variable "location" {
   type = string
   default = "East US"
 }
+
+variable "image_version" {
+  type = string
+  default = "latest"
+}

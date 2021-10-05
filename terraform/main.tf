@@ -50,7 +50,7 @@ module "frontend" {
   workspace_id            = data.azurerm_log_analytics_workspace.default.id
   
   sc_always_on = "true"
-  sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/frontend:latest"
+  sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/quackersbank:${var.image_version}"
   sc_health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
   app_settings = {
     SOMEOTHER_SETTING = "testing"
@@ -58,6 +58,17 @@ module "frontend" {
     DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
     DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv.name};SecretName=${azurerm_key_vault_secret.acrpassword.name})"
   }
+
+  storage_account = [
+    {
+      name = azurerm_storage_account.sa.name
+      type = "AzureBlob"
+      account_name = azurerm_storage_account.sa.name
+      share_name = "frontend"
+      access_key = azurerm_storage_account.sa.primary_access_key
+      mount_path = "/opt/target/config"
+    }
+  ]
 
 }
 
@@ -75,6 +86,7 @@ resource "local_file" "appprops" {
 }
 
 resource "null_resource" "publish_jar"{
+  count = 0
   depends_on = [
     module.frontend,
     local_file.appprops
@@ -238,6 +250,11 @@ resource "azurerm_storage_account" "sa" {
   account_replication_type = "LRS"
 }
 
+resource "azurerm_storage_container" "frontend" {
+  name                  = "frontend"
+  storage_account_name  = azurerm_storage_account.sa.name
+  container_access_type = "private"
+}
 
 resource "azurerm_storage_container" "accounts-api" {
   name                  = "accounts-api"
@@ -253,7 +270,7 @@ module "accounts-api" {
   workspace_id            = data.azurerm_log_analytics_workspace.default.id
   
   sc_always_on = "true"
-  sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/accounts-api:latest"
+  sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/accounts-api:${var.image_version}"
   sc_health_check_path = "/health/" 
   app_settings = {
     DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
@@ -288,7 +305,7 @@ module "transactions-api" {
   workspace_id            = data.azurerm_log_analytics_workspace.default.id
   
   sc_always_on = "true"
-  sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/transactions-api:latest"
+  sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/transactions-api:${var.image_version}"
   sc_health_check_path = "/health/" 
   app_settings = {
     DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
