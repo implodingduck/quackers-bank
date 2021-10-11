@@ -123,7 +123,7 @@ stages:
           TF_VAR_resource_group_name: $(resource-group-name)
           TF_VAR_key: $(TF_VAR_key)
           TF_VAR_container_name: $(container-name)
-          TF_VAR_image_versoin: $(Build.BuildNumber)
+          TF_VAR_image_version: $(Build.BuildNumber)
       - task: AzureCLI@2
         displayName: "Terraform Apply"
         inputs:
@@ -144,4 +144,4 @@ stages:
           TF_VAR_resource_group_name: $(resource-group-name)
           TF_VAR_key: $(TF_VAR_key)
           TF_VAR_container_name: $(container-name)
-          TF_VAR_image_versoin: $(Build.BuildNumber)
+          TF_VAR_image_version: $(Build.BuildNumber)

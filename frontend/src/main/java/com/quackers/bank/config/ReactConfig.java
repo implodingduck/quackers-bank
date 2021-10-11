@@ -14,7 +14,7 @@ public class ReactConfig implements WebMvcConfigurer {
             .setViewName("forward:/");
       registry.addViewController("/**/{spring:\\w+}")
             .setViewName("forward:/");
-      registry.addViewController("/{spring:\\w+}/**{spring:?!(\\.js|\\.css|\\.json)$}")
+      registry.addViewController("/{spring:\\w+}/**{spring:?!(\\.js|\\.css)$}")
             .setViewName("forward:/");
   }
 }
