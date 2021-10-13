@@ -10,6 +10,11 @@ public class HealthController {
     @GetMapping("/health")
 	public Hello health() {
 		String ik = System.getenv("APPINSIGHTS_INSTRUMENTATIONKEY");
-		return new Hello(200, ik);
+		if (ik != null){
+			return new Hello(200, ik);
+		} else  {
+			return new Hello(200, "healthy");
+		}
+		
 	}
 }
