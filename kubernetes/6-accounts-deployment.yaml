@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accounts-api
+  labels:
+    app: accounts-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: accounts-api
+  template:
+    metadata:
+      labels:
+        app: accounts-api
+    spec:
+      containers:
+      - name: accounts-api
+        image: ACRNAME.azurecr.io/accounts-api:20211011.3
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        ports:
+        - containerPort: 8080
+        env:
+        - name: APPLICATIONINSIGHTS_CONFIGURATION_FILE
+          value: "/opt/target/config/applicationinsights.json"
+        volumeMounts:
+        - name: app-props
+          mountPath: "/opt/target/config"
+          readOnly: true
+      volumes:
+      - name: app-props
+        secret:
+          secretName: accounts-application-properties
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: accounts-api
+  labels:
+    app: accounts-api
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: accounts-api
