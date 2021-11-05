@@ -24,7 +24,7 @@ az acr import --name $REGISTRY_NAME --source $CERT_MANAGER_REGISTRY/$CERT_MANAGE
 az acr import --name $REGISTRY_NAME --source $CERT_MANAGER_REGISTRY/$CERT_MANAGER_IMAGE_CAINJECTOR:$CERT_MANAGER_TAG --image $CERT_MANAGER_IMAGE_CAINJECTOR:$CERT_MANAGER_TAG
 
 
-kubectl create namespace ingress-basic
+kubectl create namespace $NAMESPACE
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 ACR_URL=$REGISTRY_NAME.azurecr.io
 
