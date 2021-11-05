@@ -18,7 +18,7 @@ CERT_MANAGER_IMAGE_CAINJECTOR=jetstack/cert-manager-cainjector
 ACR_URL=$REGISTRY_NAME.azurecr.io
 
 # Label the ingress-basic namespace to disable resource validation
-kubectl label namespace ingress-basic cert-manager.io/disable-validation=true
+kubectl label namespace $NAMESPACE cert-manager.io/disable-validation=true
 
 # Add the Jetstack Helm repository
 helm repo add jetstack https://charts.jetstack.io
