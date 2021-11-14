@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quackersbank
+  labels:
+    app: quackersbank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quackersbank
+  template:
+    metadata:
+      labels:
+        app: quackersbank
+    spec:
+      containers:
+      - name: quackersbank
+        image:  ${acr}.azurecr.io/quackersbank:latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quackersbank
+  labels:
+    app: quackersbank
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: quackersbank

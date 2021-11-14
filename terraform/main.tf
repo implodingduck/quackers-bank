@@ -70,6 +70,11 @@ module "frontend" {
     }
   ]
 
+
+  cors = [{
+    allowed_origins = ["http://localhost:3000"]
+    support_credentials = true
+  }]
 }
 
 data "template_file" "appprops" {

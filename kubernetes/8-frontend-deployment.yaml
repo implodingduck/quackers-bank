@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quackersbank
+  labels:
+    app: quackersbank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quackersbank
+  template:
+    metadata:
+      labels:
+        app: quackersbank
+    spec:
+      containers:
+      - name: quackersbank
+        image: ACRNAME.azurecr.io/quackersbank:20211013.2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        ports:
+        - containerPort: 8080
+        env:
+        - name: APPLICATIONINSIGHTS_CONFIGURATION_FILE
+          value: "/opt/target/config/applicationinsights.json"
+        - name: APPINSIGHTS_INSTRUMENTATIONKEY
+          value: # APP INSIGHTS KEY
+        volumeMounts:
+        - name: app-props
+          mountPath: "/opt/target/config"
+          readOnly: true
+      volumes:
+      - name: app-props
+        secret:
+          secretName: frontend-impersonation-application-properties #frontend-impersonation-application-properties #frontend-application-properties
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quackersbank
+  labels:
+    app: quackersbank
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: quackersbank

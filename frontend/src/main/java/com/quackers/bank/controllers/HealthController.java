@@ -9,6 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthController {
     @GetMapping("/health")
 	public Hello health() {
-		return new Hello(200, "healthy");
+		String ik = System.getenv("APPINSIGHTS_INSTRUMENTATIONKEY");
+		if (ik != null){
+			return new Hello(200, ik);
+		} else  {
+			return new Hello(200, "healthy");
+		}
+		
 	}
 }
