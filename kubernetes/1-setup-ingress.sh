@@ -35,12 +35,12 @@ helm install nginx-ingress ingress-nginx/ingress-nginx \
     --set controller.image.registry=$ACR_URL \
     --set controller.image.image=$CONTROLLER_IMAGE \
     --set controller.image.tag=$CONTROLLER_TAG \
-    --set controller.image.digest="sha256:0851b34f69f69352bf168e6ccf30e1e20714a264ab1ecd1933e4d8c0fc3215c6"\
+    --set controller.image.digest=""\
     --set controller.admissionWebhooks.patch.nodeSelector."kubernetes\.io/os"=linux \
     --set controller.admissionWebhooks.patch.image.registry=$ACR_URL \
     --set controller.admissionWebhooks.patch.image.image=$PATCH_IMAGE \
     --set controller.admissionWebhooks.patch.image.tag=$PATCH_TAG \
-    --set controller.admissionWebhooks.patch.image.digest="sha256:950833e19ade18cd389d647efb88992a7cc077abedef343fa59e012d376d79b7" \
+    --set controller.admissionWebhooks.patch.image.digest="" \
     --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux \
     --set defaultBackend.image.registry=$ACR_URL \
     --set defaultBackend.image.image=$DEFAULTBACKEND_IMAGE \
