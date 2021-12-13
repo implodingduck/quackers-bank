@@ -20,6 +20,7 @@
 		<arm.resourcegroup>${env.ARM_RESOURCE_GROUP}</arm.resourcegroup>
 		<arm.region>${env.ARM_REGION}</arm.region>
 		<arm.appname>quackersaccountapijar</arm.appname>
+		<log4j2.version>2.15.0</log4j2.version>
 	</properties>
 	<dependencies>
 		<dependency>
