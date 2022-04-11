@@ -331,7 +331,7 @@ module "transactions-api" {
   ]
 }
 resource "azurerm_mssql_firewall_rule" "appservice" {
-  for_each = setunion(module.accounts-api.possible_outbound_ip_address_list, module.transactions-api.possible_outbound_ip_address_list)
+  for_each = setunion(module.accounts-api.possible_outbound_ip_address_list, module.transactions-api.possible_outbound_ip_address_list, module.frontend.possible_outbound_ip_address_list)
   name             = "as-${replace(each.key, ".", "_")}"
   server_id        = azurerm_mssql_server.db.id
   start_ip_address = each.key
