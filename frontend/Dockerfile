@@ -1,4 +1,4 @@
-FROM eclipse-temurin:16-jdk-alpine as BUILD
+FROM eclipse-temurin:16-jdk-focal as BUILD
 
 RUN mkdir -p /usr/src/app
 COPY .mvn/ /usr/src/app/.mvn
@@ -15,7 +15,7 @@ COPY . /usr/src/app
 RUN ./mvnw clean install -DskipTests
 
 
-FROM eclipse-temurin:16-jdk-alpine
+FROM eclipse-temurin:16-jdk-focal
 EXPOSE 8080
 
 COPY --from=BUILD /usr/src/app/target/*.jar /opt/target/app.jar
