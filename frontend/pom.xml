@@ -14,7 +14,7 @@
 	<name>bank</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>16</java.version>
 		<azure.version>3.6.1</azure.version>
 		<arm.subscription>${env.ARM_SUBSCRIPTION}</arm.subscription>
 		<arm.resourcegroup>${env.ARM_RESOURCE_GROUP}</arm.resourcegroup>
@@ -75,7 +75,7 @@
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.6</version>
+				<version>1.12.0</version>
 				<configuration>
 					<workingDirectory>quackers-bank-react</workingDirectory>
 					<installDirectory>target</installDirectory>
