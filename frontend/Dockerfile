@@ -1,4 +1,4 @@
-FROM openjdk:16-jdk-slim-buster as BUILD
+FROM eclipse-temurin:16-jdk-alpine as BUILD
 
 RUN mkdir -p /usr/src/app
 COPY .mvn/ /usr/src/app/.mvn
@@ -15,7 +15,7 @@ COPY . /usr/src/app
 RUN ./mvnw clean install -DskipTests
 
 
-FROM openjdk:16-jre
+FROM eclipse-temurin:16-jdk-alpine
 EXPOSE 8080
 
 COPY --from=BUILD /usr/src/app/target/*.jar /opt/target/app.jar
