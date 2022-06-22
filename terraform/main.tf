@@ -54,9 +54,9 @@ module "frontend" {
   sc_health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
   app_settings = {
     SOMEOTHER_SETTING = "testing"
-    DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
+    #DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
     DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
-    DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv.name};SecretName=${azurerm_key_vault_secret.acrpassword.name})"
+    #DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv.name};SecretName=${azurerm_key_vault_secret.acrpassword.name})"
   }
 
   storage_account = [
@@ -278,9 +278,9 @@ module "accounts-api" {
   sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/accounts-api:${var.image_version}"
   sc_health_check_path = "/health/" 
   app_settings = {
-    DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
+    #DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
     DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
-    DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv.name};SecretName=${azurerm_key_vault_secret.acrpassword.name})"
+    #DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv.name};SecretName=${azurerm_key_vault_secret.acrpassword.name})"
     SOMEOTHER_SETTING = "testing"
   }
 
@@ -313,9 +313,9 @@ module "transactions-api" {
   sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/transactions-api:${var.image_version}"
   sc_health_check_path = "/health/" 
   app_settings = {
-    DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
+    #DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
     DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
-    DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv.name};SecretName=${azurerm_key_vault_secret.acrpassword.name})"
+    #DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.kv.name};SecretName=${azurerm_key_vault_secret.acrpassword.name})"
     SOMEOTHER_SETTING = "testing"
   }
 
@@ -336,4 +336,22 @@ resource "azurerm_mssql_firewall_rule" "appservice" {
   server_id        = azurerm_mssql_server.db.id
   start_ip_address = each.key
   end_ip_address   = each.key
+}
+
+resource "azurerm_role_assignment" "acrpull_role_frontend" {
+  scope                            = azurerm_container_registry.test.id
+  role_definition_name             = "AcrPull"
+  principal_id                     = module.frontend.identity_principal_id
+}
+
+resource "azurerm_role_assignment" "acrpull_role_accounts" {
+  scope                            = azurerm_container_registry.test.id
+  role_definition_name             = "AcrPull"
+  principal_id                     = module.accounts-api.identity_principal_id
+}
+
+resource "azurerm_role_assignment" "acrpull_role_transactions" {
+  scope                            = azurerm_container_registry.test.id
+  role_definition_name             = "AcrPull"
+  principal_id                     = module.transactions-api.identity_principal_id
 }
