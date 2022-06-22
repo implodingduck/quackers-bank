@@ -52,6 +52,7 @@ module "frontend" {
   sc_always_on = "true"
   sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/quackersbank:${var.image_version}"
   sc_health_check_path = "/health/" # health check required in order that internal app service plan loadbalancer do not loadbalance on instance down
+  acr_use_managed_identity_credentials = true
   app_settings = {
     SOMEOTHER_SETTING = "testing"
     #DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
@@ -277,6 +278,7 @@ module "accounts-api" {
   sc_always_on = "true"
   sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/accounts-api:${var.image_version}"
   sc_health_check_path = "/health/" 
+  acr_use_managed_identity_credentials = true
   app_settings = {
     #DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
     DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
@@ -312,6 +314,7 @@ module "transactions-api" {
   sc_always_on = "true"
   sc_linux_fx_version = "DOCKER|${azurerm_container_registry.test.login_server}/transactions-api:${var.image_version}"
   sc_health_check_path = "/health/" 
+  acr_use_managed_identity_credentials = true
   app_settings = {
     #DOCKER_REGISTRY_SERVER_USERNAME = azurerm_container_registry.test.admin_username
     DOCKER_REGISTRY_SERVER_URL = "https://${azurerm_container_registry.test.login_server}"
