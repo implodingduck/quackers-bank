@@ -34,6 +34,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
         
         http.authorizeRequests()
             .antMatchers(HttpMethod.GET, "/health/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/**/health/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/healthreport/**").permitAll()
             .antMatchers(HttpMethod.GET, "/static/**").permitAll()
             .antMatchers(HttpMethod.GET, "/**.jpg").permitAll()
             .antMatchers(HttpMethod.GET, "/**.png").permitAll()

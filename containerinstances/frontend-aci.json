@@ -1,0 +1,135 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "name of the storage account where file share is created."
+            }
+        },
+        "subnetId": {
+            "type": "string",
+            "metadata": {
+                "description": "id of the subnet"
+            }
+        },
+        
+        "containerImage": {
+            "type": "string",
+            "metadata": {
+                "description": "name of the container image"
+            }
+        },
+        "location": {
+          "type":"string",
+          "defaultValue": "eastus",
+          "metadata": {
+            "description": "location for ACI"
+          }
+        },
+        "userAssignedIdentity": {
+            "type": "string",
+            "metadata": {
+                "description": "user assigned identity ID"
+            }
+        },
+        "containerRegistryServer": {
+            "type": "string",
+            "metadata": {
+                "description": "container registry server"
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "name": "frontendcontainer",
+            "type":"Microsoft.ContainerInstance/containerGroups",
+            "apiVersion": "2021-07-01",
+            "location":"[parameters('location')]",
+            "properties":{
+                "containers":[
+                    {
+                        "name": "frontend",
+                        "properties": {
+                            "image": "[parameters('containerImage')]",
+                            "ports":[
+                                {
+                                    "port": 8080,
+                                    "protocol":"TCP"
+                                }
+                            ],
+                            "environmentVariables":[
+                                {
+                                    "name": "APPLICATIONINSIGHTS_CONFIGURATION_FILE",
+                                    "value": "/opt/target/config/applicationinsights.json"
+                                }
+                            ],
+                            "volumeMounts":[
+                                {
+                                    "name": "conf",
+                                    "mountPath": "/opt/target/config/"
+                                }
+                            ],
+                            "resources":{
+                                "requests":{
+                                    "memoryInGB": 1,
+                                    "cpu": 1
+                                }
+                            }
+                        }
+                    }
+                ],
+                "imageRegistryCredentials": [
+                    {
+                        "server": "[parameters('containerRegistryServer')]",
+                        "identity": "[parameters('userAssignedIdentity')]"
+                    }
+                ],
+                "ipAddress":{
+                    "ports":[
+                        {
+                            "port":8080,
+                            "protocol":"TCP"
+                        }
+                    ],
+                    "type": "Private"
+                },
+                "osType":"Linux",
+                "restartPolicy": "Never",
+                "subnetIds": [
+                    {
+                        "id": "[parameters('subnetId')]"
+                    }
+                ],
+                "volumes":[
+                    {
+                        "name": "conf",
+                        "azureFile":{
+                            "shareName": "transactions-api",
+                            "storageAccountName": "[parameters('storageAccountName')]",
+                            "storageAccountKey": "[listKeys(resourceId('rg-quackbank-demo', 'Microsoft.Storage/storageAccounts', parameters('storageAccountName')),'2017-10-01').keys[0].value]",
+                            "readOnly":false
+                        }
+                    }
+                ]
+                
+                
+            },
+            "identity": {
+                "type": "UserAssigned",
+                "userAssignedIdentities": {
+                    "[parameters('userAssignedIdentity')]": {
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "containerIPv4Address": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.ContainerInstance/containerGroups/', 'frontendcontainer')).ipAddress.ip]"
+        }
+    }
+}

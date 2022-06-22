@@ -3,6 +3,8 @@ import logo from './logo.svg';
 import './App.css';
 import ApiTest from './ApiTest'
 import Accounts from './Accounts'
+import Health from './Health'
+import Exception from './Exception'
 import {
     BrowserRouter as Router,
     Switch,
@@ -42,8 +44,10 @@ function App () {
                     <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link href="/">Home</Nav.Link>
+                        <Nav.Link href="/healthreport">Health</Nav.Link>
                         { (authUser.attributes) ? (<Nav.Link href="/accounts">Accounts</Nav.Link>) : "" }
                         { (authUser.attributes) ? (<Nav.Link href="/test">Testing</Nav.Link>) : "" }
+                        { (authUser.attributes) ? (<Nav.Link href="/exception">Exception</Nav.Link>) : "" }
                         { (authUser.attributes) ? (<div className="nav-link">{ authUser.attributes.name } (<a href="/logout">Logout</a>)</div>) : (<Nav.Link href="/happylogin">Login</Nav.Link>) }
                     </Nav>
                     </Navbar.Collapse>
@@ -63,6 +67,12 @@ function App () {
                                 </Route>
                                 <Route path="/happylogin">
                                     <Redirect to="/"/>
+                                </Route>
+                                <Route path="/healthreport">
+                                    <Health></Health>
+                                </Route>
+                                <Route path="/exception">
+                                    <Exception></Exception>
                                 </Route>
                                 <Route exact path="/">
                                     <Carousel>

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.quackers.bank.models.Transaction;
+import com.quackers.bank.models.Hello;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,6 +67,19 @@ public class TransactionController {
             .bodyToMono(new ParameterizedTypeReference<List<Transaction>>() {})
             .block();
         System.out.println(String.format("Response back: %s", body.size()));
+        return body;
+    }
+
+    @GetMapping("/health")
+    public Hello getTransactionApiHealth() {
+        
+        Hello body = webClient
+            .get()
+            .uri(String.format("%s/health", BASEURL))
+            .retrieve()
+            .bodyToMono(new ParameterizedTypeReference<Hello>() {})
+            .block();
+        System.out.println(String.format("Response back: %s", body.getContent()));
         return body;
     }
 }

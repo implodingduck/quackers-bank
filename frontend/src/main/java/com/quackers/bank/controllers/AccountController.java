@@ -5,6 +5,7 @@ import static org.springframework.security.oauth2.client.web.reactive.function.c
 import java.util.List;
 
 import com.quackers.bank.models.Account;
+import com.quackers.bank.models.Hello;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,6 +71,19 @@ public class AccountController {
         return body;
     }
 
+    @GetMapping("/health")
+    public Hello getAccountApiHealth() {
+        
+        Hello body = webClient
+            .get()
+            .uri(String.format("%s/health", BASEURL))
+            .retrieve()
+            .bodyToMono(new ParameterizedTypeReference<Hello>() {})
+            .block();
+        System.out.println(String.format("Response back: %s", body.getContent()));
+        return body;
+    }
+
     @DeleteMapping("/{id}")
     public String deleteAccount(@PathVariable Long id){
         String body = webClient
@@ -80,6 +94,19 @@ public class AccountController {
             .bodyToMono(String.class)
             .block();
         System.out.println(String.format("Response back: %s", body));
+        return body;
+    }
+
+    @GetMapping("/exception")
+    public Iterable<Account> getException(Authentication  authentication) {
+        List<Account> body = webClient
+            .get()
+            .uri(String.format("%s/api/accounts/exception/", BASEURL))
+            .attributes(clientRegistrationId("quackers-bank-accounts"))
+            .retrieve()
+            .bodyToMono(new ParameterizedTypeReference<List<Account>>() {})
+            .block();
+        System.out.println(String.format("Response back: %s", body.size()));
         return body;
     }
 }
