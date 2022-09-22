@@ -152,7 +152,8 @@ stages:
             export ARM_CLIENT_ID=$servicePrincipalId
             export ARM_CLIENT_SECRET=$servicePrincipalKey
             export ARM_TENANT_ID=$tenantId
-            terraform apply -auto-approve theplan
+            #terraform apply -auto-approve theplan
+            #terraform destroy
         env:
           TF_VAR_subscription_id: $(subscription-id)
           TF_VAR_storage_account_name: $(storage-account-name)
