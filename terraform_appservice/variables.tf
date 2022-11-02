@@ -21,10 +21,11 @@ variable "container_name" {
 }
 
 variable "location" {
-  type    = string
+  type = string
   default = "East US"
 }
 
-variable "gh_repo" {
+variable "image_version" {
   type = string
+  default = "latest"
 }
