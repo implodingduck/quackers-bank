@@ -33,12 +33,16 @@ az network public-ip update --ids $PUBLICIPID --dns-name $DNSNAME
 # Display the FQDN
 DNS_LABEL=$(az network public-ip show --ids $PUBLICIPID --query "[dnsSettings.fqdn]" --output tsv)
 
-helm upgrade nginx-ingress ingress-nginx/ingress-nginx \
+kubectl create namespace $NAMESPACE
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+
+helm install nginx-ingress ingress-nginx/ingress-nginx \
   --namespace $NAMESPACE \
   --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-dns-label-name"=$DNS_LABEL \
   --set controller.service.loadBalancerIP=$PUBLIC_IP
 
-# Label the ingress-basic namespace to disable resource validation
+# Label the namespace to disable resource validation
 kubectl label namespace $NAMESPACE cert-manager.io/disable-validation=true
 
 # Add the Jetstack Helm repository
@@ -51,7 +55,7 @@ ACR_URL=$REGISTRY_NAME.azurecr.io
 
 # Install the cert-manager Helm chart
 helm install cert-manager jetstack/cert-manager \
-  --namespace ingress-basic \
+  --namespace $NAMESPACE \
   --version $CERT_MANAGER_TAG \
   --set installCRDs=true \
   --set nodeSelector."kubernetes\.io/os"=linux \
@@ -62,7 +66,7 @@ helm install cert-manager jetstack/cert-manager \
   --set cainjector.image.repository=$ACR_URL/$CERT_MANAGER_IMAGE_CAINJECTOR \
   --set cainjector.image.tag=$CERT_MANAGER_TAG
 
-cat <<EOL
+cat > issuer.yaml <<EOF
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -82,4 +86,6 @@ spec:
             spec:
               nodeSelector:
                 "kubernetes.io/os": linux
-EOL | kubectl apply -f -
+EOF
+
+kubectl apply -f issuer.yaml
