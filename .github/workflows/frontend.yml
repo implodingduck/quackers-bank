@@ -22,11 +22,8 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}-frontend
+  WORKINGDIR: frontend
 
-
-defaults:
-    run:
-      working-directory: ./frontend
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -88,6 +85,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          context: ./${{ env.WORKINGDIR }}/
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
