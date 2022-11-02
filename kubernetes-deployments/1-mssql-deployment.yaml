@@ -42,11 +42,14 @@ spec:
         - name: SA_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mssql
+              name: wisecret
               key: DB-PASSWORD 
         volumeMounts:
         - name: mssql
           mountPath: /var/opt/mssql
+        - name: secrets-store01-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
       volumes:
       - name: mssql
         persistentVolumeClaim:
