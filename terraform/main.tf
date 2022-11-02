@@ -110,6 +110,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
     docker_bridge_cidr = "172.17.0.1/16"
   }
 
+  key_vault_secrets_provider {
+    secret_rotation_enabled = true
+    secret_rotation_interval = "2m"
+  }
+
   role_based_access_control_enabled = true
 
   identity {
@@ -144,4 +149,88 @@ resource "azurerm_application_insights" "app" {
   location            = azurerm_resource_group.aks.location
   application_type    = "other"
   workspace_id        = data.azurerm_log_analytics_workspace.default.id
+}
+
+resource "azurerm_key_vault" "kv" {
+  name                       = "kv-${local.func_name}"
+  location                   = azurerm_resource_group.rg.location
+  resource_group_name        = azurerm_resource_group.rg.name
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  sku_name                   = "standard"
+  soft_delete_retention_days = 7
+  purge_protection_enabled   = false
+
+}
+
+resource "azurerm_key_vault_access_policy" "sp" {
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_client_config.current.object_id
+
+  key_permissions = [
+    "Create",
+    "Get",
+    "Purge",
+    "Recover",
+    "Delete"
+  ]
+
+  secret_permissions = [
+    "Set",
+    "Purge",
+    "Get",
+    "List",
+    "Delete"
+  ]
+
+  certificate_permissions = [
+    "Purge"
+  ]
+
+  storage_permissions = [
+    "Purge"
+  ]
+
+}
+
+resource "azurerm_key_vault_access_policy" "csidriver" {
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = azurerm_user_assigned_identity.kvcsidriver.principal_id
+
+  key_permissions = [
+    "Get"
+  ]
+
+  secret_permissions = [
+    "Get",
+    "List",
+  ]
+
+}
+
+resource "azurerm_user_assigned_identity" "kvcsidriver" {
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  name = "uai-kvcsidriver-${local.cluster_name}"
+}
+
+resource "azapi_resource" "fic" {
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
+  ]
+  type = "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2022-01-31-preview"
+  name      = "fic-kvcsidriver"
+  parent_id = azurerm_user_assigned_identity.kvcsidriver.id
+
+  body = jsonencode({
+    properties = {
+      audiences = [
+        "api://AzureADTokenExchange"
+      ]
+      issuer = azurerm_kubernetes_cluster.aks.oidc_issuer_url 
+      subject = "system:serviceaccount:quackersbank:${azurerm_user_assigned_identity.kvcsidriver.name}"
+    }
+  })
 }
