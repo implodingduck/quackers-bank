@@ -39,11 +39,11 @@ spec:
         env:
         - name: ACCEPT_EULA
           value: "Y"
-        - name: SA_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: wisecret
-              key: DB-PASSWORD 
+        # - name: SA_PASSWORD
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: wisecret
+        #       key: DB-PASSWORD 
         volumeMounts:
         - name: mssql
           mountPath: /var/opt/mssql
