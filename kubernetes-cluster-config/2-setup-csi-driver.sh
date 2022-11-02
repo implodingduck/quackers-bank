@@ -34,7 +34,7 @@ spec:
     usePodIdentity: "false"
     useVMManagedIdentity: "false"          
     clientID: "${USER_ASSIGNED_CLIENT_ID}" # Setting this to use workload identity
-    keyvaultName: ${$KEYVAULT_NAME}       # Set to the name of your key vault
+    keyvaultName: ${KEYVAULT_NAME}       # Set to the name of your key vault
     objects:  |
       array:
         - |
