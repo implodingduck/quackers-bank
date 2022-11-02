@@ -28,6 +28,7 @@ apiVersion: secrets-store.csi.x-k8s.io/v1
 kind: SecretProviderClass
 metadata:
   name: azure-kvname-workload-identity # needs to be unique per namespace
+  namespace: quackersbank
 spec:
   provider: azure
   parameters:
@@ -52,6 +53,7 @@ apiVersion: secrets-store.csi.x-k8s.io/v1
 kind: SecretProviderClass
 metadata:
   name: azure-sync-workload-identity
+  namespace: quackersbank
 spec:
   provider: azure
   parameters:
