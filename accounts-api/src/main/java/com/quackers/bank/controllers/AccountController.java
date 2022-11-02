@@ -74,4 +74,9 @@ public class AccountController {
         accountRepository.deleteById(id);
         return "Deleted!";
     }
+
+    @GetMapping("/exception")
+    public Account throwException() {
+        throw new RuntimeException("I am throwing this on purpose");
+    }
 }

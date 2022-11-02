@@ -1,8 +1,12 @@
 package com.quackers.bank.models;
 
 public class Hello {
-    private final long id;
-	private final String content;
+    private long id;
+	private String content;
+
+	public Hello() {
+
+	}
 
 	public Hello(long id, String content) {
 		this.id = id;
@@ -13,8 +17,16 @@ public class Hello {
 		return id;
 	}
 
+	public void setId(long id){
+		this.id = id;
+	}
+
 	public String getContent() {
 		return content;
+	}
+
+	public void setContent(String content){
+		this.content = content;
 	}
 
 }   
