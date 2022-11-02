@@ -144,9 +144,9 @@ resource "azurerm_role_assignment" "acrpull_role" {
 }
 
 resource "azurerm_application_insights" "app" {
-  name                = "${local.cluster_name}-app-insights"
-  resource_group_name = azurerm_resource_group.aks.name
-  location            = azurerm_resource_group.aks.location
+  name                = "${local.cluster_name}-insights"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
   application_type    = "other"
   workspace_id        = data.azurerm_log_analytics_workspace.default.id
 }
