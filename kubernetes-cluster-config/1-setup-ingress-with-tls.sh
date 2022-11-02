@@ -4,6 +4,10 @@ source ./.env
 # export RESOURCE_GROUP=
 # export CLUSTER=
 # export EMAIL_ADDRESS=
+
+
+az aks get-credentials -n $CLUSTER -g $RESOURCE_GROUP
+
 NAMESPACE="quackersbank"
 CERT_MANAGER_REGISTRY=quay.io
 CERT_MANAGER_TAG=v1.8.0
