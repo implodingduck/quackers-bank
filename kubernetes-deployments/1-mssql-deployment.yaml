@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: 'pvc-sql'
+  name: pvc-sql
+  namespace: quackersbank
 spec:
   accessModes:
   - ReadWriteOnce
@@ -14,6 +15,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mssql
+  namespace: quackersbank
 spec:
   replicas: 1
   selector:
@@ -60,6 +62,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mssql
+  namespace: quackersbank
 spec:
   selector:
     app: mssql
