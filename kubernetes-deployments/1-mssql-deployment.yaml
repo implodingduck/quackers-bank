@@ -39,11 +39,11 @@ spec:
         env:
         - name: ACCEPT_EULA
           value: "Y"
-        # - name: SA_PASSWORD
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: wisecret
-        #       key: DB-PASSWORD 
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: wisecret
+              key: DB-PASSWORD 
         volumeMounts:
         - name: mssql
           mountPath: /var/opt/mssql
@@ -59,7 +59,7 @@ spec:
           driver: secrets-store.csi.k8s.io
           readOnly: true
           volumeAttributes:
-            secretProviderClass: "azure-kvname-workload-identity"
+            secretProviderClass: "azure-sync-workload-identity"
 ---
 apiVersion: v1
 kind: Service
