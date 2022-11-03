@@ -23,32 +23,6 @@ metadata:
 EOF
 
 cat <<EOF | kubectl apply -f -
-# This is a SecretProviderClass example using workload identity to access your key vault
-apiVersion: secrets-store.csi.x-k8s.io/v1
-kind: SecretProviderClass
-metadata:
-  name: azure-kvname-workload-identity # needs to be unique per namespace
-  namespace: quackersbank
-spec:
-  provider: azure
-  parameters:
-    usePodIdentity: "false"
-    useVMManagedIdentity: "false"          
-    clientID: "${USER_ASSIGNED_CLIENT_ID}" # Setting this to use workload identity
-    keyvaultName: ${KEYVAULT_NAME}       # Set to the name of your key vault
-    objects:  |
-      array:
-        - |
-          objectName: DB-PASSWORD
-          objectType: secret              # object types: secret, key, or cert
-        - |
-          objectName: APPLICATIONINSIGHTS-CONNECTION-STRING
-          objectType: secret
-
-    tenantId: "${IDENTITY_TENANT}"        # The tenant ID of the key vault
-EOF
-
-cat <<EOF | kubectl apply -f -
 apiVersion: secrets-store.csi.x-k8s.io/v1
 kind: SecretProviderClass
 metadata:
@@ -75,6 +49,8 @@ spec:
   - data:
     - key: dbpassword                           # data field to populate
       objectName: DB-PASSWORD                        # name of the mounted content to sync; this could be the object name or the object alias
-    secretName: wisecret                     # name of the Kubernetes secret object
+    - key: appinsightsconnectionstring
+      objectName: APPLICATIONINSIGHTS-CONNECTION-STRING
+    secretName: workidsyncsecret                     # name of the Kubernetes secret object
     type: Opaque    
 EOF

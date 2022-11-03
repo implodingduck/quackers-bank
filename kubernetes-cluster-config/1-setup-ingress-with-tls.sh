@@ -39,6 +39,7 @@ helm repo update
 
 helm install nginx-ingress ingress-nginx/ingress-nginx \
   --namespace $NAMESPACE \
+  --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz \
   --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-dns-label-name"=$DNSNAME \
   --set controller.service.loadBalancerIP=$PUBLIC_IP
 
