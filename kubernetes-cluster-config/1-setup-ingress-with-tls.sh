@@ -22,7 +22,7 @@ az acr import --name $REGISTRY_NAME --source $CERT_MANAGER_REGISTRY/$CERT_MANAGE
 NODE_RESOURCE_GROUP=$(az aks show --resource-group $RESOURCE_GROUP --name $CLUSTER --query nodeResourceGroup -o tsv)
 PUBLIC_IP=$(az network public-ip create --resource-group $NODE_RESOURCE_GROUP --name myAKSPublicIPIngress --sku Standard --allocation-method static --query publicIp.ipAddress -o tsv)
 
-DNSNAME="quackersbank"
+DNSNAME="aksquackersbank"
 
 # Get the resource-id of the public ip
 PUBLICIPID=$(az network public-ip list --query "[?ipAddress!=null]|[?contains(ipAddress, '$PUBLIC_IP')].[id]" --output tsv)
@@ -39,8 +39,13 @@ helm repo update
 
 helm install nginx-ingress ingress-nginx/ingress-nginx \
   --namespace $NAMESPACE \
+  --set controller.service.loadBalancerIP=$PUBLIC_IP
+
+helm upgrade nginx-ingress ingress-nginx/ingress-nginx \
+  --namespace $NAMESPACE \
   --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-dns-label-name"=$DNS_LABEL \
   --set controller.service.loadBalancerIP=$PUBLIC_IP
+
 
 # Label the namespace to disable resource validation
 kubectl label namespace $NAMESPACE cert-manager.io/disable-validation=true
