@@ -25,7 +25,7 @@ PUBLIC_IP=$(az network public-ip create --resource-group $NODE_RESOURCE_GROUP --
 DNSNAME="quackersbank"
 
 # Get the resource-id of the public ip
-PUBLICIPID=$(az network public-ip list --query "[?ipAddress!=null]|[?contains(ipAddress, '$IP')].[id]" --output tsv)
+PUBLICIPID=$(az network public-ip list --query "[?ipAddress!=null]|[?contains(ipAddress, '$PUBLIC_IP')].[id]" --output tsv)
 
 # Update public ip address with DNS name
 az network public-ip update --ids $PUBLICIPID --dns-name $DNSNAME
