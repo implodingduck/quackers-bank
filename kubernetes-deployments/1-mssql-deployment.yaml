@@ -43,7 +43,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: wisecret
-              key: DB-PASSWORD 
+              key: dbpassword
         volumeMounts:
         - name: mssql
           mountPath: /var/opt/mssql
@@ -60,8 +60,7 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: "azure-sync-workload-identity"
-          #nodePublishSecretRef:
-          #  name: secrets-store-creds
+          
 ---
 apiVersion: v1
 kind: Service
