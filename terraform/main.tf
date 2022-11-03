@@ -90,7 +90,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   name                    = "aks${local.cluster_name}"
   location                = azurerm_resource_group.rg.location
   resource_group_name     = azurerm_resource_group.rg.name
-  dns_prefix              = local.cluster_name
+  dns_prefix              = "aks${local.cluster_name}"
   kubernetes_version      = data.azurerm_kubernetes_service_versions.current.latest_version
   private_cluster_enabled = false
   default_node_pool {
