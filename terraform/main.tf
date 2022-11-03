@@ -87,7 +87,7 @@ data "azurerm_kubernetes_service_versions" "current" {
 
 
 resource "azurerm_kubernetes_cluster" "aks" {
-  name                    = local.cluster_name
+  name                    = "aks${local.cluster_name}"
   location                = azurerm_resource_group.rg.location
   resource_group_name     = azurerm_resource_group.rg.name
   dns_prefix              = local.cluster_name

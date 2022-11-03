@@ -39,11 +39,7 @@ helm repo update
 
 helm install nginx-ingress ingress-nginx/ingress-nginx \
   --namespace $NAMESPACE \
-  --set controller.service.loadBalancerIP=$PUBLIC_IP
-
-helm upgrade nginx-ingress ingress-nginx/ingress-nginx \
-  --namespace $NAMESPACE \
-  --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-dns-label-name"=$DNS_LABEL \
+  --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-dns-label-name"=$DNSNAME \
   --set controller.service.loadBalancerIP=$PUBLIC_IP
 
 
@@ -71,7 +67,7 @@ helm install cert-manager jetstack/cert-manager \
   --set cainjector.image.repository=$ACR_URL/$CERT_MANAGER_IMAGE_CAINJECTOR \
   --set cainjector.image.tag=$CERT_MANAGER_TAG
 
-cat > issuer.yaml <<EOF
+cat <<EOF | kubectl apply -f -
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -92,5 +88,3 @@ spec:
               nodeSelector:
                 "kubernetes.io/os": linux
 EOF
-
-kubectl apply -f issuer.yaml
