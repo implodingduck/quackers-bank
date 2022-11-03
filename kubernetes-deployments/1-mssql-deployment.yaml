@@ -60,8 +60,8 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: "azure-sync-workload-identity"
-          nodePublishSecretRef:
-            name: secrets-store-creds
+          #nodePublishSecretRef:
+          #  name: secrets-store-creds
 ---
 apiVersion: v1
 kind: Service
