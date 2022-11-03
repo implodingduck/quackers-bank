@@ -21,6 +21,6 @@ EXPOSE 8080
 COPY --from=BUILD /usr/src/app/target/*.jar /opt/target/app.jar
 
 WORKDIR /opt/target
-RUN curl -sOL https://github.com/microsoft/ApplicationInsights-Java/releases/download/3.4.2/applicationinsights-agent-3.2.7.jar
+RUN curl -sOL https://github.com/microsoft/ApplicationInsights-Java/releases/download/3.4.2/applicationinsights-agent-3.4.2.jar
 
 ENTRYPOINT ["java", "-javaagent:/opt/target/applicationinsights-agent-3.4.2.jar", "-jar", "app.jar"]
