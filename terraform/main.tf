@@ -242,7 +242,7 @@ resource "null_resource" "fic" {
     azurerm_kubernetes_cluster.aks
   ]
   triggers = {
-    index = "1"
+    index = azurerm_kubernetes_cluster.aks.oidc_issuer_url
   }
   provisioner "local-exec" {
     command     = "az identity federated-credential create --name fic-kvcsidriver --identity-name ${azurerm_user_assigned_identity.kvcsidriver.name} --resource-group ${azurerm_resource_group.rg.name} --issuer ${azurerm_kubernetes_cluster.aks.oidc_issuer_url } --subject system:serviceaccount:quackersbank:${azurerm_user_assigned_identity.kvcsidriver.name}"
