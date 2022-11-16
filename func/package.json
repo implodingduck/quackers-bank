@@ -1,0 +1,16 @@
+{
+  "name": "aks-start-stop-helper",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "func start",
+    "test": "echo \"No tests yet...\""
+  },
+  "dependencies": {
+    "@azure/arm-containerservice": "^17.1.0",
+    "@azure/identity": "^3.1.0"
+  },
+  "devDependencies": {
+    "azure-functions-core-tools": "^4.x"
+  }
+}

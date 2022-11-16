@@ -23,7 +23,43 @@ resource "azurerm_api_management" "apim" {
       <backend>
         <forward-request />
       </backend>
-      <outbound />
+      <outbound>
+        <set-header name="X-OperationName" exists-action="override">
+            <value>@( context.Operation.Name )</value>
+        </set-header>
+        <set-header name="X-OperationMethod" exists-action="override">
+            <value>@( context.Operation.Method )</value>
+        </set-header>
+        <set-header name="X-OperationUrl" exists-action="override">
+            <value>@( context.Operation.UrlTemplate )</value>
+        </set-header>
+        <set-header name="X-ApiName" exists-action="override">
+            <value>@( context.Api.Name )</value>
+        </set-header>
+        <set-header name="X-ApiPath" exists-action="override">
+            <value>@( context.Api.Path )</value>
+        </set-header>
+      </outbound>
+      <on-error>
+        <set-header name="X-OperationName" exists-action="override">
+            <value>@( context.Operation.Name )</value>
+        </set-header>
+        <set-header name="X-OperationMethod" exists-action="override">
+            <value>@( context.Operation.Method )</value>
+        </set-header>
+        <set-header name="X-OperationUrl" exists-action="override">
+            <value>@( context.Operation.UrlTemplate )</value>
+        </set-header>
+        <set-header name="X-ApiName" exists-action="override">
+            <value>@( context.Api.Name )</value>
+        </set-header>
+        <set-header name="X-ApiPath" exists-action="override">
+            <value>@( context.Api.Path )</value>
+        </set-header>
+        <set-header name="X-LastErrorMessage" exists-action="override">
+            <value>@( context.LastError.Message )</value>
+        </set-header>
+      </on-error>
     </policies>
 EOT
       xml_link    = null
