@@ -16,8 +16,18 @@ module.exports = async function (context, myTimer) {
     const resourceName = clusterIdArr[8];
     const credential = new DefaultAzureCredential();
     const client = new ContainerServiceClient(credential, subscriptionId);
-    const result = await client.managedClusters.get(resourceGroupName, resourceName);
-    console.log(result);
+    let result = await client.managedClusters.get(resourceGroupName, resourceName);
+    const powerstate = result.powerState.code
+    context.log(powerstate);
+    if ( powerstate == 'Running'){
+        context.log("Stopping...");
+        await client.managedClusters.beginStop(resourceGroupName, resourceName);
+        result = "Stopping..."
+    }else{
+        context.log("Starting...");
+        await client.managedClusters.beginStart(resourceGroupName, resourceName);
+        result = "Starting..."
+    }
     context.log('JavaScript timer trigger function ran!', timeStamp);  
 
 };
