@@ -35,7 +35,6 @@ resource "azurerm_linux_function_app" "func" {
   }
   app_settings = {
     "SCM_DO_BUILD_DURING_DEPLOYMENT" = "1"
-    "BUILD_FLAGS"                    = "UseExpressBuild"
     "ENABLE_ORYX_BUILD"              = "true"
     "CLUSTER_ID"                     = azurerm_kubernetes_cluster.aks.id    
   }
@@ -65,7 +64,7 @@ resource "null_resource" "publish_func" {
   }
   provisioner "local-exec" {
     working_dir = "../func"
-    command     = "timeout 10m func azure functionapp publish ${azurerm_linux_function_app.func.name} --build remote"
+    command     = "timeout 10m func azure functionapp publish ${azurerm_linux_function_app.func.name}"
     
   }
 }
