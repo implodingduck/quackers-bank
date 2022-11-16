@@ -14,7 +14,7 @@ module.exports = async function (context, req) {
     let result = await client.managedClusters.get(resourceGroupName, resourceName);
     const powerstate = result.powerState.code
     console.log(powerstate);
-    if ( powerState == 'Running'){
+    if ( powerstate == 'Running'){
         result = await client.managedClusters.beginStopAndWait(resourceGroupName, resourceName);
     }else{
         result = await client.managedClusters.beginStartAndWait(resourceGroupName, resourceName);
