@@ -11,7 +11,14 @@ module.exports = async function (context, req) {
     const resourceName = clusterIdArr[8];
     const credential = new DefaultAzureCredential();
     const client = new ContainerServiceClient(credential, subscriptionId);
-    const result = await client.managedClusters.get(resourceGroupName, resourceName);
+    let result = await client.managedClusters.get(resourceGroupName, resourceName);
+    const powerstate = result.powerState.code
+    console.log(powerstate);
+    if ( powerState == 'Running'){
+        result = await client.managedClusters.beginStopAndWait(resourceGroupName, resourceName);
+    }else{
+        result = await client.managedClusters.beginStartAndWait(resourceGroupName, resourceName);
+    }
     context.res = {
         // status: 200, /* Defaults to 200 */
         body: result
