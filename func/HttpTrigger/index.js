@@ -4,7 +4,7 @@ const { DefaultAzureCredential } = require("@azure/identity");
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
 
-    const clusterIdArr = process.env.get('CLUSTER_ID').split("/")
+    const clusterIdArr = process.env.CLUSTER_ID.split("/")
     
     const subscriptionId = clusterIdArr[2];
     const resourceGroupName = clusterIdArr[4];

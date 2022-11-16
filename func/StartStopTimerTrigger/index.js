@@ -9,7 +9,7 @@ module.exports = async function (context, myTimer) {
         context.log('JavaScript is running late!');
     }
 
-    const clusterIdArr = process.env.get('CLUSTER_ID').split("/")
+    const clusterIdArr = process.env.CLUSTER_ID.split("/")
     
     const subscriptionId = clusterIdArr[2];
     const resourceGroupName = clusterIdArr[4];
