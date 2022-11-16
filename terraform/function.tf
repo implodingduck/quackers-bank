@@ -54,3 +54,24 @@ resource "local_file" "localsettings" {
 EOT
     filename = "../func/local.settings.json"
 }
+
+resource "null_resource" "publish_func" {
+  depends_on = [
+    azurerm_linux_function_app.func,
+    local_file.localsettings
+  ]
+  triggers = {
+    index = "${timestamp()}"
+  }
+  provisioner "local-exec" {
+    working_dir = "../func"
+    command     = "timeout 10m func azure functionapp publish ${azurerm_linux_function_app.func.name} --build remote"
+    
+  }
+}
+
+resource "azurerm_role_assignment" "system" {
+  scope                = azurerm_kubernetes_cluster.aks.id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_linux_function_app.func.identity.0.principal_id  
+}
