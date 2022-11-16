@@ -16,10 +16,10 @@ module.exports = async function (context, req) {
     context.log(powerstate);
     if ( powerstate == 'Running'){
         context.log("Stopping...");
-        result = await client.managedClusters.beginStopAndWait(resourceGroupName, resourceName);
+        result = await client.managedClusters.beginStop(resourceGroupName, resourceName);
     }else{
         context.log("Starting...");
-        result = await client.managedClusters.beginStartAndWait(resourceGroupName, resourceName);
+        result = await client.managedClusters.beginStart(resourceGroupName, resourceName);
     }
     context.res = {
         // status: 200, /* Defaults to 200 */
