@@ -64,7 +64,7 @@ resource "null_resource" "publish_func" {
   }
   provisioner "local-exec" {
     working_dir = "../func"
-    command     = "timeout 10m func azure functionapp publish ${azurerm_linux_function_app.func.name}"
+    command     = "timeout 10m func azure functionapp publish ${azurerm_linux_function_app.func.name} --remote-build"
     
   }
 }
