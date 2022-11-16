@@ -13,10 +13,12 @@ module.exports = async function (context, req) {
     const client = new ContainerServiceClient(credential, subscriptionId);
     let result = await client.managedClusters.get(resourceGroupName, resourceName);
     const powerstate = result.powerState.code
-    console.log(powerstate);
+    context.log(powerstate);
     if ( powerstate == 'Running'){
+        context.log("Stopping...");
         result = await client.managedClusters.beginStopAndWait(resourceGroupName, resourceName);
     }else{
+        context.log("Starting...");
         result = await client.managedClusters.beginStartAndWait(resourceGroupName, resourceName);
     }
     context.res = {
