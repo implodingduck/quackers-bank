@@ -16,12 +16,12 @@ resource "azurerm_service_plan" "asp" {
 
 resource "azurerm_linux_function_app" "func" {
 
-  name                = local.func_name
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  service_plan_id     = azurerm_service_plan.asp.id
-  storage_account_name            = azurerm_storage_account.sa.name
-
+  name                       = local.func_name
+  resource_group_name        = azurerm_resource_group.rg.name
+  location                   = azurerm_resource_group.rg.location
+  service_plan_id            = azurerm_service_plan.asp.id
+  storage_account_name       = azurerm_storage_account.sa.name
+  storage_account_access_key = azurerm_storage_account.sa.primary_access_key
 
   site_config {
     application_insights_key = azurerm_application_insights.app.instrumentation_key
