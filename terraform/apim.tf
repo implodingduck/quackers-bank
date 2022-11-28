@@ -113,7 +113,6 @@ openapi: 3.0.1
 info:
   title: Revision API
   description: ''
-  version: '1.0'
 paths:
   /health:
     get:
