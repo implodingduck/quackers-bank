@@ -57,14 +57,15 @@ jobs:
       - uses: Azure/get-keyvault-secrets@v1
         with:
           keyvault: ${{ secrets.KV_NAME }}
-          secrets: 'container-name, resource-group-name, storage-account-name, subscription-id, ARM-TENANT-ID, ARM-CLIENT-ID'  # comma separated list of secret keys that need to be fetched from the Key Vault 
+          secrets: 'container-name, resource-group-name, storage-account-name, subscription-id, ARM-TENANT-ID, ARM-CLIENT-ID, ARM-CLIENT-SECRET'  # comma separated list of secret keys that need to be fetched from the Key Vault 
         id: kvAction
 
       - name: plan terraform
         env:
           ARM_CLIENT_ID: ${{ steps.kvAction.outputs.ARM-CLIENT-ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_USE_OIDC: true 
+          #ARM_USE_OIDC: true 
+          ARM_CLIENT_SECRET: ${{ steps.kvAction.outputs.ARM-CLIENT-SECRET }}
           ARM_TENANT_ID: ${{ steps.kvAction.outputs.ARM-TENANT-ID }}
           TF_VAR_container_name: ${{ steps.kvAction.outputs.container-name }}
           TF_VAR_resource_group_name: ${{ steps.kvAction.outputs.resource-group-name }}
@@ -83,7 +84,8 @@ jobs:
         env:
           ARM_CLIENT_ID: ${{ steps.kvAction.outputs.ARM-CLIENT-ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_USE_OIDC: true
+          #ARM_USE_OIDC: true
+          ARM_CLIENT_SECRET: ${{ steps.kvAction.outputs.ARM-CLIENT-SECRET }}
           ARM_TENANT_ID: ${{ steps.kvAction.outputs.ARM-TENANT-ID }}
           TF_VAR_container_name: ${{ steps.kvAction.outputs.container-name }}
           TF_VAR_resource_group_name: ${{ steps.kvAction.outputs.resource-group-name }}

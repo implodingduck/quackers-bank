@@ -69,3 +69,27 @@ EOT
   sku_name = "Developer_1"
   tags     = local.tags
 }
+
+resource "azurerm_api_management_api" "revisionv1" {
+  name                = "revision-api"
+  resource_group_name = azurerm_resource_group.rg.name
+  api_management_name = azurerm_api_management.apim.name
+  revision            = "1"
+  display_name        = "Revision API"
+  path                = "revision"
+  protocols           = ["https"]
+}
+
+
+resource "azurerm_api_management_api" "revisionv2" {
+  depends_on = [
+    azurerm_api_management_api.revisionv1
+  ]
+  name                = "revision-api"
+  resource_group_name = azurerm_resource_group.rg.name
+  api_management_name = azurerm_api_management.apim.name
+  revision            = "2"
+  display_name        = "Revision API"
+  path                = "revision"
+  protocols           = ["https"]
+}
