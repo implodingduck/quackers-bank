@@ -71,7 +71,7 @@ EOT
 }
 
 resource "azurerm_api_management_api" "revisionv1" {
-  name                 = "revision-api"
+  name                 = "revision-api;rev=1"
   resource_group_name  = azurerm_resource_group.rg.name
   api_management_name  = azurerm_api_management.apim.name
   revision             = "1"
@@ -79,6 +79,7 @@ resource "azurerm_api_management_api" "revisionv1" {
   revision_description = "This is version 1"
   path                 = "revision"
   protocols            = ["https"]
+  version              = ""
   version_set_id       = ""
 }
 
@@ -87,7 +88,7 @@ resource "azurerm_api_management_api" "revisionv2" {
   depends_on = [
     azurerm_api_management_api.revisionv1
   ]
-  name                 = "revision-api"
+  name                 = "revision-api;rev=2"
   resource_group_name  = azurerm_resource_group.rg.name
   api_management_name  = azurerm_api_management.apim.name
   revision             = "2"
@@ -95,6 +96,7 @@ resource "azurerm_api_management_api" "revisionv2" {
   revision_description = "This is version 2"
   path                 = "revision"
   protocols            = ["https"]
+  version              = ""
   version_set_id       = ""
 }
 
@@ -102,7 +104,7 @@ resource "azurerm_api_management_api" "revisionv3" {
   depends_on = [
     azurerm_api_management_api.revisionv2
   ]
-  name                 = "revision-api"
+  name                 = "revision-api;rev=3"
   resource_group_name  = azurerm_resource_group.rg.name
   api_management_name  = azurerm_api_management.apim.name
   revision             = "3"
@@ -110,5 +112,6 @@ resource "azurerm_api_management_api" "revisionv3" {
   revision_description = "This is version 3"
   path                 = "revision"
   protocols            = ["https"]
+  version              = ""
   version_set_id       = ""
 }
