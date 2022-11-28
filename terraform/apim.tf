@@ -71,7 +71,7 @@ EOT
 }
 
 resource "azurerm_api_management_api" "revisionv1" {
-  name                 = "revision-api-v1"
+  name                 = "revision-api;rev=1"
   resource_group_name  = azurerm_resource_group.rg.name
   api_management_name  = azurerm_api_management.apim.name
   revision             = "1"
@@ -90,7 +90,7 @@ resource "azurerm_api_management_api" "revisionv1" {
 }
 
 resource "azurerm_api_management_api" "revisionv2" {
-  name                 = "revision-api-v2"
+  name                 = "revision-api;rev=2"
   resource_group_name  = azurerm_resource_group.rg.name
   api_management_name  = azurerm_api_management.apim.name
   revision             = "2"
