@@ -90,9 +90,9 @@ resource "azurerm_api_management_api" "revisionv1" {
 }
 
 resource "azurerm_api_management_api_policy" "policy" {
-  api_name            = data.azurerm_api_management_api.revisionv1.name
-  api_management_name = data.azurerm_api_management_api.revisionv1.api_management_name
-  resource_group_name = data.azurerm_api_management_api.revisionv1.resource_group_name
+  api_name            = azurerm_api_management_api.revisionv1.name
+  api_management_name = azurerm_api_management_api.revisionv1.api_management_name
+  resource_group_name = azurerm_api_management_api.revisionv1.resource_group_name
 
   xml_content = <<XML
 <policies>
