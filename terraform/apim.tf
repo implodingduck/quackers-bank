@@ -115,3 +115,20 @@ resource "azurerm_api_management_api" "revisionv3" {
   version              = ""
   version_set_id       = ""
 }
+
+resource "azurerm_api_management_api" "revisionv4" {
+  depends_on = [
+    azurerm_api_management_api.revisionv3
+  ]
+  name                 = "revision-api;rev=4"
+  resource_group_name  = azurerm_resource_group.rg.name
+  api_management_name  = azurerm_api_management.apim.name
+  revision             = "4"
+  display_name         = "Revision API"
+  revision_description = "This is version 4"
+  path                 = "revision"
+  protocols            = ["https"]
+  version              = ""
+  version_set_id       = ""
+}
+
