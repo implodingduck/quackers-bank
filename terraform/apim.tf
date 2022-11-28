@@ -89,6 +89,26 @@ resource "azurerm_api_management_api" "revisionv1" {
   }
 }
 
+resource "azurerm_api_management_api" "revisionv2" {
+  name                 = "revision-api;rev=2"
+  resource_group_name  = azurerm_resource_group.rg.name
+  api_management_name  = azurerm_api_management.apim.name
+  revision             = "2"
+  display_name         = "Revision API"
+  revision_description = "This is version 2"
+  path                 = "revision"
+  protocols            = ["https"]
+  version              = ""
+  version_set_id       = ""
+  lifecycle {
+    ignore_changes = [
+      name,
+      service_url
+    ]
+  }
+}
+
+
 resource "azurerm_api_management_api_policy" "policy" {
   api_name            = azurerm_api_management_api.revisionv1.name
   api_management_name = azurerm_api_management_api.revisionv1.api_management_name
