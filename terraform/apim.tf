@@ -79,6 +79,7 @@ resource "azurerm_api_management_api" "revisionv1" {
   revision_description = "This is version 1"
   path                 = "revision"
   protocols            = ["https"]
+  version_set_id       = ""
 }
 
 
@@ -94,6 +95,7 @@ resource "azurerm_api_management_api" "revisionv2" {
   revision_description = "This is version 2"
   path                 = "revision"
   protocols            = ["https"]
+  version_set_id       = ""
 }
 
 resource "azurerm_api_management_api" "revisionv3" {
@@ -108,4 +110,5 @@ resource "azurerm_api_management_api" "revisionv3" {
   revision_description = "This is version 3"
   path                 = "revision"
   protocols            = ["https"]
+  version_set_id       = ""
 }
