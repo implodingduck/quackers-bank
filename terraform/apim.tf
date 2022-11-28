@@ -156,3 +156,27 @@ resource "azurerm_api_management_api_release" "current" {
   name   = "Revision-API-Release"
   api_id = azurerm_api_management_api.revisionv4.id
 }
+
+
+resource "azurerm_api_management_api_operation" "hello" {
+  operation_id        = "hello"
+  api_name            = azurerm_api_management_api.revisionv1.name
+  api_management_name = azurerm_api_management_api.revisionv1.api_management_name
+  resource_group_name = azurerm_api_management_api.revisionv1.resource_group_name
+  display_name        = "hello"
+  method              = "GET"
+  url_template        = "/api/HttpTrigger"
+  description         = "hello world operation"
+  request {
+    query_parameter {
+      name     = "name"
+      required = false
+      type     = "string"
+    }
+  }
+
+
+  response {
+    status_code = 200
+  }
+}
