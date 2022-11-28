@@ -153,6 +153,6 @@ resource "azurerm_api_management_api" "revisionv4" {
 }
 
 resource "azurerm_api_management_api_release" "current" {
-  name   = "Revision API Release"
+  name   = "Revision-API-Release"
   api_id = azurerm_api_management_api.revisionv4.id
 }
