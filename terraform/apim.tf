@@ -89,56 +89,56 @@ resource "azurerm_api_management_api" "revisionv1" {
   }
 }
 
-resource "azurerm_api_management_api" "revisionv2" {
-  name                 = "revision-api;rev=2"
-  resource_group_name  = azurerm_resource_group.rg.name
-  api_management_name  = azurerm_api_management.apim.name
-  revision             = "2"
-  display_name         = "Revision API"
-  revision_description = "This is version 2"
-  path                 = "revision"
-  protocols            = ["https"]
-  version              = ""
-  version_set_id       = ""
-  lifecycle {
-    ignore_changes = [
-      name,
-      service_url
-    ]
-  }
-  import {
-    content_format = "openapi"
-    content_value = <<YAML
-openapi: 3.0.1
-info:
-  title: Revision API
-  description: ''
-  version: ''
-paths:
-  /health:
-    get:
-      summary: health
-      description: get the health of the underlying api
-      operationId: health
-      responses:
-        '200':
-          description: ''
-components:
-  securitySchemes:
-    apiKeyHeader:
-      type: apiKey
-      name: Ocp-Apim-Subscription-Key
-      in: header
-    apiKeyQuery:
-      type: apiKey
-      name: subscription-key
-      in: query
-security:
-  - apiKeyHeader: [ ]
-  - apiKeyQuery: [ ]
-YAML
-  }
-}
+# resource "azurerm_api_management_api" "revisionv2" {
+#   name                 = "revision-api;rev=2"
+#   resource_group_name  = azurerm_resource_group.rg.name
+#   api_management_name  = azurerm_api_management.apim.name
+#   revision             = "2"
+#   display_name         = "Revision API"
+#   revision_description = "This is version 2"
+#   path                 = "revision"
+#   protocols            = ["https"]
+#   version              = ""
+#   version_set_id       = ""
+#   lifecycle {
+#     ignore_changes = [
+#       name,
+#       service_url
+#     ]
+#   }
+#   import {
+#     content_format = "openapi"
+#     content_value = <<YAML
+# openapi: 3.0.1
+# info:
+#   title: Revision API
+#   description: ''
+#   version: ''
+# paths:
+#   /health:
+#     get:
+#       summary: health
+#       description: get the health of the underlying api
+#       operationId: health
+#       responses:
+#         '200':
+#           description: ''
+# components:
+#   securitySchemes:
+#     apiKeyHeader:
+#       type: apiKey
+#       name: Ocp-Apim-Subscription-Key
+#       in: header
+#     apiKeyQuery:
+#       type: apiKey
+#       name: subscription-key
+#       in: query
+# security:
+#   - apiKeyHeader: [ ]
+#   - apiKeyQuery: [ ]
+# YAML
+#   }
+# }
 
 
 resource "azurerm_api_management_api_policy" "policy" {
