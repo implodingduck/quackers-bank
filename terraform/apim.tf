@@ -97,7 +97,8 @@ resource "azurerm_api_management_api_policy" "policy" {
   xml_content = <<XML
 <policies>
   <inbound>
-    <rewrite-uri template="/" />
+    <base />
+    <rewrite-uri template="/health" />
   </inbound>
 </policies>
 XML
