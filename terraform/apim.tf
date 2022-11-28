@@ -81,6 +81,11 @@ resource "azurerm_api_management_api" "revisionv1" {
   protocols            = ["https"]
   version              = ""
   version_set_id       = ""
+  lifecycle {
+    ignore_changes = [
+      name
+    ]
+  }
 }
 
 
@@ -98,6 +103,11 @@ resource "azurerm_api_management_api" "revisionv2" {
   protocols            = ["https"]
   version              = ""
   version_set_id       = ""
+  lifecycle {
+    ignore_changes = [
+      name
+    ]
+  }
 }
 
 resource "azurerm_api_management_api" "revisionv3" {
@@ -114,6 +124,11 @@ resource "azurerm_api_management_api" "revisionv3" {
   protocols            = ["https"]
   version              = ""
   version_set_id       = ""
+  lifecycle {
+    ignore_changes = [
+      name
+    ]
+  }
 }
 
 resource "azurerm_api_management_api" "revisionv4" {
@@ -130,5 +145,21 @@ resource "azurerm_api_management_api" "revisionv4" {
   protocols            = ["https"]
   version              = ""
   version_set_id       = ""
+  lifecycle {
+    ignore_changes = [
+      name
+    ]
+  }
 }
 
+resource "azapi_update_resource" "setcurrent" {
+  type        = "Microsoft.ApiManagement/service/apis@2021-08-01"
+  resource_id = azurerm_api_management_api.revisionv4.id
+
+  body = jsonencode({
+    properties = {
+      isCurrent = true
+    }
+  })
+
+}
