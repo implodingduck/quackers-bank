@@ -152,14 +152,7 @@ resource "azurerm_api_management_api" "revisionv4" {
   }
 }
 
-resource "azapi_update_resource" "setcurrent" {
-  type        = "Microsoft.ApiManagement/service/apis@2021-08-01"
-  resource_id = azurerm_api_management_api.revisionv4.id
-
-  body = jsonencode({
-    properties = {
-      isCurrent = true
-    }
-  })
-
+resource "azurerm_api_management_api_release" "current" {
+  name   = "Revision API Release"
+  api_id = azurerm_api_management_api.revisionv4.id
 }
