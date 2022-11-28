@@ -89,27 +89,27 @@ resource "azurerm_api_management_api" "revisionv1" {
   }
 }
 
-# resource "azurerm_api_management_api" "revisionv2" {
-#   name                 = "revision-api-v2"
-#   resource_group_name  = azurerm_resource_group.rg.name
-#   api_management_name  = azurerm_api_management.apim.name
-#   revision             = "2"
-#   display_name         = "Revision API"
-#   revision_description = "This is version 2"
-#   path                 = "revision"
-#   protocols            = ["https"]
-#   version              = ""
-#   version_set_id       = ""
-#   source_api_id        = "${azurerm_api_management_api.revisionv1.id}"
+resource "azurerm_api_management_api" "revisionv2" {
+  name                 = "revision-api-v2"
+  resource_group_name  = azurerm_resource_group.rg.name
+  api_management_name  = azurerm_api_management.apim.name
+  revision             = "2"
+  display_name         = "Revision API"
+  revision_description = "This is version 2"
+  path                 = "revision"
+  protocols            = ["https"]
+  version              = ""
+  version_set_id       = ""
+  source_api_id        = "${azurerm_api_management_api.revisionv1.id}"
 
-#   lifecycle {
-#     ignore_changes = [
-#       name,
-#       service_url
-#     ]
-#   }
+  lifecycle {
+    ignore_changes = [
+      name,
+      service_url
+    ]
+  }
   
-# }
+}
 
 # resource "azurerm_api_management_api" "revisionv3" {
 #   name                 = "revision-api-v3"
