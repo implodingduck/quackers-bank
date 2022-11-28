@@ -93,3 +93,16 @@ resource "azurerm_api_management_api" "revisionv2" {
   path                = "revision"
   protocols           = ["https"]
 }
+
+resource "azurerm_api_management_api" "revisionv3" {
+  depends_on = [
+    azurerm_api_management_api.revisionv2
+  ]
+  name                = "revision-api"
+  resource_group_name = azurerm_resource_group.rg.name
+  api_management_name = azurerm_api_management.apim.name
+  revision            = "3"
+  display_name        = "Revision API"
+  path                = "revision"
+  protocols           = ["https"]
+}

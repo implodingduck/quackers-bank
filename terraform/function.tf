@@ -60,7 +60,7 @@ resource "null_resource" "publish_func" {
     local_file.localsettings
   ]
   triggers = {
-    index = "${timestamp()}"
+    index = "2022-11-28T15:38:54Z" #"${timestamp()}"
   }
   provisioner "local-exec" {
     working_dir = "../func"
