@@ -71,13 +71,14 @@ EOT
 }
 
 resource "azurerm_api_management_api" "revisionv1" {
-  name                = "revision-api"
-  resource_group_name = azurerm_resource_group.rg.name
-  api_management_name = azurerm_api_management.apim.name
-  revision            = "1"
-  display_name        = "Revision API"
-  path                = "revision"
-  protocols           = ["https"]
+  name                 = "revision-api"
+  resource_group_name  = azurerm_resource_group.rg.name
+  api_management_name  = azurerm_api_management.apim.name
+  revision             = "1"
+  display_name         = "Revision API"
+  revision_description = "This is version 1"
+  path                 = "revision"
+  protocols            = ["https"]
 }
 
 
@@ -85,24 +86,26 @@ resource "azurerm_api_management_api" "revisionv2" {
   depends_on = [
     azurerm_api_management_api.revisionv1
   ]
-  name                = "revision-api"
-  resource_group_name = azurerm_resource_group.rg.name
-  api_management_name = azurerm_api_management.apim.name
-  revision            = "2"
-  display_name        = "Revision API"
-  path                = "revision"
-  protocols           = ["https"]
+  name                 = "revision-api"
+  resource_group_name  = azurerm_resource_group.rg.name
+  api_management_name  = azurerm_api_management.apim.name
+  revision             = "2"
+  display_name         = "Revision API"
+  revision_description = "This is version 2"
+  path                 = "revision"
+  protocols            = ["https"]
 }
 
 resource "azurerm_api_management_api" "revisionv3" {
   depends_on = [
     azurerm_api_management_api.revisionv2
   ]
-  name                = "revision-api"
-  resource_group_name = azurerm_resource_group.rg.name
-  api_management_name = azurerm_api_management.apim.name
-  revision            = "3"
-  display_name        = "Revision API"
-  path                = "revision"
-  protocols           = ["https"]
+  name                 = "revision-api"
+  resource_group_name  = azurerm_resource_group.rg.name
+  api_management_name  = azurerm_api_management.apim.name
+  revision             = "3"
+  display_name         = "Revision API"
+  revision_description = "This is version 3"
+  path                 = "revision"
+  protocols            = ["https"]
 }
