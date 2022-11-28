@@ -106,6 +106,38 @@ resource "azurerm_api_management_api" "revisionv2" {
       service_url
     ]
   }
+  import {
+    content_format = "openapi"
+    content_value = <<YAML
+openapi: 3.0.1
+info:
+  title: Revision API
+  description: ''
+  version: '1.0'
+paths:
+  /health:
+    get:
+      summary: health
+      description: get the health of the underlying api
+      operationId: health
+      responses:
+        '200':
+          description: ''
+components:
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]
+YAML
+  }
 }
 
 
