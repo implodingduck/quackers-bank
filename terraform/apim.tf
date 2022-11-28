@@ -70,46 +70,46 @@ EOT
   tags     = local.tags
 }
 
-resource "azurerm_api_management_api" "revisionv1" {
-  name                 = "revision-api;rev=1"
-  resource_group_name  = azurerm_resource_group.rg.name
-  api_management_name  = azurerm_api_management.apim.name
-  revision             = "1"
-  display_name         = "Revision API"
-  revision_description = "This is version 1"
-  path                 = "revision"
-  protocols            = ["https"]
-  version              = ""
-  version_set_id       = ""
-  lifecycle {
-    ignore_changes = [
-      name,
-      service_url
-    ]
-  }
-}
+# resource "azurerm_api_management_api" "revisionv1" {
+#   name                 = "revision-api;rev=1"
+#   resource_group_name  = azurerm_resource_group.rg.name
+#   api_management_name  = azurerm_api_management.apim.name
+#   revision             = "1"
+#   display_name         = "Revision API"
+#   revision_description = "This is version 1"
+#   path                 = "revision"
+#   protocols            = ["https"]
+#   version              = ""
+#   version_set_id       = ""
+#   lifecycle {
+#     ignore_changes = [
+#       name,
+#       service_url
+#     ]
+#   }
+# }
 
-resource "azurerm_api_management_api" "revisionv2" {
-  name                 = "revision-api;rev=2"
-  resource_group_name  = azurerm_resource_group.rg.name
-  api_management_name  = azurerm_api_management.apim.name
-  revision             = "2"
-  display_name         = "Revision API"
-  revision_description = "This is version 2"
-  path                 = "revision"
-  protocols            = ["https"]
-  version              = ""
-  version_set_id       = ""
-  source_api_id        = "${azurerm_api_management_api.revisionv1.id}"
+# resource "azurerm_api_management_api" "revisionv2" {
+#   name                 = "revision-api;rev=2"
+#   resource_group_name  = azurerm_resource_group.rg.name
+#   api_management_name  = azurerm_api_management.apim.name
+#   revision             = "2"
+#   display_name         = "Revision API"
+#   revision_description = "This is version 2"
+#   path                 = "revision"
+#   protocols            = ["https"]
+#   version              = ""
+#   version_set_id       = ""
+#   source_api_id        = "${azurerm_api_management_api.revisionv1.id}"
 
-  lifecycle {
-    ignore_changes = [
-      name,
-      service_url
-    ]
-  }
+#   lifecycle {
+#     ignore_changes = [
+#       name,
+#       service_url
+#     ]
+#   }
   
-}
+# }
 
 # resource "azurerm_api_management_api" "revisionv3" {
 #   name                 = "revision-api-v3"
@@ -135,34 +135,34 @@ resource "azurerm_api_management_api" "revisionv2" {
 
 
 
-resource "azurerm_api_management_api_policy" "policy" {
-  api_name            = azurerm_api_management_api.revisionv1.name
-  api_management_name = azurerm_api_management_api.revisionv1.api_management_name
-  resource_group_name = azurerm_api_management_api.revisionv1.resource_group_name
+# resource "azurerm_api_management_api_policy" "policy" {
+#   api_name            = azurerm_api_management_api.revisionv1.name
+#   api_management_name = azurerm_api_management_api.revisionv1.api_management_name
+#   resource_group_name = azurerm_api_management_api.revisionv1.resource_group_name
 
-  xml_content = <<XML
-<policies>
-  <inbound>
-    <base />
-    <rewrite-uri template="/health" />
-  </inbound>
-</policies>
-XML
-}
+#   xml_content = <<XML
+# <policies>
+#   <inbound>
+#     <base />
+#     <rewrite-uri template="/health" />
+#   </inbound>
+# </policies>
+# XML
+# }
 
-resource "azurerm_api_management_api_operation" "hello" {
-  operation_id        = "health"
-  api_name            = azurerm_api_management_api.revisionv1.name
-  api_management_name = azurerm_api_management_api.revisionv1.api_management_name
-  resource_group_name = azurerm_api_management_api.revisionv1.resource_group_name
-  display_name        = "health"
-  method              = "GET"
-  url_template        = "/health"
-  description         = "get the health of the underlying api"
-  response {
-    status_code = 200
-  }
-}
+# resource "azurerm_api_management_api_operation" "hello" {
+#   operation_id        = "health"
+#   api_name            = azurerm_api_management_api.revisionv1.name
+#   api_management_name = azurerm_api_management_api.revisionv1.api_management_name
+#   resource_group_name = azurerm_api_management_api.revisionv1.resource_group_name
+#   display_name        = "health"
+#   method              = "GET"
+#   url_template        = "/health"
+#   description         = "get the health of the underlying api"
+#   response {
+#     status_code = 200
+#   }
+# }
 
 # resource "azurerm_api_management_api_release" "current" {
 #   name   = "Revision-API-Release"
