@@ -70,7 +70,7 @@ EOT
   tags     = local.tags
 }
 
-esource "azurerm_api_management_api_version_set" "vs" {
+resource "azurerm_api_management_api_version_set" "vs" {
   name                = "revision-api-1_0_0"
   resource_group_name = azurerm_resource_group.rg.name
   api_management_name = azurerm_api_management.apim.name
