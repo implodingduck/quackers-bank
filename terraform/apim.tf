@@ -162,7 +162,9 @@ paths:
       operationId: health
       responses:
         '200':
-          description: 'response from the health check'
+          description: ''
+        '404':
+          description: ''
 components:
   securitySchemes:
     apiKeyHeader:
