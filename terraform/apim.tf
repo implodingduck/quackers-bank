@@ -152,7 +152,7 @@ resource "azurerm_api_management_api" "revisionv2" {
 openapi: 3.0.1
 info:
   title: 'Revision API'
-  description: 'basic description'
+  description: ''
   version: ''
 paths:
   /health:
@@ -162,8 +162,6 @@ paths:
       operationId: health
       responses:
         '200':
-          description: ''
-        '404':
           description: ''
 components:
   securitySchemes:
