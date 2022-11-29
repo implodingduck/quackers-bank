@@ -83,7 +83,7 @@ resource "azurerm_api_management_api" "revisionv1" {
   resource_group_name  = azurerm_resource_group.rg.name
   api_management_name  = azurerm_api_management.apim.name
   revision             = "1"
-  display_name         = "Revision API"
+
   revision_description = "This is version 1"
   path                 = "revision"
   protocols            = ["https"]
@@ -95,8 +95,8 @@ resource "azurerm_api_management_api" "revisionv1" {
     content_value = <<YAML
 openapi: 3.0.1
 info:
-  title: Revision API
-  description: ''
+  title: 'Revision API'
+  description: 'basic description'
   version: ''
 paths:
   /health:
