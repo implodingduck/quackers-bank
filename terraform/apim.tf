@@ -146,39 +146,6 @@ resource "azurerm_api_management_api" "revisionv2" {
   version_set_id       = azurerm_api_management_api_version_set.vs.id
   source_api_id        = "${azurerm_api_management_api.revisionv1.id}"
 
-    import {
-    content_format = "openapi"
-    content_value = <<YAML
-openapi: 3.0.1
-info:
-  title: 'Revision API'
-  description: ''
-  version: ''
-paths:
-  /health:
-    get:
-      summary: health
-      description: get the health of the underlying api
-      operationId: health
-      responses:
-        '200':
-          description: ''
-components:
-  securitySchemes:
-    apiKeyHeader:
-      type: apiKey
-      name: Ocp-Apim-Subscription-Key
-      in: header
-    apiKeyQuery:
-      type: apiKey
-      name: subscription-key
-      in: query
-security:
-  - apiKeyHeader: [ ]
-  - apiKeyQuery: [ ]
-YAML
-  }
-
   lifecycle {
     ignore_changes = [
       name,
