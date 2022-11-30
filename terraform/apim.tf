@@ -324,3 +324,8 @@ YAML
     }
   })
 }
+
+resource "azurerm_api_management_api_release" "versionlesscurrent" {
+  name   = "Versionless-Api-Release"
+  api_id = "${azurerm_api_management.apim.id}/apis/${azurerm_api_management_api.versionlessv1.name};rev=2"
+}
