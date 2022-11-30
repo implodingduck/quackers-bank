@@ -139,7 +139,9 @@ resource "azurerm_api_management_api" "revisionv2" {
   api_management_name  = azurerm_api_management.apim.name
   revision             = "2"
   revision_description = "This is version 2"
-  version_set_id       = azurerm_api_management_api_version_set.vs.id
+  path                 = "revision"
+  protocols            = ["https"]
+
   source_api_id        = "${azurerm_api_management_api.revisionv1.id}"
 
   lifecycle {
