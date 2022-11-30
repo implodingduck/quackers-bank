@@ -207,3 +207,71 @@ resource "azurerm_api_management_api_release" "current" {
 }
 
 
+resource "azurerm_api_management_api" "versionlessv1" {
+  name                 = "versionless-api"
+  resource_group_name  = azurerm_resource_group.rg.name
+  api_management_name  = azurerm_api_management.apim.name
+  revision             = "1"
+  display_name         = "Versionless Api"
+  description          = "basic description"
+  revision_description = "This is version 1"
+  path                 = "versionless"
+  protocols            = ["https"]
+  
+  import {
+    content_format = "openapi"
+    content_value = <<YAML
+openapi: 3.0.1
+info:
+  title: 'Revision API'
+  description: 'basic description'
+  version: ''
+paths:
+  /health:
+    get:
+      summary: health
+      description: get the health of the underlying api
+      operationId: health
+      responses:
+        '200':
+          description: ''
+components:
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]
+YAML
+  }
+  
+  lifecycle {
+    ignore_changes = [
+      name,
+      service_url
+    ]
+  }
+
+
+}
+
+resource "azurerm_api_management_api_policy" "versionlesspolicy" {
+  api_name            = azurerm_api_management_api.versionlessv1.name
+  api_management_name = azurerm_api_management_api.versionlessv1.api_management_name
+  resource_group_name = azurerm_api_management_api.versionlessv1.resource_group_name
+
+  xml_content = <<XML
+<policies>
+  <inbound>
+    <base />
+    <rewrite-uri template="/health" />
+  </inbound>
+</policies>
+XML
+}
