@@ -144,6 +144,7 @@ resource "azapi_resource_action" "revision2" {
       apiRevisionDescription = "This is version 2"
       sourceApiId = "${azurerm_api_management_api.revisionv1.id};rev=1"
       path = "revision"
+      description = ""
       format = "openapi"
       value = <<YAML
 openapi: 3.0.1
