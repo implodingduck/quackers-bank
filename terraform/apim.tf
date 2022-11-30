@@ -162,6 +162,8 @@ paths:
       responses:
         '200':
           description: ''
+        '404':
+          description: ''
 components:
   securitySchemes:
     apiKeyHeader:
