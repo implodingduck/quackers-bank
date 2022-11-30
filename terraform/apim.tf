@@ -84,6 +84,7 @@ resource "azurerm_api_management_api" "revisionv1" {
   api_management_name  = azurerm_api_management.apim.name
   revision             = "1"
   display_name         = "Revision Api"
+  description          = "basic description"
   revision_description = "This is version 1"
   path                 = "revision"
   protocols            = ["https"]
@@ -144,7 +145,7 @@ resource "azapi_resource_action" "revision2" {
       apiRevisionDescription = "This is version 2"
       sourceApiId = "${azurerm_api_management_api.revisionv1.id};rev=1"
       path = "revision"
-      description = ""
+      description = "basic description"
       format = "openapi"
       value = <<YAML
 openapi: 3.0.1
