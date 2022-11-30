@@ -159,7 +159,7 @@ paths:
       operationId: health
       responses:
         '200':
-          description: 'healthy'
+          description: ''
 components:
   securitySchemes:
     apiKeyHeader:
