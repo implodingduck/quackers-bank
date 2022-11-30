@@ -136,7 +136,7 @@ YAML
 
 resource "azapi_resource_action" "symbolicname" {
   type = "Microsoft.ApiManagement/service/apis@2021-08-01"
-  resource_id = azurerm_api_management.apim.id
+  resource_id = "${azurerm_api_management.apim.id}/apis/${azurerm_api_management_api.revisionv1.name}"
   method = "PUT"
   body = jsonencode({
     properties = {
