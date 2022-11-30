@@ -141,7 +141,7 @@ resource "azurerm_api_management_api" "revisionv2" {
   revision_description = "This is version 2"
   path                 = "revision"
   protocols            = ["https"]
-
+  version              = ""
   source_api_id        = "${azurerm_api_management_api.revisionv1.id}"
 
   lifecycle {
