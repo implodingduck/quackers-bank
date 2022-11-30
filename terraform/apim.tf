@@ -134,39 +134,49 @@ YAML
 }
 
 
-resource "azapi_resource_action" "symbolicname" {
-  type = "Microsoft.ApiManagement/service/apis@2021-08-01"
-  resource_id = "${azurerm_api_management.apim.id}/apis/${azurerm_api_management_api.revisionv1.name};rev=2"
-  method = "PUT"
-  body = jsonencode({
-    properties = {
-      apiRevision = "2"
-      apiRevisionDescription = "This is version 2"
-      sourceApiId = "${azurerm_api_management_api.revisionv1.id};rev=1"
-    }
-  })
-}
+# resource "azapi_resource_action" "symbolicname" {
+#   type = "Microsoft.ApiManagement/service/apis@2021-08-01"
+#   resource_id = "${azurerm_api_management.apim.id}/apis/${azurerm_api_management_api.revisionv1.name};rev=2"
+#   method = "PUT"
+#   body = jsonencode({
+#     properties = {
+#       apiRevision = "2"
+#       apiRevisionDescription = "This is version 2"
+#       sourceApiId = "${azurerm_api_management_api.revisionv1.id};rev=1"
+#       format = "openapi"
+#       value = <<YAML
+# openapi: 3.0.1
+# info:
+#   title: 'Revision API'
+#   description: 'basic description'
+#   version: ''
+# paths:
+#   /health:
+#     get:
+#       summary: health
+#       description: get the health of the underlying api
+#       operationId: health
+#       responses:
+#         '200':
+#           description: ''
+# components:
+#   securitySchemes:
+#     apiKeyHeader:
+#       type: apiKey
+#       name: Ocp-Apim-Subscription-Key
+#       in: header
+#     apiKeyQuery:
+#       type: apiKey
+#       name: subscription-key
+#       in: query
+# security:
+#   - apiKeyHeader: [ ]
+#   - apiKeyQuery: [ ]
+# YAML
+#     }
+#   })
+# }
 
-
-resource "azurerm_api_management_api" "revisionv2" {
-  name                 = "revision-api;rev=2"
-  resource_group_name  = azurerm_resource_group.rg.name
-  api_management_name  = azurerm_api_management.apim.name
-  revision             = "2"
-  revision_description = "This is version 2"
-  path                 = "revision"
-  protocols            = ["https"]
-  version              = ""
-  source_api_id        = "${azurerm_api_management_api.revisionv1.id};rev=1"
-
-  lifecycle {
-    ignore_changes = [
-      name,
-      service_url
-    ]
-  }
-  
-}
 
 # resource "azurerm_api_management_api" "revisionv3" {
 #   name                 = "revision-api-v3"
