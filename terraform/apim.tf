@@ -148,25 +148,25 @@ YAML
 # }
 
 
-# resource "azurerm_api_management_api" "revisionv2" {
-#   name                 = "revision-api;rev=2"
-#   resource_group_name  = azurerm_resource_group.rg.name
-#   api_management_name  = azurerm_api_management.apim.name
-#   revision             = "2"
-#   revision_description = "This is version 2"
-#   path                 = "revision"
-#   protocols            = ["https"]
-#   version              = ""
-#   source_api_id        = "${azurerm_api_management_api.revisionv1.id};rev=1"
+resource "azurerm_api_management_api" "revisionv2" {
+  name                 = "revision-api;rev=2"
+  resource_group_name  = azurerm_resource_group.rg.name
+  api_management_name  = azurerm_api_management.apim.name
+  revision             = "2"
+  revision_description = "This is version 2"
+  path                 = "revision"
+  protocols            = ["https"]
+  version              = ""
+  source_api_id        = "${azurerm_api_management_api.revisionv1.id};rev=1"
 
-#   lifecycle {
-#     ignore_changes = [
-#       name,
-#       service_url
-#     ]
-#   }
+  lifecycle {
+    ignore_changes = [
+      name,
+      service_url
+    ]
+  }
   
-# }
+}
 
 # resource "azurerm_api_management_api" "revisionv3" {
 #   name                 = "revision-api-v3"
