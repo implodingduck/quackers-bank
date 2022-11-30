@@ -134,18 +134,18 @@ YAML
 }
 
 
-# resource "azapi_resource_action" "symbolicname" {
-#   type = "Microsoft.ApiManagement/service/apis@2021-08-01"
-#   resource_id = "${azurerm_api_management.apim.id}/apis/${azurerm_api_management_api.revisionv1.name};rev=2"
-#   method = "PUT"
-#   body = jsonencode({
-#     properties = {
-#       apiRevision = "2"
-#       apiRevisionDescription = "This is version 2"
-#       sourceApiId = "${azurerm_api_management_api.revisionv1.id};rev=1"
-#     }
-#   })
-# }
+resource "azapi_resource_action" "symbolicname" {
+  type = "Microsoft.ApiManagement/service/apis@2021-08-01"
+  resource_id = "${azurerm_api_management.apim.id}/apis/${azurerm_api_management_api.revisionv1.name};rev=2"
+  method = "PUT"
+  body = jsonencode({
+    properties = {
+      apiRevision = "2"
+      apiRevisionDescription = "This is version 2"
+      sourceApiId = "${azurerm_api_management_api.revisionv1.id};rev=1"
+    }
+  })
+}
 
 
 resource "azurerm_api_management_api" "revisionv2" {
