@@ -199,23 +199,11 @@ resource "azurerm_api_management_api_policy" "policy" {
 XML
 }
 
-# resource "azurerm_api_management_api_operation" "hello" {
-#   operation_id        = "health"
-#   api_name            = azurerm_api_management_api.revisionv1.name
-#   api_management_name = azurerm_api_management_api.revisionv1.api_management_name
-#   resource_group_name = azurerm_api_management_api.revisionv1.resource_group_name
-#   display_name        = "health"
-#   method              = "GET"
-#   url_template        = "/health"
-#   description         = "get the health of the underlying api"
-#   response {
-#     status_code = 200
-#   }
-# }
 
-# resource "azurerm_api_management_api_release" "current" {
-#   name   = "Revision-API-Release"
-#   api_id = azurerm_api_management_api.revisionv1.id
-# }
+
+resource "azurerm_api_management_api_release" "current" {
+  name   = "Revision-API-Release"
+  api_id = "${azurerm_api_management_api.revisionv1.id};rev=2"
+}
 
 
