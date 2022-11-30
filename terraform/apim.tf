@@ -133,25 +133,40 @@ YAML
 
 }
 
-resource "azurerm_api_management_api" "revisionv2" {
-  name                 = "revision-api;rev=2"
-  resource_group_name  = azurerm_resource_group.rg.name
-  api_management_name  = azurerm_api_management.apim.name
-  revision             = "2"
-  revision_description = "This is version 2"
-  path                 = "revision"
-  protocols            = ["https"]
-  version              = ""
-  source_api_id        = "${azurerm_api_management_api.revisionv1.id}"
 
-  lifecycle {
-    ignore_changes = [
-      name,
-      service_url
-    ]
-  }
-  
+resource "azapi_resource_action" "symbolicname" {
+  type = "Microsoft.ApiManagement/service/apis@2021-08-01"
+  resource_id = azurerm_api_management.apim.id
+  method = "PUT"
+  body = jsonencode({
+    properties = {
+      apiRevision = "2"
+      apiRevisionDescription = "This is version 2"
+      sourceApiId = azurerm_api_management_api.revisionv1.id
+    }
+  })
 }
+
+
+# resource "azurerm_api_management_api" "revisionv2" {
+#   name                 = "revision-api;rev=2"
+#   resource_group_name  = azurerm_resource_group.rg.name
+#   api_management_name  = azurerm_api_management.apim.name
+#   revision             = "2"
+#   revision_description = "This is version 2"
+#   path                 = "revision"
+#   protocols            = ["https"]
+#   version              = ""
+#   source_api_id        = "${azurerm_api_management_api.revisionv1.id}"
+
+#   lifecycle {
+#     ignore_changes = [
+#       name,
+#       service_url
+#     ]
+#   }
+  
+# }
 
 # resource "azurerm_api_management_api" "revisionv3" {
 #   name                 = "revision-api-v3"
