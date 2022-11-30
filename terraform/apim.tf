@@ -223,7 +223,7 @@ resource "azurerm_api_management_api" "versionlessv1" {
     content_value = <<YAML
 openapi: 3.0.1
 info:
-  title: 'Revision API'
+  title: 'Versionless Api'
   description: 'basic description'
   version: ''
 paths:
@@ -293,7 +293,7 @@ resource "azapi_resource_action" "versionless2" {
       value = <<YAML
 openapi: 3.0.1
 info:
-  title: 'Revision API'
+  title: 'Versionless Api'
   description: 'basic description'
   version: ''
 paths:
