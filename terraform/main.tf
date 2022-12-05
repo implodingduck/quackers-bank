@@ -104,7 +104,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     vm_size         = "Standard_B2ms"
     os_disk_size_gb = "128"
     vnet_subnet_id  = azurerm_subnet.cluster.id
-
+    max_pods        = 60
 
   }
   network_profile {
