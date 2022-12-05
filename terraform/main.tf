@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=3.29.1"
+      version = "=3.34.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -248,14 +248,23 @@ resource "azurerm_user_assigned_identity" "kvcsidriver" {
 # }
 
 
-resource "null_resource" "fic" {
-  depends_on = [
-    azurerm_kubernetes_cluster.aks
-  ]
-  triggers = {
-    index = azurerm_kubernetes_cluster.aks.oidc_issuer_url
-  }
-  provisioner "local-exec" {
-    command     = "az identity federated-credential create --name fic-kvcsidriver --identity-name ${azurerm_user_assigned_identity.kvcsidriver.name} --resource-group ${azurerm_resource_group.rg.name} --issuer ${azurerm_kubernetes_cluster.aks.oidc_issuer_url } --subject system:serviceaccount:quackersbank:${azurerm_user_assigned_identity.kvcsidriver.name}"
-  }
+# resource "null_resource" "fic" {
+#   depends_on = [
+#     azurerm_kubernetes_cluster.aks
+#   ]
+#   triggers = {
+#     index = azurerm_kubernetes_cluster.aks.oidc_issuer_url
+#   }
+#   provisioner "local-exec" {
+#     command     = "az identity federated-credential create --name fic-kvcsidriver --identity-name ${azurerm_user_assigned_identity.kvcsidriver.name} --resource-group ${azurerm_resource_group.rg.name} --issuer ${azurerm_kubernetes_cluster.aks.oidc_issuer_url } --subject system:serviceaccount:quackersbank:${azurerm_user_assigned_identity.kvcsidriver.name}"
+#   }
+# }
+
+resource "azurerm_federated_identity_credential" "fic-kvcsidriver" {
+  name                = "fic-kvcsidriver"
+  resource_group_name = azurerm_resource_group.rg.name
+  audience            = ["api://AzureADTokenExchange"]
+  issuer              = azurerm_kubernetes_cluster.aks.oidc_issuer_url
+  parent_id           = azurerm_user_assigned_identity.kvcsidriver.id
+  subject             = "system:serviceaccount:quackersbank:${azurerm_user_assigned_identity.kvcsidriver.name}"
 }
