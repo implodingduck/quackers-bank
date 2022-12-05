@@ -4,6 +4,7 @@ resource "azurerm_storage_account" "sa" {
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  allow_nested_items_to_be_public = false
 }
 
 resource "azurerm_service_plan" "asp" {
@@ -60,7 +61,7 @@ resource "null_resource" "publish_func" {
     local_file.localsettings
   ]
   triggers = {
-    index = "2022-11-28T15:38:54Z" #"${timestamp()}"
+    index = "2022-12-05T15:38:54Z" #"${timestamp()}"
   }
   provisioner "local-exec" {
     working_dir = "../func"
