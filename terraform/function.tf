@@ -35,9 +35,16 @@ resource "azurerm_linux_function_app" "func" {
     type         = "SystemAssigned"
   }
   app_settings = {
-    "SCM_DO_BUILD_DURING_DEPLOYMENT" = "1"
+    "CLUSTER_ID"                     = azurerm_kubernetes_cluster.aks.id  
     "ENABLE_ORYX_BUILD"              = "true"
-    "CLUSTER_ID"                     = azurerm_kubernetes_cluster.aks.id    
+    "SCM_DO_BUILD_DURING_DEPLOYMENT" = "1"
+    "WEBSITE_MOUNT_ENABLED"          = "1"
+      
+  }
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
   }
 
 }
@@ -61,7 +68,7 @@ resource "null_resource" "publish_func" {
     local_file.localsettings
   ]
   triggers = {
-    index = "2022-12-05T15:38:54Z" #"${timestamp()}"
+    index = "2022-12-06T15:30:55Z" #"${timestamp()}"
   }
   provisioner "local-exec" {
     working_dir = "../func"
