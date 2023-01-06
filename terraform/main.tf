@@ -135,6 +135,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     log_analytics_workspace_id = data.azurerm_log_analytics_workspace.default.id
   }
 
+  open_service_mesh_enabled = true
   tags = local.tags
 
 }
