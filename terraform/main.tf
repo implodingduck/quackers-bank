@@ -88,6 +88,7 @@ resource "azurerm_subnet" "cluster" {
 
 data "azurerm_kubernetes_service_versions" "current" {
   location = azurerm_resource_group.rg.location
+  include_preview = false
 }
 
 
@@ -109,8 +110,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
   network_profile {
     network_plugin      = "azure"
-    # network_plugin_mode = "Overlay"
-    # pod_cidr            = "192.168.0.0/16"
+    network_plugin_mode = "Overlay"
+    pod_cidr            = "192.168.0.0/16"
     service_cidr       = "10.255.252.0/22"
     dns_service_ip     = "10.255.252.10"
     docker_bridge_cidr = "172.17.0.1/16"
@@ -118,7 +119,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   key_vault_secrets_provider {
     secret_rotation_enabled = true
-    secret_rotation_interval = "2m"
+    secret_rotation_interval = "5m"
   }
 
   role_based_access_control_enabled = false
@@ -129,9 +130,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
   
   oidc_issuer_enabled = true
   workload_identity_enabled = true
-  microsoft_defender {
-    log_analytics_workspace_id = data.azurerm_log_analytics_workspace.default.id
-  }
+  # microsoft_defender {
+  #   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.default.id
+  # }
   oms_agent {
     log_analytics_workspace_id = data.azurerm_log_analytics_workspace.default.id
   }
