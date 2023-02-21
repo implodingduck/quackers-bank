@@ -110,8 +110,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
   network_profile {
     network_plugin      = "azure"
-    #network_plugin_mode = "Overlay"
-    #pod_cidr            = "192.168.0.0/16"
+    network_plugin_mode = "Overlay"
+    pod_cidr            = "192.168.0.0/16"
     service_cidr       = "10.255.252.0/22"
     dns_service_ip     = "10.255.252.10"
     docker_bridge_cidr = "172.17.0.1/16"
