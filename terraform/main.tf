@@ -92,10 +92,10 @@ data "azurerm_kubernetes_service_versions" "current" {
 
 
 resource "azurerm_kubernetes_cluster" "aks" {
-  name                    = "${local.cluster_name}"
+  name                    = "aks${local.cluster_name}"
   location                = azurerm_resource_group.rg.location
   resource_group_name     = azurerm_resource_group.rg.name
-  dns_prefix              = "${local.cluster_name}"
+  dns_prefix              = "aks${local.cluster_name}"
   kubernetes_version      = data.azurerm_kubernetes_service_versions.current.latest_version
   private_cluster_enabled = false
   default_node_pool {
@@ -110,7 +110,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
   network_profile {
     network_plugin      = "azure"
     network_plugin_mode = "Overlay"
-    network_policy     = "azure"
     pod_cidr            = "192.168.0.0/16"
     service_cidr       = "10.255.252.0/22"
     dns_service_ip     = "10.255.252.10"
@@ -137,7 +136,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     log_analytics_workspace_id = data.azurerm_log_analytics_workspace.default.id
   }
 
-  open_service_mesh_enabled = true
+  open_service_mesh_enabled = false
   tags = local.tags
 
 }
