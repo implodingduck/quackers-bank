@@ -16,9 +16,9 @@ resource "azurerm_eventhub" "eh" {
   message_retention   = 1
 }
 
-resource "azurerm_eventhub_consumer_group" "ehcg" {
-  name                = "cg${local.func_name}"
-  namespace_name      = azurerm_eventhub_namespace.ehn.name
-  eventhub_name       = azurerm_eventhub.eh.name
-  resource_group_name = azurerm_resource_group.rg.name
-}
+# resource "azurerm_eventhub_consumer_group" "ehcg" {
+#   name                = "cg${local.func_name}"
+#   namespace_name      = azurerm_eventhub_namespace.ehn.name
+#   eventhub_name       = azurerm_eventhub.eh.name
+#   resource_group_name = azurerm_resource_group.rg.name
+# }
