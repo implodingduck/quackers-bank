@@ -125,7 +125,13 @@ resource "azurerm_kubernetes_cluster" "aks" {
   role_based_access_control_enabled = false
 
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"
+    identity_ids = [
+      azurerm_user_assigned_identity.cluster.principal_id
+    ]
+  }
+  kubelet_identity {
+    user_assigned_identity_id = azurerm_user_assigned_identity.cluster.id
   }
   
   oidc_issuer_enabled = true
@@ -221,6 +227,13 @@ resource "azurerm_key_vault_access_policy" "csidriver" {
     "List",
   ]
 
+}
+
+resource "azurerm_user_assigned_identity" "cluster" {
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  name = "uai-${local.cluster_name}"
 }
 
 resource "azurerm_user_assigned_identity" "kvcsidriver" {
