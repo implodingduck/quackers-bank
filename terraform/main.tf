@@ -127,7 +127,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   identity {
     type = "UserAssigned"
     identity_ids = [
-      azurerm_user_assigned_identity.kvcsidriver.principal_id
+      azurerm_user_assigned_identity.kvcsidriver.id
     ]
   }
   kubelet_identity {
