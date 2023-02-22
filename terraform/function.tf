@@ -40,6 +40,7 @@ resource "azurerm_linux_function_app" "func" {
     "SCM_DO_BUILD_DURING_DEPLOYMENT" = "1"
     "WEBSITE_MOUNT_ENABLED"          = "1"
     "EHCONN__fullyQualifiedNamespace" = "${azurerm_eventhub_namespace.ehn.name}.servicebus.windows.net" 
+    "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.app.connection_string
   }
   lifecycle {
     ignore_changes = [
