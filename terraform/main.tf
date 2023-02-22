@@ -127,11 +127,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
   identity {
     type = "UserAssigned"
     identity_ids = [
-      azurerm_user_assigned_identity.cluster.principal_id
+      azurerm_user_assigned_identity.kvcsidriver.principal_id
     ]
   }
   kubelet_identity {
-    user_assigned_identity_id = azurerm_user_assigned_identity.cluster.id
+    user_assigned_identity_id = azurerm_user_assigned_identity.kvcsidriver.id
   }
   
   oidc_issuer_enabled = true
@@ -229,12 +229,6 @@ resource "azurerm_key_vault_access_policy" "csidriver" {
 
 }
 
-resource "azurerm_user_assigned_identity" "cluster" {
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-
-  name = "uai-${local.cluster_name}"
-}
 
 resource "azurerm_user_assigned_identity" "kvcsidriver" {
   resource_group_name = azurerm_resource_group.rg.name
