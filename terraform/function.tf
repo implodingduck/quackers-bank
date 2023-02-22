@@ -35,7 +35,7 @@ resource "azurerm_linux_function_app" "func" {
     type         = "SystemAssigned"
   }
   app_settings = {
-    "CLUSTER_ID"                     = azurerm_kubernetes_cluster.aks.id  
+    "CLUSTER_ID"                     = "" #azurerm_kubernetes_cluster.aks.id  
     "ENABLE_ORYX_BUILD"              = "true"
     "SCM_DO_BUILD_DURING_DEPLOYMENT" = "1"
     "WEBSITE_MOUNT_ENABLED"          = "1"
@@ -80,5 +80,11 @@ resource "null_resource" "publish_func" {
 resource "azurerm_role_assignment" "system" {
   scope                = azurerm_kubernetes_cluster.aks.id
   role_definition_name = "Contributor"
+  principal_id         = azurerm_linux_function_app.func.identity.0.principal_id  
+}
+
+resource "azurerm_role_assignment" "system" {
+  scope                = azurerm_resource_group.rg.id
+  role_definition_name = "Azure Event Hubs Data Receiver"
   principal_id         = azurerm_linux_function_app.func.identity.0.principal_id  
 }
