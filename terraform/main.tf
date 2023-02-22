@@ -131,6 +131,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
     ]
   }
   kubelet_identity {
+    client_id = azurerm_user_assigned_identity.kvcsidriver.client_id
+    object_id = azurerm_user_assigned_identity.kvcsidriver.principal_id
     user_assigned_identity_id = azurerm_user_assigned_identity.kvcsidriver.id
   }
   
