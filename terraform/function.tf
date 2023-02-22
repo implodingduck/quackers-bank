@@ -39,7 +39,7 @@ resource "azurerm_linux_function_app" "func" {
     "ENABLE_ORYX_BUILD"              = "true"
     "SCM_DO_BUILD_DURING_DEPLOYMENT" = "1"
     "WEBSITE_MOUNT_ENABLED"          = "1"
-      
+    "EHCONN__fullyQualifiedNamespace" = "${azurerm_eventhub_namespace.ehn.name}.servicebus.windows.net" 
   }
   lifecycle {
     ignore_changes = [
@@ -68,7 +68,7 @@ resource "null_resource" "publish_func" {
     local_file.localsettings
   ]
   triggers = {
-    index = "2022-12-06T15:30:55Z" #"${timestamp()}"
+    index = "${timestamp()}" #"2022-12-06T15:30:55Z" #"${timestamp()}"
   }
   provisioner "local-exec" {
     working_dir = "../func"

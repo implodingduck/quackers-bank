@@ -9,7 +9,7 @@ resource "azurerm_eventhub_namespace" "ehn" {
 }
 
 resource "azurerm_eventhub" "eh" {
-  name                = "eh${local.cluster_name}"
+  name                = "ehquackbank"
   namespace_name      = azurerm_eventhub_namespace.ehn.name
   resource_group_name = azurerm_resource_group.rg.name
   partition_count     = 2
