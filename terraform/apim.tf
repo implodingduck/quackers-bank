@@ -69,3 +69,15 @@ EOT
   sku_name = "Developer_1"
   tags     = local.tags
 }
+
+resource "azurerm_api_management_logger" "example" {
+  name                = "ehlogger"
+  api_management_name = azurerm_api_management.apim.name
+  resource_group_name = azurerm_resource_group.rg.name
+  
+
+  eventhub {
+    name              = azurerm_eventhub.eh.name
+    connection_string = azurerm_eventhub_namespace.ehn.default_primary_connection_string
+  }
+}
