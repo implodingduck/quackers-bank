@@ -5,7 +5,7 @@
       "name": "eventHubMessages",
       "direction": "in",
       "eventHubName": "ehquackbank",
-      "connection": "",
+      "connection": "EHCONN",
       "cardinality": "many",
       "consumerGroup": "$Default",
       "dataType": "string"
