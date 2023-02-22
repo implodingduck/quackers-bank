@@ -83,7 +83,7 @@ resource "azurerm_role_assignment" "system" {
   principal_id         = azurerm_linux_function_app.func.identity.0.principal_id  
 }
 
-resource "azurerm_role_assignment" "system" {
+resource "azurerm_role_assignment" "eh" {
   scope                = azurerm_resource_group.rg.id
   role_definition_name = "Azure Event Hubs Data Receiver"
   principal_id         = azurerm_linux_function_app.func.identity.0.principal_id  
