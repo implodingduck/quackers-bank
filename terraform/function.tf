@@ -69,7 +69,7 @@ resource "null_resource" "publish_func" {
     local_file.localsettings
   ]
   triggers = {
-    index = "${timestamp()}" #"2022-12-06T15:30:55Z" #"${timestamp()}"
+    index = "2023-02-22T19:56:24Z" #"${timestamp()}"
   }
   provisioner "local-exec" {
     working_dir = "../func"
@@ -78,11 +78,11 @@ resource "null_resource" "publish_func" {
   }
 }
 
-# resource "azurerm_role_assignment" "system" {
-#   scope                = azurerm_kubernetes_cluster.aks.id
-#   role_definition_name = "Contributor"
-#   principal_id         = azurerm_linux_function_app.func.identity.0.principal_id  
-# }
+resource "azurerm_role_assignment" "system" {
+  scope                = azurerm_kubernetes_cluster.aks.id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_linux_function_app.func.identity.0.principal_id  
+}
 
 resource "azurerm_role_assignment" "eh" {
   scope                = azurerm_resource_group.rg.id
