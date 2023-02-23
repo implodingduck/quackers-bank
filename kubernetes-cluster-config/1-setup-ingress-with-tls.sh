@@ -10,7 +10,7 @@ az aks get-credentials -n $CLUSTER -g $RESOURCE_GROUP
 
 NAMESPACE="quackersbank"
 CERT_MANAGER_REGISTRY=quay.io
-CERT_MANAGER_TAG=v1.8.0
+CERT_MANAGER_TAG=v1.11.0
 CERT_MANAGER_IMAGE_CONTROLLER=jetstack/cert-manager-controller
 CERT_MANAGER_IMAGE_WEBHOOK=jetstack/cert-manager-webhook
 CERT_MANAGER_IMAGE_CAINJECTOR=jetstack/cert-manager-cainjector
