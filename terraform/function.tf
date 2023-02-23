@@ -26,6 +26,7 @@ resource "azurerm_linux_function_app" "func" {
 
   site_config {
     application_insights_key = azurerm_application_insights.app.instrumentation_key
+    application_insights_connection_string = azurerm_application_insights.app.connection_string
     application_stack {
       node_version = "16"
     }
@@ -40,7 +41,6 @@ resource "azurerm_linux_function_app" "func" {
     "SCM_DO_BUILD_DURING_DEPLOYMENT" = "1"
     "WEBSITE_MOUNT_ENABLED"          = "1"
     "EHCONN__fullyQualifiedNamespace" = "${azurerm_eventhub_namespace.ehn.name}.servicebus.windows.net" 
-    "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.app.connection_string
   }
   lifecycle {
     ignore_changes = [
@@ -69,7 +69,7 @@ resource "null_resource" "publish_func" {
     local_file.localsettings
   ]
   triggers = {
-    index = "2023-02-22T19:56:24Z" #"${timestamp()}"
+    index = "${timestamp()}" #"2023-02-22T19:56:24Z" #"${timestamp()}"
   }
   provisioner "local-exec" {
     working_dir = "../func"
