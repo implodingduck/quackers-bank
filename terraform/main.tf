@@ -207,6 +207,12 @@ resource "azurerm_key_vault_access_policy" "sp" {
 
 }
 
+resource "azurerm_key_vault_secret" "appinsights" {
+  name = "APPLICATIONINSIGHTS-CONNECTION-STRING"
+  key_vault_id = azurerm_key_vault.kv.id
+  value = azurerm_application_insights.app.connection_string
+}
+
 resource "azurerm_key_vault_access_policy" "csidriver" {
   key_vault_id = azurerm_key_vault.kv.id
   tenant_id    = data.azurerm_client_config.current.tenant_id

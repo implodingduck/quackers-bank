@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transactions-api
+  namespace: quackersbank
+  labels:
+    app: transactions-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transactions-api
+  template:
+    metadata:
+      labels:
+        app: transactions-api
+    spec:
+      containers:
+      - name: transactions-api
+        image: ghcr.io/implodingduck/quackers-bank-transactions-api:v0.0.1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: APPLICATIONINSIGHTS_CONFIGURATION_FILE
+          value: "/opt/target/config/applicationinsights.json"
+        - name: APPLICATIONINSIGHTS_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: workidsyncsecret
+              key: appinsightsconnectionstring
+        volumeMounts:
+        - name: app-props
+          mountPath: "/opt/target/config"
+          readOnly: true
+        - name: secrets-store01-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+      volumes:
+      - name: app-props
+        secret:
+          secretName: transactions-application-properties
+      - name: secrets-store01-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "azure-sync-workload-identity"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transactions-api
+  namespace: quackersbank
+  labels:
+    app: transactions-api
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: transactions-api

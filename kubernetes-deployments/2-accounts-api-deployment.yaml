@@ -23,14 +23,28 @@ spec:
         env:
         - name: APPLICATIONINSIGHTS_CONFIGURATION_FILE
           value: "/opt/target/config/applicationinsights.json"
+        - name: APPLICATIONINSIGHTS_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: workidsyncsecret
+              key: appinsightsconnectionstring
         volumeMounts:
         - name: app-props
           mountPath: "/opt/target/config"
+          readOnly: true
+        - name: secrets-store01-inline
+          mountPath: "/mnt/secrets-store"
           readOnly: true
       volumes:
       - name: app-props
         secret:
           secretName: accounts-application-properties
+      - name: secrets-store01-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "azure-sync-workload-identity"
 ---
 apiVersion: v1
 kind: Service
