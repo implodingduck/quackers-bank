@@ -23,11 +23,60 @@ spec:
         env:
         - name: APPLICATIONINSIGHTS_CONFIGURATION_FILE
           value: "/opt/target/config/applicationinsights.json"
+        - name: ACCOUNTSAPI_BASEURL
+          value: http://accounts-api
+        - name: TRANSACTIONSAPI_BASEURL
+          value: http://transactions-api
+        - name: ACCOUNTS_SCOPES
+          valueFrom:
+            secretKeyRef:
+              name: workidsyncsecret
+              key: accountsscopes
         - name: APPLICATIONINSIGHTS_CONNECTION_STRING
           valueFrom:
             secretKeyRef:
               name: workidsyncsecret
               key: appinsightsconnectionstring
+        - name: B2C_BASE_URI
+          valueFrom:
+            secretKeyRef:
+              name: workidsyncsecret
+              key: b2cbaseuri
+        - name: B2C_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: workidsyncsecret
+              key: b2cclientid
+        - name: B2C_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: workidsyncsecret
+              key: b2cclientsecret
+        - name: B2C_TENANT_ID
+          valueFrom:
+            secretKeyRef:
+              name: workidsyncsecret
+              key: b2ctenantid
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: workidsyncsecret
+              key: dbpassword
+        - name: DB_URL
+          valueFrom:
+            secretKeyRef:
+              name: workidsyncsecret
+              key: dburl
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: workidsyncsecret
+              key: dbusername
+        - name: TRANSACTIONS_SCOPES
+          valueFrom:
+            secretKeyRef:
+              name: workidsyncsecret
+              key: transactionsscopes
         volumeMounts:
         - name: app-props
           mountPath: "/opt/target/config"

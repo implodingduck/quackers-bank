@@ -38,19 +38,59 @@ spec:
     objects:  |
       array:
         - |
+          objectName: ACCOUNTS-SCOPES
+          objectType: secret
+        - |
+          objectName: APPLICATIONINSIGHTS-CONNECTION-STRING
+          objectType: secret
+        - |
+          objectName: B2C-BASE-URI
+          objectType: secret
+        - |
+          objectName: B2C-CLIENT-ID
+          objectType: secret
+        - |
+          objectName: B2C-CLIENT-SECRET
+          objectType: secret
+        - |
+          objectName: B2C-TENANT-ID
+          objectType: secret
+        - |
           objectName: DB-PASSWORD
           objectType: secret              # object types: secret, key, or cert
         - |
-          objectName: APPLICATIONINSIGHTS-CONNECTION-STRING
+          objectName: DB-URL
+          objectType: secret
+        - |
+          objectName: DB-USERNAME
+          objectType: secret
+        - |
+          objectName: TRANSACTIONS-SCOPES
           objectType: secret
 
     tenantId: "${IDENTITY_TENANT}"        # The tenant ID of the key vault                             
   secretObjects:                              # [OPTIONAL] SecretObjects defines the desired state of synced Kubernetes secret objects
   - data:
-    - key: dbpassword                           # data field to populate
-      objectName: DB-PASSWORD                        # name of the mounted content to sync; this could be the object name or the object alias
+    - key: accountsscopes
+      objectName: ACCOUNTS-SCOPES
     - key: appinsightsconnectionstring
       objectName: APPLICATIONINSIGHTS-CONNECTION-STRING
+    - key: b2cbaseuri
+      objectName: B2C-BASE-URI
+    - key: b2cclientid
+      objectName: B2C-CLIENT-ID
+    - key: b2cclientsecret
+      objectName: B2C-CLIENT-SECRET
+    - key: b2ctenantid
+      objectName: B2C-TENANT-ID
+    - key: dbpassword                           # data field to populate
+      objectName: DB-PASSWORD                        # name of the mounted content to sync; this could be the object name or the object alias
+    - key: dburl
+      objectName: DB-URL
+    - key: dbusername
+      objectName: DB-USERNAME
+    - key: transactionsscopes
+      objectName: TRANSACTIONS-SCOPES
     secretName: workidsyncsecret                     # name of the Kubernetes secret object
     type: Opaque    
 EOF
