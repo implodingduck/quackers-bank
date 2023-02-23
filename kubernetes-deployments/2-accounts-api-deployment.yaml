@@ -14,7 +14,9 @@ spec:
     metadata:
       labels:
         app: accounts-api
+        azure.workload.identity/use: "true"
     spec:
+      serviceAccountName: uai-kvcsidriver-quackbankl6ht6vt8
       containers:
       - name: accounts-api
         image: ghcr.io/implodingduck/quackers-bank-accounts-api:v0.0.1

@@ -14,7 +14,9 @@ spec:
     metadata:
       labels:
         app: frontend
+        azure.workload.identity/use: "true"
     spec:
+      serviceAccountName: uai-kvcsidriver-quackbankl6ht6vt8
       containers:
       - name: frontend
         image: ghcr.io/implodingduck/quackers-bank-frontend:main
