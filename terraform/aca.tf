@@ -46,6 +46,49 @@ resource "azurerm_container_app_environment_storage" "accountsapi" {
   access_mode                  = "ReadOnly"
 }
 
+resource "azurerm_container_app" "accountsapi" {
+  name                         = "aca-accounts-api"
+  container_app_environment_id = azurerm_container_app_environment.aca.id
+  resource_group_name          = azurerm_resource_group.rg.name
+  revision_mode                = "Single"
+
+  template {
+    min_replicas = 0
+    max_replicas = 1
+    container {
+      name   = "aca-accounts-api"
+      image  = "ghcr.io/implodingduck/quackers-bank-accounts-api:main"
+      cpu    = 0.25
+      memory = "0.5Gi"
+      env {
+
+      }
+      volume_mounts {
+        name = azurerm_container_app_environment_storage.accountsapi.name
+        path = "/opt/target/config"
+      }
+    }
+    
+    volume {
+      name         = azurerm_container_app_environment_storage.accountsapi.name
+      storage_type = "AzureFile"
+      storage_name = azurerm_container_app_environment_storage.accountsapi.name
+    }
+  }
+  ingress {
+    allow_insecure_connections = true
+    external_enabled           = true
+    target_port                = 8080
+    transport                  = "http"
+    traffic_weight {
+      latest_revision = true
+      percentage      = 100
+    }
+  }
+
+  tags = local.tags
+}
+
 resource "azurerm_storage_share" "frontend" {
   name                 = "frontend"
   storage_account_name = azurerm_storage_account.sa.name
@@ -67,6 +110,49 @@ resource "azurerm_container_app_environment_storage" "frontend" {
   access_mode                  = "ReadOnly"
 }
 
+resource "azurerm_container_app" "frontend" {
+  name                         = "aca-frontend"
+  container_app_environment_id = azurerm_container_app_environment.aca.id
+  resource_group_name          = azurerm_resource_group.rg.name
+  revision_mode                = "Single"
+
+  template {
+    min_replicas = 0
+    max_replicas = 1
+    container {
+      name   = "aca-frontend"
+      image  = "ghcr.io/implodingduck/quackers-bank-fronted:main"
+      cpu    = 0.25
+      memory = "0.5Gi"
+      env {
+
+      }
+      volume_mounts {
+        name = azurerm_container_app_environment_storage.frontend.name
+        path = "/opt/target/config"
+      }
+    }
+    
+    volume {
+      name         = azurerm_container_app_environment_storage.frontend.name
+      storage_type = "AzureFile"
+      storage_name = azurerm_container_app_environment_storage.frontend.name
+    }
+  }
+  ingress {
+    allow_insecure_connections = true
+    external_enabled           = true
+    target_port                = 8080
+    transport                  = "http"
+    traffic_weight {
+      latest_revision = true
+      percentage      = 100
+    }
+  }
+
+  tags = local.tags
+}
+
 resource "azurerm_storage_share" "transactionsapi" {
   name                 = "transactionsapi"
   storage_account_name = azurerm_storage_account.sa.name
@@ -86,4 +172,47 @@ resource "azurerm_container_app_environment_storage" "transactionsapi" {
   share_name                   = azurerm_storage_share.transactionsapi.name
   access_key                   = azurerm_storage_account.sa.primary_access_key
   access_mode                  = "ReadOnly"
+}
+
+resource "azurerm_container_app" "transactionsapi" {
+  name                         = "aca-transactions-api"
+  container_app_environment_id = azurerm_container_app_environment.aca.id
+  resource_group_name          = azurerm_resource_group.rg.name
+  revision_mode                = "Single"
+
+  template {
+    min_replicas = 0
+    max_replicas = 1
+    container {
+      name   = "aca-transactions-api"
+      image  = "ghcr.io/implodingduck/quackers-bank-transactions-api:main"
+      cpu    = 0.25
+      memory = "0.5Gi"
+      env {
+
+      }
+      volume_mounts {
+        name = azurerm_container_app_environment_storage.transactionsapi.name
+        path = "/opt/target/config"
+      }
+    }
+    
+    volume {
+      name         = azurerm_container_app_environment_storage.transactionsapi.name
+      storage_type = "AzureFile"
+      storage_name = azurerm_container_app_environment_storage.transactionsapi.name
+    }
+  }
+  ingress {
+    allow_insecure_connections = true
+    external_enabled           = true
+    target_port                = 8080
+    transport                  = "http"
+    traffic_weight {
+      latest_revision = true
+      percentage      = 100
+    }
+  }
+
+  tags = local.tags
 }
