@@ -19,10 +19,10 @@ module.exports = async function (context, req) {
     const acaSecrets = []
     for (let k of secretsList){
         context.log(`Getting ${k}...`);
-        let v = await kvclient.getSecret(k);
+        let s = await kvclient.getSecret(k);
         acaSecrets.push({
             name: k,
-            value: v
+            value: s.value
         })
     }
  
