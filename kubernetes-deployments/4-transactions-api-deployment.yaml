@@ -53,7 +53,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: workidsyncsecret
-              key: b2cclientsecret
+              key: b2cclientsecrettransactions
         - name: B2C_TENANT_ID
           valueFrom:
             secretKeyRef:

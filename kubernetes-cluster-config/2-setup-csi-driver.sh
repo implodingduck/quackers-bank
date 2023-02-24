@@ -59,6 +59,9 @@ spec:
           objectName: B2C-CLIENT-SECRET
           objectType: secret
         - |
+          objectName: B2C-CLIENT-SECRET-TRANSACTIONS
+          objectType: secret
+        - |
           objectName: B2C-TENANT-ID
           objectType: secret
         - |
@@ -91,6 +94,8 @@ spec:
       objectName: B2C-CLIENT-ID-TRANSACTIONS
     - key: b2cclientsecret
       objectName: B2C-CLIENT-SECRET
+    - key: b2cclientsecrettransactions
+      objectName: B2C-CLIENT-SECRET-TRANSACTIONS
     - key: b2ctenantid
       objectName: B2C-TENANT-ID
     - key: dbpassword                           # data field to populate
