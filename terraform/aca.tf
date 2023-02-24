@@ -60,9 +60,6 @@ resource "azurerm_container_app" "accountsapi" {
       image  = "ghcr.io/implodingduck/quackers-bank-accounts-api:main"
       cpu    = 0.25
       memory = "0.5Gi"
-      env {
-
-      }
       volume_mounts {
         name = azurerm_container_app_environment_storage.accountsapi.name
         path = "/opt/target/config"
@@ -124,9 +121,7 @@ resource "azurerm_container_app" "frontend" {
       image  = "ghcr.io/implodingduck/quackers-bank-fronted:main"
       cpu    = 0.25
       memory = "0.5Gi"
-      env {
-
-      }
+      
       volume_mounts {
         name = azurerm_container_app_environment_storage.frontend.name
         path = "/opt/target/config"
@@ -188,9 +183,7 @@ resource "azurerm_container_app" "transactionsapi" {
       image  = "ghcr.io/implodingduck/quackers-bank-transactions-api:main"
       cpu    = 0.25
       memory = "0.5Gi"
-      env {
 
-      }
       volume_mounts {
         name = azurerm_container_app_environment_storage.transactionsapi.name
         path = "/opt/target/config"
