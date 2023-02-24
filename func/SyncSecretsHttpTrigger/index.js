@@ -25,21 +25,21 @@ module.exports = async function (context, req) {
             value: v
         })
     }
-
-
-    const containerAppEnvelop = {
-        configuration: {
-            secrets: acaSecrets
-        }
-    }
+ 
     const acaList = ["aca-accounts-api", "aca-frontend", "aca-transactions-api"]
     const result = []
     for (let a of acaList){
+        context.log(`getting ${a}...`);
+        let containerAppEnvelope = await acaclient.containerApps.get(
+            resourceGroupName,
+            a
+        )
         context.log(`syncing ${a}...`);
+        containerAppEnvelope.configuration.secrets = acaSecrets;
         let r = await acaclient.containerApps.beginUpdate(
             resourceGroupName,
             a,
-            containerAppEnvelop
+            containerAppEnvelope
         );
         result.push(r);
 
