@@ -118,7 +118,7 @@ resource "azurerm_container_app" "frontend" {
     max_replicas = 1
     container {
       name   = "aca-frontend"
-      image  = "ghcr.io/implodingduck/quackers-bank-fronted:main"
+      image  = "ghcr.io/implodingduck/quackers-bank-frontend:main"
       cpu    = 0.25
       memory = "0.5Gi"
       
