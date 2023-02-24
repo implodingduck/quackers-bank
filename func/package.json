@@ -7,8 +7,10 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
+    "@azure/arm-appcontainers": "^1.1.2",
     "@azure/arm-containerservice": "^17.1.0",
     "@azure/identity": "^3.1.0",
+    "@azure/keyvault-secrets": "^4.6.0",
     "applicationinsights": "^2.4.2"
   },
   "devDependencies": {

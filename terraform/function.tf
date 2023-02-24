@@ -36,11 +36,13 @@ resource "azurerm_linux_function_app" "func" {
     type         = "SystemAssigned"
   }
   app_settings = {
-    "CLUSTER_ID"                     = azurerm_kubernetes_cluster.aks.id  
-    "ENABLE_ORYX_BUILD"              = "true"
-    "SCM_DO_BUILD_DURING_DEPLOYMENT" = "1"
-    "WEBSITE_MOUNT_ENABLED"          = "1"
+    "CLUSTER_ID"                      = azurerm_kubernetes_cluster.aks.id  
+    "ENABLE_ORYX_BUILD"               = "true"
+    "SCM_DO_BUILD_DURING_DEPLOYMENT"  = "1"
+    "WEBSITE_MOUNT_ENABLED"           = "1"
     "EHCONN__fullyQualifiedNamespace" = "${azurerm_eventhub_namespace.ehn.name}.servicebus.windows.net" 
+    "VAULT_URL"                       = azurerm_key_vault.kv.vault_uri
+    "SECRET_LIST"                     = "ACCOUNTS-SCOPES,APPLICATIONINSIGHTS-CONNECTION-STRING,B2C-BASE-URI,B2C-CLIENT-ID,B2C-CLIENT-ID-ACCOUNTS,B2C-CLIENT-ID-TRANSACTIONS,B2C-CLIENT-SECRET,B2C-CLIENT-SECRET-TRANSACTIONS,B2C-TENANT-ID,DB-PASSWORD,DB-URL,DB-USERNAME,TRANSACTIONS-SCOPES"
   }
   lifecycle {
     ignore_changes = [
@@ -88,4 +90,35 @@ resource "azurerm_role_assignment" "eh" {
   scope                = azurerm_resource_group.rg.id
   role_definition_name = "Azure Event Hubs Data Receiver"
   principal_id         = azurerm_linux_function_app.func.identity.0.principal_id  
+}
+
+resource "azurerm_role_assignment" "contributor" {
+  scope                = azurerm_resource_group.rg.id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_linux_function_app.func.identity.0.principal_id  
+}
+
+resource "azurerm_key_vault_access_policy" "func" {
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = azurerm_linux_function_app.func.identity.0.principal_id
+
+  key_permissions = [
+    "Get",
+  ]
+
+  secret_permissions = [
+    "Get",
+    "List",
+
+  ]
+
+  certificate_permissions = [
+
+  ]
+
+  storage_permissions = [
+
+  ]
+
 }
