@@ -48,7 +48,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: workidsyncsecret
-              key: b2cclientid
+              key: b2cclientidtransactions
         - name: B2C_CLIENT_SECRET
           valueFrom:
             secretKeyRef:

@@ -50,6 +50,12 @@ spec:
           objectName: B2C-CLIENT-ID
           objectType: secret
         - |
+          objectName: B2C-CLIENT-ID-ACCOUNTS
+          objectType: secret
+        - |
+          objectName: B2C-CLIENT-ID-TRANSACTIONS
+          objectType: secret
+        - |
           objectName: B2C-CLIENT-SECRET
           objectType: secret
         - |
@@ -79,6 +85,10 @@ spec:
       objectName: B2C-BASE-URI
     - key: b2cclientid
       objectName: B2C-CLIENT-ID
+    - key: b2cclientidaccounts
+      objectName: B2C-CLIENT-ID-ACCOUNTS
+    - key: b2cclientidtransactions
+      objectName: B2C-CLIENT-ID-TRANSACTIONS
     - key: b2cclientsecret
       objectName: B2C-CLIENT-SECRET
     - key: b2ctenantid
