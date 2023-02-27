@@ -21,7 +21,7 @@ module.exports = async function (context, req) {
         context.log(`Getting ${k}...`);
         let s = await kvclient.getSecret(k);
         acaSecrets.push({
-            name: k,
+            name: k.toLowerCase(),
             value: s.value
         })
     }
