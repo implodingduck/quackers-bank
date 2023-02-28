@@ -84,6 +84,12 @@ resource "azurerm_container_app" "accountsapi" {
   }
 
   tags = local.tags
+
+  lifecycle {
+    ignore_changes = [
+      template.secret
+    ]
+  }
 }
 
 resource "azurerm_storage_share" "frontend" {
@@ -146,6 +152,11 @@ resource "azurerm_container_app" "frontend" {
   }
 
   tags = local.tags
+  lifecycle {
+    ignore_changes = [
+      template.secret
+    ]
+  }
 }
 
 resource "azurerm_storage_share" "transactionsapi" {
@@ -208,4 +219,9 @@ resource "azurerm_container_app" "transactionsapi" {
   }
 
   tags = local.tags
+  lifecycle {
+    ignore_changes = [
+      template.secret
+    ]
+  }
 }
