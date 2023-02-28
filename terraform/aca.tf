@@ -70,11 +70,11 @@ resource "azurerm_container_app" "accountsapi" {
       }
       env {
         name = "ACCOUNTSAPI_BASEURL"
-        value = "http://localhost:7777/v1.0/bindings/accounts-api"
+        value = "http://localhost:3500/v1.0/bindings/accounts-api"
       }
       env {
         name = "TRANSACTIONSAPI_BASEURL"
-        value = "http://localhost:7777/v1.0/bindings/transactions-api"
+        value = "http://localhost:3500/v1.0/bindings/transactions-api"
       }
       env {
         name = "ACCOUNTS_SCOPES"
@@ -196,11 +196,11 @@ resource "azurerm_container_app" "frontend" {
       }
       env {
         name = "ACCOUNTSAPI_BASEURL"
-        value = "http://localhost:7777/v1.0/bindings/accounts-api"
+        value = "http://localhost:3500/v1.0/bindings/accounts-api"
       }
       env {
         name = "TRANSACTIONSAPI_BASEURL"
-        value = "http://localhost:7777/v1.0/bindings/transactions-api"
+        value = "http://localhost:3500/v1.0/bindings/transactions-api"
       }
       env {
         name = "ACCOUNTS_SCOPES"
@@ -261,6 +261,11 @@ resource "azurerm_container_app" "frontend" {
     }
   }
 
+  dapr {
+    app_id       = "frontend"
+    app_port     = 8080
+    app_protocol = "http"
+  }
   tags = local.tags
   lifecycle {
     ignore_changes = [
@@ -315,11 +320,11 @@ resource "azurerm_container_app" "transactionsapi" {
       }
       env {
         name = "ACCOUNTSAPI_BASEURL"
-        value = "http://localhost:7777/v1.0/bindings/accounts-api"
+        value = "http://localhost:3500/v1.0/bindings/accounts-api"
       }
       env {
         name = "TRANSACTIONSAPI_BASEURL"
-        value = "http://localhost:7777/v1.0/bindings/transactions-api"
+        value = "http://localhost:3500/v1.0/bindings/transactions-api"
       }
       env {
         name = "ACCOUNTS_SCOPES"
