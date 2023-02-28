@@ -114,7 +114,7 @@ resource "azurerm_container_app" "accountsapi" {
       }
       env {
         name = "TRANSACTIONS_SCOPES"
-        secret_name = "transactions-scropes"
+        secret_name = "transactions-scopes"
       }
       
     }
@@ -240,7 +240,7 @@ resource "azurerm_container_app" "frontend" {
       }
       env {
         name = "TRANSACTIONS_SCOPES"
-        secret_name = "transactions-scropes"
+        secret_name = "transactions-scopes"
       }
     }
     
@@ -359,7 +359,7 @@ resource "azurerm_container_app" "transactionsapi" {
       }
       env {
         name = "TRANSACTIONS_SCOPES"
-        secret_name = "transactions-scropes"
+        secret_name = "transactions-scopes"
       }
     }
     
