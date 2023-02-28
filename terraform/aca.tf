@@ -70,11 +70,11 @@ resource "azurerm_container_app" "accountsapi" {
       }
       env {
         name = "ACCOUNTSAPI_BASEURL"
-        value = "http://localhost:3500/v1.0/bindings/accounts-api"
+        value = "http://localhost:3500/v1.0/invoke/accounts-api/method"
       }
       env {
         name = "TRANSACTIONSAPI_BASEURL"
-        value = "http://localhost:3500/v1.0/bindings/transactions-api"
+        value = "http://localhost:3500/v1.0/invoke/transactioins-api/method"
       }
       env {
         name = "ACCOUNTS_SCOPES"
@@ -196,11 +196,11 @@ resource "azurerm_container_app" "frontend" {
       }
       env {
         name = "ACCOUNTSAPI_BASEURL"
-        value = "http://localhost:3500/v1.0/bindings/accounts-api"
+        value = "http://localhost:3500/v1.0/invoke/accounts-api/method"
       }
       env {
         name = "TRANSACTIONSAPI_BASEURL"
-        value = "http://localhost:3500/v1.0/bindings/transactions-api"
+        value = "http://localhost:3500/v1.0/invoke/transactioins-api/method"
       }
       env {
         name = "ACCOUNTS_SCOPES"
@@ -320,11 +320,11 @@ resource "azurerm_container_app" "transactionsapi" {
       }
       env {
         name = "ACCOUNTSAPI_BASEURL"
-        value = "http://localhost:3500/v1.0/bindings/accounts-api"
+        value = "http://localhost:3500/v1.0/invoke/accounts-api/method"
       }
       env {
         name = "TRANSACTIONSAPI_BASEURL"
-        value = "http://localhost:3500/v1.0/bindings/transactions-api"
+        value = "http://localhost:3500/v1.0/invoke/transactioins-api/method"
       }
       env {
         name = "ACCOUNTS_SCOPES"
