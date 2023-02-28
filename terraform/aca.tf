@@ -53,7 +53,7 @@ resource "azurerm_container_app" "accountsapi" {
   revision_mode                = "Single"
 
   template {
-    min_replicas = 0
+    min_replicas = 1
     max_replicas = 1
     container {
       name   = "aca-accounts-api"
@@ -64,6 +64,59 @@ resource "azurerm_container_app" "accountsapi" {
         name = azurerm_container_app_environment_storage.accountsapi.name
         path = "/opt/target/config"
       }
+      env {
+        name = "APPLICATIONINSIGHTS_CONFIGURATION_FILE"
+        value = "/opt/target/config/applicationinsights.json"
+      }
+      env {
+        name = "ACCOUNTSAPI_BASEURL"
+        value = "http://localhost:7777/v1.0/bindings/accounts-api"
+      }
+      env {
+        name = "TRANSACTIONSAPI_BASEURL"
+        value = "http://localhost:7777/v1.0/bindings/transactions-api"
+      }
+      env {
+        name = "ACCOUNTS_SCOPES"
+        secret_name = "accounts-scopes"
+      }
+      env {
+        name = "APPLICATIONINSIGHTS_CONNECTION_STRING"
+        secret_name = "applicationinsights-connection-string"
+      }
+      env {
+        name = "B2C_BASE_URI"
+        secret_name = "b2c-base-uri"
+      }
+      env {
+        name = "B2C_CLIENT_ID"
+        secret_name = "b2c-client-id-accounts"
+      }
+      env {
+        name = "B2C_CLIENT_SECRET"
+        secret_name = "b2c-client-secret"
+      }
+      env {
+        name = "B2C_TENANT_ID"
+        secret_name = "b2c-tenant-id"
+      }
+      env {
+        name = "DB_PASSWORD"
+        secret_name = "db-password"
+      }
+      env {
+        name = "DB_URL"
+        secret_name = "db-url"
+      }
+      env {
+        name = "DB_USERNAME"
+        secret_name = "db-username"
+      }
+      env {
+        name = "TRANSACTIONS_SCOPES"
+        secret_name = "transactions-scropes"
+      }
+      
     }
     
     volume {
@@ -82,12 +135,17 @@ resource "azurerm_container_app" "accountsapi" {
       percentage      = 100
     }
   }
+  dapr {
+    app_id       = "accounts-api"
+    app_port     = 8080
+    app_protocol = "http"
+  }
 
   tags = local.tags
 
   lifecycle {
     ignore_changes = [
-      template.0.secret
+      secret
     ]
   }
 }
@@ -120,7 +178,7 @@ resource "azurerm_container_app" "frontend" {
   revision_mode                = "Single"
 
   template {
-    min_replicas = 0
+    min_replicas = 1
     max_replicas = 1
     container {
       name   = "aca-frontend"
@@ -131,6 +189,58 @@ resource "azurerm_container_app" "frontend" {
       volume_mounts {
         name = azurerm_container_app_environment_storage.frontend.name
         path = "/opt/target/config"
+      }
+      env {
+        name = "APPLICATIONINSIGHTS_CONFIGURATION_FILE"
+        value = "/opt/target/config/applicationinsights.json"
+      }
+      env {
+        name = "ACCOUNTSAPI_BASEURL"
+        value = "http://localhost:7777/v1.0/bindings/accounts-api"
+      }
+      env {
+        name = "TRANSACTIONSAPI_BASEURL"
+        value = "http://localhost:7777/v1.0/bindings/transactions-api"
+      }
+      env {
+        name = "ACCOUNTS_SCOPES"
+        secret_name = "accounts-scopes"
+      }
+      env {
+        name = "APPLICATIONINSIGHTS_CONNECTION_STRING"
+        secret_name = "applicationinsights-connection-string"
+      }
+      env {
+        name = "B2C_BASE_URI"
+        secret_name = "b2c-base-uri"
+      }
+      env {
+        name = "B2C_CLIENT_ID"
+        secret_name = "b2c-client-id"
+      }
+      env {
+        name = "B2C_CLIENT_SECRET"
+        secret_name = "b2c-client-secret"
+      }
+      env {
+        name = "B2C_TENANT_ID"
+        secret_name = "b2c-tenant-id"
+      }
+      env {
+        name = "DB_PASSWORD"
+        secret_name = "db-password"
+      }
+      env {
+        name = "DB_URL"
+        secret_name = "db-url"
+      }
+      env {
+        name = "DB_USERNAME"
+        secret_name = "db-username"
+      }
+      env {
+        name = "TRANSACTIONS_SCOPES"
+        secret_name = "transactions-scropes"
       }
     }
     
@@ -154,7 +264,7 @@ resource "azurerm_container_app" "frontend" {
   tags = local.tags
   lifecycle {
     ignore_changes = [
-      template.0.secret
+      secret
     ]
   }
 }
@@ -187,7 +297,7 @@ resource "azurerm_container_app" "transactionsapi" {
   revision_mode                = "Single"
 
   template {
-    min_replicas = 0
+    min_replicas = 1
     max_replicas = 1
     container {
       name   = "aca-transactions-api"
@@ -198,6 +308,58 @@ resource "azurerm_container_app" "transactionsapi" {
       volume_mounts {
         name = azurerm_container_app_environment_storage.transactionsapi.name
         path = "/opt/target/config"
+      }
+      env {
+        name = "APPLICATIONINSIGHTS_CONFIGURATION_FILE"
+        value = "/opt/target/config/applicationinsights.json"
+      }
+      env {
+        name = "ACCOUNTSAPI_BASEURL"
+        value = "http://localhost:7777/v1.0/bindings/accounts-api"
+      }
+      env {
+        name = "TRANSACTIONSAPI_BASEURL"
+        value = "http://localhost:7777/v1.0/bindings/transactions-api"
+      }
+      env {
+        name = "ACCOUNTS_SCOPES"
+        secret_name = "accounts-scopes"
+      }
+      env {
+        name = "APPLICATIONINSIGHTS_CONNECTION_STRING"
+        secret_name = "applicationinsights-connection-string"
+      }
+      env {
+        name = "B2C_BASE_URI"
+        secret_name = "b2c-base-uri"
+      }
+      env {
+        name = "B2C_CLIENT_ID"
+        secret_name = "b2c-client-id-transactions"
+      }
+      env {
+        name = "B2C_CLIENT_SECRET"
+        secret_name = "b2c-client-secret-transactions"
+      }
+      env {
+        name = "B2C_TENANT_ID"
+        secret_name = "b2c-tenant-id"
+      }
+      env {
+        name = "DB_PASSWORD"
+        secret_name = "db-password"
+      }
+      env {
+        name = "DB_URL"
+        secret_name = "db-url"
+      }
+      env {
+        name = "DB_USERNAME"
+        secret_name = "db-username"
+      }
+      env {
+        name = "TRANSACTIONS_SCOPES"
+        secret_name = "transactions-scropes"
       }
     }
     
@@ -218,10 +380,16 @@ resource "azurerm_container_app" "transactionsapi" {
     }
   }
 
+  dapr {
+    app_id       = "transactions-api"
+    app_port     = 8080
+    app_protocol = "http"
+  }
+
   tags = local.tags
   lifecycle {
     ignore_changes = [
-      template.0.secret
+      secret
     ]
   }
 }
