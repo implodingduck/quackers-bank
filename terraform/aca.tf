@@ -87,7 +87,7 @@ resource "azurerm_container_app" "accountsapi" {
 
   lifecycle {
     ignore_changes = [
-      template.secret
+      template.0.secret
     ]
   }
 }
@@ -154,7 +154,7 @@ resource "azurerm_container_app" "frontend" {
   tags = local.tags
   lifecycle {
     ignore_changes = [
-      template.secret
+      template.0.secret
     ]
   }
 }
@@ -221,7 +221,7 @@ resource "azurerm_container_app" "transactionsapi" {
   tags = local.tags
   lifecycle {
     ignore_changes = [
-      template.secret
+      template.0.secret
     ]
   }
 }
