@@ -12,7 +12,7 @@ resource "azurerm_spring_cloud_app" "frontend" {
 }
 
 resource "azurerm_spring_cloud_container_deployment" "frontend" {
-  name                = "frontend"
+  name                = "sample"
   spring_cloud_app_id = azurerm_spring_cloud_app.frontend.id
   instance_count      = 1
   
