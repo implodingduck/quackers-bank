@@ -17,6 +17,6 @@ resource "azurerm_spring_cloud_container_deployment" "frontend" {
   instance_count      = 1
   
   server             = "ghcr.io"
-  image              = "quackers-bank-transactions-api:main"
+  image              = "implodingduck/gs-spring-boot-azurespringapps:azurespringapps"
   language_framework = "springboot"
 }
