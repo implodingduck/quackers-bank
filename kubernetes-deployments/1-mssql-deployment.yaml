@@ -29,7 +29,7 @@ spec:
         app: mssql
         azure.workload.identity/use: "true"
     spec:
-      serviceAccountName: uai-kvcsidriver-quackbanky2pis47k
+      serviceAccountName: uai-kvcsidriver-quackbankl6ht6vt8
       containers:
       - name: mssql
         image: 'mcr.microsoft.com/mssql/server:2019-latest'
