@@ -19,7 +19,8 @@ spec:
       serviceAccountName: uai-kvcsidriver-quackbankl6ht6vt8
       containers:
       - name: accounts-api
-        image: ghcr.io/implodingduck/quackers-bank-accounts-api:v0.0.1
+        image: ghcr.io/implodingduck/quackers-bank-accounts-api:main
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
