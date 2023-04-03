@@ -14,7 +14,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests((requests) -> requests.antMatchers(HttpMethod.GET, "/health/**").permitAll().antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll().anyRequest().authenticated())
+        http.authorizeRequests((requests) -> requests.antMatchers(HttpMethod.GET, "/health/**").permitAll().antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll().antMatchers(HttpMethod.GET, "/v2/**").permitAll().anyRequest().authenticated())
         .oauth2ResourceServer()
         .jwt()
         .jwtAuthenticationConverter(new AADB2CJwtBearerTokenAuthenticationConverter());
