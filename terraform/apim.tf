@@ -19,7 +19,22 @@ resource "azurerm_api_management" "apim" {
     {
       xml_content = <<-EOT
     <policies>
-      <inbound />
+      <inbound>
+        <cors allow-credentials="true">
+          <allowed-origins>
+            <origin>https://apim-quackersbank${random_string.unique.result}.developer.azure-api.net</origin>
+          </allowed-origins>
+          <allowed-methods preflight-result-max-age="300">
+          	<method>*</method>
+          </allowed-methods>
+          <allowed-headers>
+          	<header>*</header>
+          </allowed-headers>
+          <expose-headers>
+          	<header>*</header>
+          </expose-headers>
+        </cors>
+      </inbound>
       <backend>
         <forward-request />
       </backend>

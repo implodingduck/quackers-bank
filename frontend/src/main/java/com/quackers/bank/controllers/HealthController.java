@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthController {
     @GetMapping("/health")
 	public Hello health() {
-		String ik = System.getenv("APPINSIGHTS_INSTRUMENTATIONKEY");
+		String ik = System.getenv("APPLICATIONINSIGHTS_CONNECTION_STRING");
 		if (ik != null){
 			return new Hello(200, ik);
 		} else  {
