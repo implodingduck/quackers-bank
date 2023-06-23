@@ -28,6 +28,14 @@ function rewriteContext ( envelope, context ) {
 module.exports = async function (context, eventHubMessages) {
     context.log(`JavaScript eventhub trigger function called for message array ${eventHubMessages}`);
 
+    rewriteContext = function ( envelope, context ) {
+        context.log(`This is the evelope ${envelope}`);
+        context.log(`This is the context ${context}`);
+        return true;
+      }
+      
+    client.addTelemetryProcessor(rewriteContext);
+
     eventHubMessages.forEach((message, index) => {
         context.log(`Processed message ${message}`);
         jsonmessage = JSON.parse(message)
