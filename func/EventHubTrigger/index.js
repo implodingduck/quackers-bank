@@ -16,15 +16,6 @@ appInsights.setup()
     .start(); // assuming connection string in env var. start() can be omitted to disable any non-custom data
 const client = appInsights.defaultClient;
 
-function rewriteContext ( envelope, context ) {
-    context.log(`This is the evelope ${envelope}`);
-    context.log(`This is the context ${context}`);
-    return true;
-  }
-  
-  client.addTelemetryProcessor(rewriteContext);
-
-
 module.exports = async function (context, eventHubMessages) {
     context.log(`JavaScript eventhub trigger function called for message array ${eventHubMessages}`);
 
