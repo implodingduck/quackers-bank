@@ -32,7 +32,7 @@ module.exports = async function (context, eventHubMessages) {
         context.log(`This is the evelope ${envelope}`);
         context.log(`This is the context ${aicontext}`);
         return true;
-      }
+    }
       
     client.addTelemetryProcessor(rewriteContext);
 
