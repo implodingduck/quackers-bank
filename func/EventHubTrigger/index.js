@@ -1,6 +1,9 @@
 const appInsights = require("applicationinsights");
+
+
+
 appInsights.setup()
-    .setAutoDependencyCorrelation(true)
+    .setAutoDependencyCorrelation(false)
     .setAutoCollectRequests(false)
     .setAutoCollectPerformance(false, false)
     .setAutoCollectExceptions(false)
@@ -10,7 +13,7 @@ appInsights.setup()
     .setAutoCollectPreAggregatedMetrics(false)
     .setSendLiveMetrics(false)
     .setAutoCollectHeartbeat(false)
-    .setAutoCollectIncomingRequestAzureFunctions(true)
+    .setAutoCollectIncomingRequestAzureFunctions(false)
     .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C)
     .enableWebInstrumentation(false)
     .start(); // assuming connection string in env var. start() can be omitted to disable any non-custom data
@@ -31,15 +34,16 @@ module.exports = async function (context, eventHubMessages) {
                 let operationAndSpanId = requestIdHeader.split('|')[1].split('.')
                 let operationId = operationAndSpanId[0]
                 let spanId = operationAndSpanId[1]
-                               
-                aicontext.correlationContext.operation.id = operationId
-                aicontext.correlationContext.operation.parentId = requestIdHeader
-                aicontext.correlationContext.operation.traceparent.parentId = requestIdHeader
-                aicontext.correlationContext.operation.traceparent.spanId = spanId
-                aicontext.correlationContext.operation.traceparent.traceId = operationId
+                context.log(`OperationID: ${operationId} SpanID: ${spanId}`)                               
+                // aicontext.correlationContext.operation.id = operationId
+                // aicontext.correlationContext.operation.parentId = requestIdHeader
+                // aicontext.correlationContext.operation.traceparent.parentId = requestIdHeader
+                // aicontext.correlationContext.operation.traceparent.spanId = spanId
+                // aicontext.correlationContext.operation.traceparent.traceId = operationId
 
-                envelope.tags["ai.operation.parentId"] == requestIdHeader
-                envelope.tags["ai.operation.operation.id"] == operationId
+                envelope.tags["ai.operation.parentId"] = requestIdHeader
+                envelope.tags["ai.operation.id"] = operationId
+                envelope.data.baseData.id = requestIdHeader
 
                 context.log(`This is the evelope after: ${JSON.stringify(envelope)}`);
                 context.log(`This is the context after: ${JSON.stringify(aicontext)}`);
@@ -64,13 +68,13 @@ module.exports = async function (context, eventHubMessages) {
                 let trackedRequest = {
                     id: jsonmessage["requestIdHeader"],
                     name: `${jsonmessage["RequestMethod"]} ${jsonmessage["ApiPath"]}${jsonmessage["OperationUrl"]}`,
-                    url: `https://${jsonmessage["servicename"]}${jsonmessage["ApiPath"]}${jsonmessage["OperationUrl"]}`,
+                    url: `https://${jsonmessage["ServicNname"]}${jsonmessage["ApiPath"]}${jsonmessage["OperationUrl"]}`,
                     success: true,
                     resultCode: jsonmessage["ResponseStatusCode"],
                     duration: jsonmessage["Duration"],
                     properties: jsonmessage
                 }
-                
+                CorrelationContextManager.getCurrentContext()
                 context.log(`tracking: ${JSON.stringify(trackedRequest)}`);
                 client.trackRequest(trackedRequest)
             }
