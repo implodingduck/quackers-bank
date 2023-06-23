@@ -8,18 +8,20 @@ module.exports = async function (context, eventHubMessages) {
 
     eventHubMessages.forEach((message, index) => {
         context.log(`Processed message ${message}`);
-        client.trackEvent({name: "ehloggerevent", properties: JSON.parse(message)});
+        jsonmessage = JSON.parse(message)
+        client.trackEvent({name: "ehloggerevent", properties: jsonmessage});
         try{
-            context.log(`${message["Type"]} vs ${message.Type}`)
-            if (message["Type"] == "response"){
+            
+            context.log(`${jsonmessage["Type"]} vs ${jsonmessage.Type}`)
+            if (jsonmessage["Type"] == "response"){
                 context.log("I got a response event! Let me track it!")
                 let trackedRequest = {
-                    id: message["requestIdHeader"],
-                    name: `${message["RequestMethod"]} ${message["ApiPath"]}${message["OperationUrl"]}`,
-                    url: `https://${message["servicename"]}${message["ApiPath"]}${message["OperationUrl"]}`,
+                    id: jsonmessage["requestIdHeader"],
+                    name: `${jsonmessage["RequestMethod"]} ${jsonmessage["ApiPath"]}${jsonmessage["OperationUrl"]}`,
+                    url: `https://${jsonmessage["servicename"]}${jsonmessage["ApiPath"]}${jsonmessage["OperationUrl"]}`,
                     success: true,
-                    resultCode: message["ResponseStatusCode"],
-                    duration: message["Duration"],
+                    resultCode: jsonmessage["ResponseStatusCode"],
+                    duration: jsonmessage["Duration"],
                 }
                 context.log(`tracking: ${trackedRequest}`);
                 client.trackRequest(trackedRequest)
