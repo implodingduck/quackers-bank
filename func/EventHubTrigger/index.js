@@ -1,7 +1,5 @@
 const appInsights = require("applicationinsights");
 
-
-
 appInsights.setup()
     .setAutoDependencyCorrelation(false)
     .setAutoCollectRequests(false)
@@ -74,7 +72,7 @@ module.exports = async function (context, eventHubMessages) {
                     duration: jsonmessage["Duration"],
                     properties: jsonmessage
                 }
-                CorrelationContextManager.getCurrentContext()
+                
                 context.log(`tracking: ${JSON.stringify(trackedRequest)}`);
                 client.trackRequest(trackedRequest)
             }
