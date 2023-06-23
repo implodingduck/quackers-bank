@@ -1,7 +1,7 @@
 const appInsights = require("applicationinsights");
 
 appInsights.setup()
-    .setAutoDependencyCorrelation(false)
+    .setAutoDependencyCorrelation(true)
     .setAutoCollectRequests(false)
     .setAutoCollectPerformance(false, false)
     .setAutoCollectExceptions(false)
@@ -24,7 +24,7 @@ module.exports = async function (context, eventHubMessages) {
         context.log(`Envelope... ${JSON.stringify(envelope)}`)
         context.log(`BaseType... ${envelope.data.baseType}`)
         if(envelope.data.baseType == "RequestData"){
-            context.log(`This is the evelope ${JSON.stringify(envelope)}`);
+            context.log(`This is the envelope ${JSON.stringify(envelope)}`);
             context.log(`This is the context ${JSON.stringify(aicontext)}`);
             let requestIdHeader = envelope.data.baseData.properties.requestIdHeader
             context.log(`RequestIdHeader: ${requestIdHeader}`)
@@ -43,7 +43,7 @@ module.exports = async function (context, eventHubMessages) {
                 envelope.tags["ai.operation.id"] = operationId
                 envelope.data.baseData.id = requestIdHeader
 
-                context.log(`This is the evelope after: ${JSON.stringify(envelope)}`);
+                context.log(`This is the envelope after: ${JSON.stringify(envelope)}`);
                 context.log(`This is the context after: ${JSON.stringify(aicontext)}`);
             }
             
