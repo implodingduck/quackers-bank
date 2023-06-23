@@ -46,9 +46,7 @@ module.exports = async function (context, eventHubMessages) {
                     duration: jsonmessage["Duration"],
                     properties: jsonmessage
                 }
-                context.log(`current Trace ID: ${client.context.telemetryTrace.traceID}`);
-                client.context.telemetryTrace.traceID = jsonmessage["requestIdHeader"]
-                context.log(`new Trace ID: ${client.context.telemetryTrace.traceID}`);
+                
                 context.log(`tracking: ${JSON.stringify(trackedRequest)}`);
                 client.trackRequest(trackedRequest)
             }
