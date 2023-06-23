@@ -28,9 +28,9 @@ function rewriteContext ( envelope, context ) {
 module.exports = async function (context, eventHubMessages) {
     context.log(`JavaScript eventhub trigger function called for message array ${eventHubMessages}`);
 
-    rewriteContext = function ( envelope, context ) {
+    rewriteContext = function ( envelope, aicontext ) {
         context.log(`This is the evelope ${envelope}`);
-        context.log(`This is the context ${context}`);
+        context.log(`This is the context ${aicontext}`);
         return true;
       }
       
