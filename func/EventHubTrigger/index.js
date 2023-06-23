@@ -12,18 +12,18 @@ module.exports = async function (context, eventHubMessages) {
         try{
             if (message.Type == "response"){
                 let trackedRequest = {
-                    id: message.requestIdHeader,
-                    name: `${message.RequestMethod} ${message.ApiPath}${message.OperationUrl}`,
-                    url: `https://${message.servicename}${message.ApiPath}${message.OperationUrl}`,
+                    id: message["requestIdHeader"],
+                    name: `${message["RequestMethod"]} ${message["ApiPath"]}${message["OperationUrl"]}`,
+                    url: `https://${message["servicename"]}${message["ApiPath"]}${message["OperationUrl"]}`,
                     success: true,
-                    resultCode: message.ResponseStatusCode,
-                    duration: message.Duration,
+                    resultCode: message["ResponseStatusCode"],
+                    duration: message["Duration"],
                 }
                 context.log(`tracking: ${trackedRequest}`);
                 client.trackRequest(trackedRequest)
             }
         }catch(e){
-            context.log(e);
+            context.log(`Error not in your favor: ${e}`);
         }
         
     });
