@@ -33,15 +33,17 @@ module.exports = async function (context, eventHubMessages) {
                 let operationId = operationAndSpanId[0]
                 let spanId = operationAndSpanId[1]
                 context.log(`OperationID: ${operationId} SpanID: ${spanId}`)                               
-                // aicontext.correlationContext.operation.id = operationId
-                // aicontext.correlationContext.operation.parentId = requestIdHeader
-                // aicontext.correlationContext.operation.traceparent.parentId = requestIdHeader
-                // aicontext.correlationContext.operation.traceparent.spanId = spanId
-                // aicontext.correlationContext.operation.traceparent.traceId = operationId
+                aicontext.correlationContext.operation.id = operationId
+                aicontext.correlationContext.operation.parentId = requestIdHeader
+                aicontext.correlationContext.operation.traceparent.parentId = requestIdHeader
+                aicontext.correlationContext.operation.traceparent.spanId = spanId
+                aicontext.correlationContext.operation.traceparent.traceId = operationId
 
+                envelope.tags["ai.cloud.role"] = envelope.data.baseData.properties.ServiceName
                 envelope.tags["ai.operation.parentId"] = requestIdHeader
                 envelope.tags["ai.operation.id"] = operationId
                 envelope.data.baseData.id = requestIdHeader
+                envelope.time = envelope.data.baseData.properties.EventTime
 
                 context.log(`This is the envelope after: ${JSON.stringify(envelope)}`);
                 context.log(`This is the context after: ${JSON.stringify(aicontext)}`);
@@ -66,7 +68,7 @@ module.exports = async function (context, eventHubMessages) {
                 let trackedRequest = {
                     id: jsonmessage["requestIdHeader"],
                     name: `${jsonmessage["RequestMethod"]} ${jsonmessage["ApiPath"]}${jsonmessage["OperationUrl"]}`,
-                    url: `https://${jsonmessage["ServicNname"]}${jsonmessage["ApiPath"]}${jsonmessage["OperationUrl"]}`,
+                    url: `https://${jsonmessage["ServiceName"]}${jsonmessage["ApiPath"]}${jsonmessage["OperationUrl"]}`,
                     success: true,
                     resultCode: jsonmessage["ResponseStatusCode"],
                     duration: jsonmessage["Duration"],
