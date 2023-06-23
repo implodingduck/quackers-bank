@@ -1,6 +1,28 @@
 const appInsights = require("applicationinsights");
-appInsights.setup().start(); // assuming connection string in env var. start() can be omitted to disable any non-custom data
+appInsights.setup()
+    .setAutoDependencyCorrelation(true)
+    .setAutoCollectRequests(false)
+    .setAutoCollectPerformance(false, false)
+    .setAutoCollectExceptions(false)
+    .setAutoCollectDependencies(false)
+    .setAutoCollectConsole(false, false)
+    .setUseDiskRetryCaching(false)
+    .setAutoCollectPreAggregatedMetrics(false)
+    .setSendLiveMetrics(false)
+    .setAutoCollectHeartbeat(false)
+    .setAutoCollectIncomingRequestAzureFunctions(true)
+    .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C)
+    .enableWebInstrumentation(false)
+    .start(); // assuming connection string in env var. start() can be omitted to disable any non-custom data
 const client = appInsights.defaultClient;
+
+function rewriteContext ( envelope, context ) {
+    context.log(`This is the evelope ${envelope}`);
+    context.log(`This is the context ${context}`);
+    return true;
+  }
+  
+  client.addTelemetryProcessor(rewriteContext);
 
 
 module.exports = async function (context, eventHubMessages) {
@@ -22,8 +44,12 @@ module.exports = async function (context, eventHubMessages) {
                     success: true,
                     resultCode: jsonmessage["ResponseStatusCode"],
                     duration: jsonmessage["Duration"],
+                    properties: jsonmessage
                 }
-                context.log(`tracking: ${trackedRequest}`);
+                context.log(`current Trace ID: ${client.context.telemetryTrace.traceID}`);
+                client.context.telemetryTrace.traceID = jsonmessage["requestIdHeader"]
+                context.log(`new Trace ID: ${client.context.telemetryTrace.traceID}`);
+                context.log(`tracking: ${JSON.stringify(trackedRequest)}`);
                 client.trackRequest(trackedRequest)
             }
         }catch(e){
