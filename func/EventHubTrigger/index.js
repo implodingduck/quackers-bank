@@ -21,8 +21,8 @@ module.exports = async function (context, eventHubMessages) {
 
     rewriteContext = function ( envelope, aicontext ) {
         context.log(`Envelope... ${JSON.stringify(envelope)}`)
-        context.log(`BaseType... ${envelope.data.baseData.baseType}`)
-        if(envelope.data.baseData.baseType == "RequestData"){
+        context.log(`BaseType... ${envelope.data.baseType}`)
+        if(envelope.data.baseType == "RequestData"){
             context.log(`This is the evelope ${JSON.stringify(envelope)}`);
             context.log(`This is the context ${JSON.stringify(aicontext)}`);
             let requestIdHeader = envelope.baseData.properties.requestIdHeader
@@ -30,15 +30,15 @@ module.exports = async function (context, eventHubMessages) {
                 let operationAndSpanId = requestIdHeader.split('|')[1].split('.')
                 let operationId = operationAndSpanId[0]
                 let spanId = operationAndSpanId[1]
-                
-                envelope.tags["ai.operation.parentId"] == requestIdHeader
-                envelope.tags["ai.operation.operation.id"] == operationId
-                
+                               
                 aicontext.correlationContext.operation.id = operationId
                 aicontext.correlationContext.operation.parentId = requestIdHeader
                 aicontext.correlationContext.operation.traceparent.parentId = requestIdHeader
                 aicontext.correlationContext.operation.traceparent.spanId = spanId
                 aicontext.correlationContext.operation.traceparent.traceId = operationId
+
+                envelope.tags["ai.operation.parentId"] == requestIdHeader
+                envelope.tags["ai.operation.operation.id"] == operationId
 
                 context.log(`This is the evelope after: ${JSON.stringify(envelope)}`);
                 context.log(`This is the context after: ${JSON.stringify(aicontext)}`);
