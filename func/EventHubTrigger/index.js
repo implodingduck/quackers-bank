@@ -10,7 +10,9 @@ module.exports = async function (context, eventHubMessages) {
         context.log(`Processed message ${message}`);
         client.trackEvent({name: "ehloggerevent", properties: JSON.parse(message)});
         try{
-            if (message.Type == "response"){
+            context.log(`${message["Type"]} vs ${message.Type}`)
+            if (message["Type"] == "response"){
+                context.log("I got a response event! Let me track it!")
                 let trackedRequest = {
                     id: message["requestIdHeader"],
                     name: `${message["RequestMethod"]} ${message["ApiPath"]}${message["OperationUrl"]}`,
