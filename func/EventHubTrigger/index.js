@@ -20,8 +20,30 @@ module.exports = async function (context, eventHubMessages) {
     context.log(`JavaScript eventhub trigger function called for message array ${eventHubMessages}`);
 
     rewriteContext = function ( envelope, aicontext ) {
-        context.log(`This is the evelope ${JSON.stringify(envelope)}`);
-        context.log(`This is the context ${JSON.stringify(aicontext)}`);
+        if(envelope.data.baseData.baseType == "RequestData"){
+            context.log(`This is the evelope ${JSON.stringify(envelope)}`);
+            context.log(`This is the context ${JSON.stringify(aicontext)}`);
+            let requestIdHeader = envelope.baseData.properties.requestIdHeader
+            if (requestIdHeader != null && requestIdHeader != ""){
+                let operationAndSpanId = requestIdHeader.split('|')[1].split('.')
+                let operationId = operationAndSpanId[0]
+                let spanId = operationAndSpanId[1]
+                
+                envelope.tags["ai.operation.parentId"] == requestIdHeader
+                envelope.tags["ai.operation.operation.id"] == operationId
+                
+                aicontext.correlationContext.operation.id = operationId
+                aicontext.correlationContext.operation.parentId = requestIdHeader
+                aicontext.correlationContext.operation.traceparent.parentId = requestIdHeader
+                aicontext.correlationContext.operation.traceparent.spanId = spanId
+                aicontext.correlationContext.operation.traceparent.traceId = operationId
+
+                context.log(`This is the evelope after: ${JSON.stringify(envelope)}`);
+                context.log(`This is the context after: ${JSON.stringify(aicontext)}`);
+            }
+            
+        }
+        
         return true;
     }
       
