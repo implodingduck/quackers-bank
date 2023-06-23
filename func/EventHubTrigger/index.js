@@ -25,7 +25,8 @@ module.exports = async function (context, eventHubMessages) {
         if(envelope.data.baseType == "RequestData"){
             context.log(`This is the evelope ${JSON.stringify(envelope)}`);
             context.log(`This is the context ${JSON.stringify(aicontext)}`);
-            let requestIdHeader = envelope.baseData.properties.requestIdHeader
+            let requestIdHeader = envelope.data.baseData.properties.requestIdHeader
+            context.log(`RequestIdHeader: ${requestIdHeader}`)
             if (requestIdHeader != null && requestIdHeader != ""){
                 let operationAndSpanId = requestIdHeader.split('|')[1].split('.')
                 let operationId = operationAndSpanId[0]
