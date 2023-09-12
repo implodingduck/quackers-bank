@@ -25,10 +25,10 @@ resource "azurerm_application_insights_workbook" "example" {
           },
           "metrics" : [
             {
-              "namespace" : "azure.applicationinsights",
-              "metric" : "azure.applicationinsights--HttpTrigger Count",
-              "aggregation" : 4,
-              "splitBy" : null
+              "namespace" : "microsoft.insights/components/kusto",
+              "metric" : "microsoft.insights/components/kusto-Server-requests/count",
+              "aggregation" : 1,
+              "splitBy" : "cloud/roleName"
             }
           ],
           "gridSettings" : {
@@ -54,10 +54,10 @@ resource "azurerm_application_insights_workbook" "example" {
           },
           "metrics" : [
             {
-              "namespace" : "azure.applicationinsights",
-              "metric" : "azure.applicationinsights--HttpTrigger Failures",
-              "aggregation" : 7,
-              "splitBy" : null
+                "namespace": "microsoft.insights/components/kusto",
+                "metric": "microsoft.insights/components/kusto-Failure-exceptions/count",
+                "aggregation": 1,
+                "splitBy": "cloud/roleName"
             }
           ],
           "gridSettings" : {
