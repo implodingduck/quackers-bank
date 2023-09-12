@@ -78,7 +78,7 @@ resource "azurerm_application_insights_workbook" "example" {
               "version" : "KqlParameterItem/1.0",
               "name" : "exception_operation_id",
               "type" : 2,
-              "query" : "union *\r\n| where itemType == \"exception\"\r\n| distinct operation_Id",
+              "query" : "union *\r\n| where itemType == \"exception\"\r\n| where operation_Id != \"\"\r\n| distinct operation_Id",
               "crossComponentResources" : [
                 "${azurerm_application_insights.app.id}"
               ],
