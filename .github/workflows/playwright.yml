@@ -6,17 +6,19 @@ on:
 
 env:
   WORKINGDIR: playwright
-  
+
 jobs:
   runtest:
     runs-on: ubuntu-latest
     steps:
+    - run: pwd
+    
     - name: Install dependencies
-      working-directory: ${{ env.WORKINGDIR }}
+      working-directory: ./${{ env.WORKINGDIR }}
       run: npm ci
 
     - name: Run Playwright tests
-      working-directory: ${{ env.WORKINGDIR }}
+      working-directory: ./${{ env.WORKINGDIR }}
       env:
         # Access token and regional endpoint for Microsoft Playwright Testing
         PLAYWRIGHT_SERVICE_ACCESS_TOKEN: ${{ secrets.PLAYWRIGHT_SERVICE_ACCESS_TOKEN }}
