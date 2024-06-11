@@ -1,0 +1,150 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "HTTP": {
+                "inputs": {
+                    "method": "GET",
+                    "uri": "https://aksquackersbank.eastus.cloudapp.azure.com/health"
+                },
+                "runAfter": {},
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                },
+                "type": "Http"
+            },
+            "HTTP_1": {
+                "inputs": {
+                    "method": "GET",
+                    "uri": "https://aksquackersbank.eastus.cloudapp.azure.com/accounts-api/health"
+                },
+                "runAfter": {},
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                },
+                "type": "Http"
+            },
+            "HTTP_2": {
+                "inputs": {
+                    "method": "GET",
+                    "uri": "https://aksquackersbank.eastus.cloudapp.azure.com/transactions-api/health"
+                },
+                "runAfter": {},
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                },
+                "type": "Http"
+            },
+            "Parse_JSON": {
+                "inputs": {
+                    "content": "@body('HTTP')",
+                    "schema": {
+                        "properties": {
+                            "content": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {
+                    "HTTP": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ParseJson"
+            },
+            "Parse_JSON_1": {
+                "inputs": {
+                    "content": "@body('HTTP_1')",
+                    "schema": {
+                        "properties": {
+                            "content": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {
+                    "HTTP_1": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ParseJson"
+            },
+            "Parse_JSON_2": {
+                "inputs": {
+                    "content": "@body('HTTP_2')",
+                    "schema": {
+                        "properties": {
+                            "content": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {
+                    "HTTP_2": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ParseJson"
+            },
+            "Response": {
+                "inputs": {
+                    "body": "Hello from Logic App!\n\nFrontend: @{body('Parse_JSON')?['id']}\nAccounts Api: @{body('Parse_JSON_1')?['id']}\nTransactions Api: @{body('Parse_JSON_2')?['id']}",
+                    "statusCode": 200
+                },
+                "kind": "Http",
+                "runAfter": {
+                    "Parse_JSON": [
+                        "Succeeded"
+                    ],
+                    "Parse_JSON_1": [
+                        "Succeeded"
+                    ],
+                    "Parse_JSON_2": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Response"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "When_a_HTTP_request_is_received": {
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "value": {}
+        }
+    }
+}
