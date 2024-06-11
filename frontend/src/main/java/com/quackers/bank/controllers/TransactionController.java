@@ -38,8 +38,6 @@ public class TransactionController {
 
     }
 
-    
-
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public Transaction createTransaction(@RequestBody Transaction t) {

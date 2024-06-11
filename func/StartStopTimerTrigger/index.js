@@ -23,10 +23,6 @@ module.exports = async function (context, myTimer) {
         context.log("Stopping...");
         await client.managedClusters.beginStop(resourceGroupName, resourceName);
         result = "Stopping..."
-    }else{
-        context.log("Starting...");
-        await client.managedClusters.beginStart(resourceGroupName, resourceName);
-        result = "Starting..."
     }
     context.log('JavaScript timer trigger function ran!', timeStamp);  
 
