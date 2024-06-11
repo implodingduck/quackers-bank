@@ -11,7 +11,7 @@ jobs:
   runtest:
     runs-on: ubuntu-latest
     steps:
-    - run: pwd || ls -lta
+    - run: pwd && ls -lta
 
     - name: Install dependencies
       working-directory: ./${{ env.WORKINGDIR }}
