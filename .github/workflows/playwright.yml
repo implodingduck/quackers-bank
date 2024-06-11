@@ -11,8 +11,8 @@ jobs:
   runtest:
     runs-on: ubuntu-latest
     steps:
-    - run: pwd
-    
+    - run: pwd || ls -lta
+
     - name: Install dependencies
       working-directory: ./${{ env.WORKINGDIR }}
       run: npm ci
