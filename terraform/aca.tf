@@ -53,7 +53,7 @@ resource "azurerm_container_app" "accountsapi" {
   revision_mode                = "Single"
 
   template {
-    min_replicas = 1
+    min_replicas = 0
     max_replicas = 1
     container {
       name   = "aca-accounts-api"
@@ -178,7 +178,7 @@ resource "azurerm_container_app" "frontend" {
   revision_mode                = "Single"
 
   template {
-    min_replicas = 1
+    min_replicas = 0
     max_replicas = 1
     container {
       name   = "aca-frontend"
@@ -302,7 +302,7 @@ resource "azurerm_container_app" "transactionsapi" {
   revision_mode                = "Single"
 
   template {
-    min_replicas = 1
+    min_replicas = 0
     max_replicas = 1
     container {
       name   = "aca-transactions-api"
